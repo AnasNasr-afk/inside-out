@@ -79,7 +79,7 @@ class _EmotionGameState extends State<EmotionGame> {
             ),
             const SizedBox(height: 30),
             Card(
-              color: AppTheme.primaryColor.withOpacity(0.1),
+              color: AppTheme.primaryColor.withValues(alpha:0.1),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -120,7 +120,7 @@ class _EmotionGameState extends State<EmotionGame> {
                   return GestureDetector(
                     onTap: () => _selectEmotion(emotion.name),
                     child: Card(
-                      color: emotion.color.withOpacity(0.2),
+                      color: emotion.color.withValues(alpha:0.2),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -169,7 +169,7 @@ class _EmotionGameState extends State<EmotionGame> {
 
   Widget _buildStatCard(String label, String value) {
     return Card(
-      color: AppTheme.primaryColor.withOpacity(0.1),
+      color: AppTheme.primaryColor.withValues(alpha:0.1),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

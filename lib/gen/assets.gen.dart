@@ -15,6 +15,15 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/icChat.svg
+  SvgGenImage get icChat => const SvgGenImage('assets/icons/icChat.svg');
+
+  /// File path: assets/icons/icChild.svg
+  SvgGenImage get icChild => const SvgGenImage('assets/icons/icChild.svg');
+
+  /// File path: assets/icons/icTasks.svg
+  SvgGenImage get icTasks => const SvgGenImage('assets/icons/icTasks.svg');
+
   /// File path: assets/icons/ic_calendar.svg
   SvgGenImage get icCalendar =>
       const SvgGenImage('assets/icons/ic_calendar.svg');
@@ -48,6 +57,9 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    icChat,
+    icChild,
+    icTasks,
     icCalendar,
     icChatbot,
     icCompleted,

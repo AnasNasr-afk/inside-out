@@ -59,7 +59,7 @@ dependencies:
   flutter_native_splash: ^2.3.6
   google_sign_in: ^6.1.6
   carousel_slider: ^4.0.0
-  flutter_dotenv: ^5.2.1
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -76,6 +76,10 @@ dependencies:
   flutter_gemini: ^3.0.0
   get_it: ^8.2.0
   rxdart: ^0.28.0
+  flutter_bloc: ^9.1.1
+  firebase_core: ^4.7.0
+  firebase_auth: ^6.4.0
+  cloud_firestore: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -96,7 +100,7 @@ flutter:
     - assets/illustrations/
     - assets/logos/
     - assets/placeholders/
-    - .env
+
 
  # To add assets to your application, add an assets section, like this:
   # assets:

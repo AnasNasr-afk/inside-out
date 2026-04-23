@@ -56,7 +56,7 @@ class LevelIndicator extends StatelessWidget {
                                 ? 20
                                 : 15, // Alternating heights for ticks
                             width: 2,
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha:0.7),
                           ),
                         ),
                       ),

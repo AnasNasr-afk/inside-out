@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:patient/presentation/auth/auth_screen.dart';
 
 import '../gen/assets.gen.dart';
+import '../routing/routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,9 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToAuthScreen() async {
     await Future.delayed(const Duration(seconds: 3));
     if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const AuthScreen()),
-      );
+      Navigator.pushReplacementNamed(context, Routes.onboardingScreen);
     }
   }
 

@@ -42,9 +42,9 @@ class ArticleScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Article Title
-            Text(
+            const Text(
               "Learn About Heartbeat.", // Use bold title
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -74,11 +74,11 @@ class ArticleScreen extends StatelessWidget {
               child: Row(
                 children: [
                   // Left side: Text + Play Button
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Learn About Heartbeat.",
                           style: TextStyle(
                             fontSize: 25,
@@ -86,19 +86,19 @@ class ArticleScreen extends StatelessWidget {
                             color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6),
                         Row(
                           children: [
                             // Play Icon
                             SizedBox(width: 2),
-                            const Icon(Icons.play_circle_outline,
+                            Icon(Icons.play_circle_outline,
                                 color: Color.fromRGBO(122, 134, 248, 1),
                                 size: 30),
 
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6),
 
                             // "Check Now" Text
-                            const Text(
+                            Text(
                               "Check Now",
                               style: TextStyle(
                                   fontSize: 10,

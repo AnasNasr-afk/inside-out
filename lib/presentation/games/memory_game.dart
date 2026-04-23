@@ -100,7 +100,7 @@ class _MemoryGameState extends State<MemoryGame> {
 
             if (isGameComplete)
               Card(
-                color: Colors.green.withOpacity(0.2),
+                color: Colors.green.withValues(alpha:0.2),
                 child: const Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Row(
@@ -137,7 +137,7 @@ class _MemoryGameState extends State<MemoryGame> {
                     onTap: () => _flipCard(index),
                     child: Card(
                       color: isFlipped || isMatched
-                          ? AppTheme.primaryColor.withOpacity(0.3)
+                          ? AppTheme.primaryColor.withValues(alpha:0.3)
                           : Colors.grey.shade300,
                       child: Center(
                         child: isFlipped || isMatched
@@ -181,7 +181,7 @@ class _MemoryGameState extends State<MemoryGame> {
 
   Widget _buildStatCard(String label, String value) {
     return Card(
-      color: AppTheme.primaryColor.withOpacity(0.1),
+      color: AppTheme.primaryColor.withValues(alpha:0.1),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
