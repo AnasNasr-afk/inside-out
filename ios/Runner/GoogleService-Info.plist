@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>629023836355-9tmplleg8imgapacti1uoki1ql1fad9d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.629023836355-9tmplleg8imgapacti1uoki1ql1fad9d</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCmjMCszRoaJ60nFYrqoPGfK5Vy87QxVlg</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.aossie.neurotrack.patient</string>
+	<string>com.anas.insideout</string>
 	<key>PROJECT_ID</key>
 	<string>insideout-4cd8d</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:629023836355:ios:6ea6be020795573ff97a76</string>
+	<string>1:629023836355:ios:84fdbe7930eb9bc7f97a76</string>
 </dict>
 </plist>

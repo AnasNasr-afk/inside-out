@@ -16,18 +16,14 @@ class AuthButtonsSection extends StatelessWidget {
           right: 0,
           child: EmailSignInButton(
             onPressed: () {
-
-            },
+              Navigator.pushReplacementNamed(context, Routes.homeScreen);            },
           ),
         ),
-        Positioned(
+        const Positioned(
           bottom: 40,
           left: 0,
           right: 0,
-          child: GoogleSignInButton(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, Routes.homeScreen),
-          ),
+          child: GoogleSignInButton(),
         ),
       ],
     );

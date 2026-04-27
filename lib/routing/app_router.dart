@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient/presentation/reports/report_screen.dart';
 import 'package:patient/presentation/splash_screen.dart';
 import 'package:patient/presentation/tasks%20/task_details_screen.dart';
 import 'package:patient/routing/routes.dart';
 
+import '../core/businessLogic/auth_cubit/auth_cubit.dart';
 import '../presentation/home/home_screen.dart';
 import '../presentation/onBoarding/onboarding_screen.dart';
 
@@ -13,7 +15,9 @@ class AppRouter {
       case Routes.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.onboardingScreen:
-        return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
+        return MaterialPageRoute(builder: (_) => BlocProvider(
+          create: (context) => AuthCubit(),
+            child: const OnBoardingScreen()));
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case Routes.reportScreen:
