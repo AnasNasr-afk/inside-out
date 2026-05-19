@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color primaryColor =
-      Color(0xFF6366F1); // The purple/blue color from your design
+  static const Color primaryColor = Color(0xFF6366F1);
+
   static const Color secondaryColor = Color(0xFF7A86F8);
   static const Color backgroundColor = Colors.white;
   static const Color textColor = Color(0xFF1F2937);
   static const Color subtitleColor = Color(0xFF6B7280);
   static const Color orange = Color(0xFFF0956A);
+  static const Color hoverColor = Color(0xFF83859C);
 
   static ThemeData lightTheme() {
     return ThemeData(

@@ -1,5 +1,5 @@
-import '../../model/task_model.dart';
-import 'api_client.dart';
+import '../../../model/task_model.dart';
+import '../api_client.dart';
 
 class TaskRepository {
   final _client = ApiClient.instance;

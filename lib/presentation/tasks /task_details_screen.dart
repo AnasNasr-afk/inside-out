@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:patient/model/task_model.dart';
 import 'package:patient/presentation/tasks%20/widgets/detail_card.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
-  const TaskDetailsScreen({super.key});
+  const TaskDetailsScreen({super.key, required this.task});
+
+  final TaskModel task;
 
   @override
   State<TaskDetailsScreen> createState() => _TaskDetailsScreenState();
@@ -11,9 +14,9 @@ class TaskDetailsScreen extends StatefulWidget {
 class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   int? _moodBefore;
   int? _moodAfter;
-  bool _markedDone = false;
+  late bool _markedDone;
 
-  final List<Map<String, dynamic>> _moods = [
+  final List<Map<String, dynamic>> _moods = const [
     {'emoji': '😢', 'label': 'Very sad'},
     {'emoji': '😕', 'label': 'Sad'},
     {'emoji': '😐', 'label': 'Okay'},
@@ -22,8 +25,15 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _markedDone = widget.task.isCompleted;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final task = widget.task;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FC),
@@ -47,7 +57,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
           ),
         ),
         title: Text(
-          'Greeting Practice',
+          task.title,
+          overflow: TextOverflow.ellipsis,
           style:
               theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
@@ -64,88 +75,60 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _StatusPill(task: task),
+                  const SizedBox(height: 16),
                   DetailCard(
                     title: 'What to do',
                     icon: Icons.task_alt_rounded,
                     iconColor: const Color(0xFF6366F1),
                     child: Text(
-                      'Child practices greeting a familiar person using eye contact and a verbal "hello" or wave.',
+                      task.description.isEmpty
+                          ? 'No description provided for this task.'
+                          : task.description,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.6,
                         color: const Color(0xFF374151),
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 12),
-                  const DetailCard(
-                    title: 'Steps',
-                    icon: Icons.format_list_numbered_rounded,
-                    iconColor: Color(0xFF3B82F6),
-                    child: Column(
-                      children: [
-                        _StepItem(
-                            number: 1,
-                            text:
-                                'Stand in front of the person and look at their face.'),
-                        SizedBox(height: 8),
-                        _StepItem(
-                            number: 2, text: 'Say "Hello" or wave your hand.'),
-                        SizedBox(height: 8),
-                        _StepItem(
-                            number: 3,
-                            text: 'Wait for them to respond and smile back.'),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
                   DetailCard(
                     title: 'Time & schedule',
                     icon: Icons.schedule_rounded,
                     iconColor: const Color(0xFF10B981),
                     child: Column(
                       children: [
-                        const _ScheduleRow(label: 'Duration', value: '20 min'),
+                        _ScheduleRow(
+                            label: 'Duration', value: task.plannedDaysLabel),
                         const SizedBox(height: 8),
                         _ScheduleRow(
-                          label: 'Days',
-                          valueWidget: Row(
-                            children: ['MON', 'TUE']
-                                .map((d) => Container(
-                                      margin: const EdgeInsets.only(right: 6),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFEEF2FF),
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                            color: const Color(0xFFC7D2FE)),
-                                      ),
-                                      child: Text(d,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            color: Color(0xFF4338CA),
-                                          )),
-                                    ))
-                                .toList(),
+                            label: 'Assigned',
+                            value: task.formattedAssignedDate),
+                        const SizedBox(height: 8),
+                        _ScheduleRow(
+                            label: 'Due', value: task.formattedDueDate),
+                        if (task.isCompleted &&
+                            task.completedAt != null) ...[
+                          const SizedBox(height: 8),
+                          _ScheduleRow(
+                            label: 'Completed',
+                            value: _formatDate(task.completedAt!),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        _ScheduleRow(
-                            label: 'Best time',
-                            value: 'Morning after breakfast'),
+                        ],
+                        if (task.isCompleted && task.actualDays > 0) ...[
+                          const SizedBox(height: 8),
+                          _ScheduleRow(
+                            label: 'Took',
+                            value:
+                                '${task.actualDays.round()} ${task.actualDays.round() == 1 ? 'day' : 'days'}',
+                          ),
+                        ],
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 12),
-
-                  // ── Mood before ─────────────────────────────
                   DetailCard(
-                    title: "Sara's Mood before task",
+                    title: 'Mood before task',
                     icon: Icons.mood_rounded,
                     iconColor: const Color(0xFF8B5CF6),
                     child: _MoodPicker(
@@ -154,11 +137,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                       onSelect: (i) => setState(() => _moodBefore = i),
                     ),
                   ),
-
                   const SizedBox(height: 12),
-
                   DetailCard(
-                    title: "Sara's Mood after task",
+                    title: 'Mood after task',
                     icon: Icons.mood_bad_rounded,
                     iconColor: const Color(0xFFEC4899),
                     child: _MoodPicker(
@@ -171,8 +152,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               ),
             ),
           ),
-
-          // ── Bottom action bar ─────────────────────────────
           Container(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
             decoration: const BoxDecoration(
@@ -181,7 +160,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             ),
             child: Column(
               children: [
-                // Mark as Done
                 GestureDetector(
                   onTap: () => setState(() => _markedDone = !_markedDone),
                   child: AnimatedContainer(
@@ -228,7 +206,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Skip
                 GestureDetector(
                   onTap: () {},
                   child: Container(
@@ -257,62 +234,79 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       ),
     );
   }
+
+  String _formatDate(DateTime d) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return '${months[d.month - 1]} ${d.day}';
+  }
 }
 
-// ─────────────────────────────────────────────
-// Reusable sub-widgets
-// ─────────────────────────────────────────────
-
-class _StepItem extends StatelessWidget {
-  const _StepItem({required this.number, required this.text});
-
-  final int number;
-  final String text;
+class _StatusPill extends StatelessWidget {
+  final TaskModel task;
+  const _StatusPill({required this.task});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            color: const Color(0xFF6366F1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Center(
-            child: Text(
-              '$number',
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800),
+    late final String label;
+    late final Color fg;
+    late final Color bg;
+    late final IconData icon;
+
+    if (!task.isCompleted) {
+      label = 'Pending';
+      fg = const Color(0xFFB45309);
+      bg = const Color(0xFFFEF3C7);
+      icon = Icons.hourglass_empty_rounded;
+    } else if (task.isLate) {
+      label = 'Completed late';
+      fg = const Color(0xFFDC2626);
+      bg = const Color(0xFFFFE4E4);
+      icon = Icons.warning_amber_rounded;
+    } else if (task.isEarly) {
+      label = 'Completed early';
+      fg = const Color(0xFF059669);
+      bg = const Color(0xFFD1FAE5);
+      icon = Icons.bolt_rounded;
+    } else {
+      label = 'Completed on time';
+      fg = const Color(0xFF059669);
+      bg = const Color(0xFFD1FAE5);
+      icon = Icons.check_circle_rounded;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: fg),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: fg,
             ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF374151),
-              height: 1.5,
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class _ScheduleRow extends StatelessWidget {
-  const _ScheduleRow({required this.label, this.value, this.valueWidget});
+  const _ScheduleRow({required this.label, required this.value});
 
   final String label;
-  final String? value;
-  final Widget? valueWidget;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -332,15 +326,14 @@ class _ScheduleRow extends StatelessWidget {
         ),
         const Text(' : ',
             style: TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
-        valueWidget ??
-            Text(
-              value ?? '',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1F2937),
-              ),
-            ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1F2937),
+          ),
+        ),
       ],
     );
   }
