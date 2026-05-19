@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/presentation/appointments/appointment_list_screen.dart';
 import 'package:patient/presentation/childMood/child_mode_screen.dart';
 import 'package:patient/presentation/home/widgets/quick_action_button.dart';
@@ -11,6 +12,10 @@ class QuickActionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ── Synchronous now — no setState, no initState ─────────
+    final userId = SharedPrefHelper.getString('userId');
+    final frontendId = SharedPrefHelper.getInt('frontendId');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,9 +34,7 @@ class QuickActionsRow extends StatelessWidget {
               child: QuickActionButton(
                 icon: Icons.bar_chart_outlined,
                 label: 'Reports',
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.reportScreen);
-                },
+                onTap: () => Navigator.pushNamed(context, Routes.reportScreen),
               ),
             ),
             const SizedBox(width: 10),
@@ -40,10 +43,16 @@ class QuickActionsRow extends StatelessWidget {
                 icon: Icons.child_care_outlined,
                 label: 'Child Mode',
                 onTap: () {
+                  if (userId.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please log in again.')),
+                    );
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const ChildModeScreen(),
+                      builder: (_) => ChildModeScreen(frontendId: frontendId.toString()),
                     ),
                   );
                 },
@@ -54,14 +63,12 @@ class QuickActionsRow extends StatelessWidget {
               child: QuickActionButton(
                 icon: Icons.calendar_month_rounded,
                 label: 'Appointments',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AppointmentListScreen(),
-                    ),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AppointmentListScreen(),
+                  ),
+                ),
               ),
             ),
           ],

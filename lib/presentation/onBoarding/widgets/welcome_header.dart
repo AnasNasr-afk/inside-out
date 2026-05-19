@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/theme/theme.dart';
+
 class WelcomeHeader extends StatelessWidget {
   const WelcomeHeader({super.key});
 
@@ -9,7 +11,7 @@ class WelcomeHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: Color(0xFF6A79F7), // Blue background color
+        color: AppTheme.primaryColor,
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(100), // Adjust this value as needed
         ),

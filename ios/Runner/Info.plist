@@ -103,6 +103,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+      <string>This app needs microphone access to listen to your voice.</string>
+      <key>NSSpeechRecognitionUsageDescription</key>
+      <string>This app needs speech recognition to understand your voice.</string>
 
 </dict>
 </plist>

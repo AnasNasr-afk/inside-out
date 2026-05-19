@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../routing/routes.dart';
 import 'google_signin_button.dart';
-import 'email_signin_button.dart';
+import 'get_started_button.dart';
 
 class AuthButtonsSection extends StatelessWidget {
   const AuthButtonsSection({super.key});
@@ -10,20 +10,13 @@ class AuthButtonsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned(
-          bottom: 100,
-          left: 0,
-          right: 0,
-          child: EmailSignInButton(
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: GetStartedButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, Routes.homeScreen);            },
+              Navigator.pushNamed(context, Routes.loginScreen);
+            },
           ),
-        ),
-        const Positioned(
-          bottom: 40,
-          left: 0,
-          right: 0,
-          child: GoogleSignInButton(),
         ),
       ],
     );

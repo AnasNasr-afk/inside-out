@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/theme.dart';
 import '../../../gen/assets.gen.dart'; // IMPORTANT
 
 class BottomNavBar extends StatelessWidget {
@@ -53,7 +54,7 @@ class BottomNavBar extends StatelessWidget {
       child: icon.svg(
         width: 24,
         height: 24,
-        color: isSelected ? Colors.blueAccent : Colors.grey,
+        color: isSelected ? AppTheme.primaryColor : Colors.grey,
       ),
     );
   }

@@ -1,7 +1,7 @@
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-
 import 'constants.dart';
 
 class ApiClient {
@@ -10,17 +10,48 @@ class ApiClient {
 
   static const String _baseUrl = AppConstants.baseUrl;
 
+  // ── GET ────────────────────────────────────────────────
   Future<dynamic> get(String endpoint) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
     debugPrint('GET $uri');
-
     final response = await http.get(uri, headers: _headers);
     return _handleResponse(response);
   }
 
+  // ── POST ───────────────────────────────────────────────
+  Future<dynamic> post(String endpoint, {Map<String, dynamic>? body}) async {
+    final uri = Uri.parse('$_baseUrl$endpoint');
+    debugPrint('POST $uri');
+    debugPrint('BODY ${jsonEncode(body)}');
+    final response = await http.post(
+      uri,
+      headers: _headers,
+      body: jsonEncode(body),
+    );
+    return _handleResponse(response);
+  }
 
+  // ── PATCH ──────────────────────────────────────────────
+  Future<dynamic> patch(String endpoint, {Map<String, dynamic>? body}) async {
+    final uri = Uri.parse('$_baseUrl$endpoint');
+    debugPrint('PATCH $uri');
+    final response = await http.patch(
+      uri,
+      headers: _headers,
+      body: jsonEncode(body),
+    );
+    return _handleResponse(response);
+  }
 
+  // ── DELETE ─────────────────────────────────────────────
+  Future<dynamic> delete(String endpoint) async {
+    final uri = Uri.parse('$_baseUrl$endpoint');
+    debugPrint('DELETE $uri');
+    final response = await http.delete(uri, headers: _headers);
+    return _handleResponse(response);
+  }
 
+  // ── Headers ────────────────────────────────────────────
   Map<String, String> get _headers => {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

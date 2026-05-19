@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class EmailSignInButton extends StatelessWidget {
-  const EmailSignInButton({
+import '../../../core/theme/theme.dart';
+
+class GetStartedButton extends StatelessWidget {
+  const GetStartedButton({
     super.key,
     required this.onPressed,
   });
@@ -11,14 +13,15 @@ class EmailSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20
+          , vertical: 30),
       child: SizedBox(
         width: double.infinity,
-        height: 50,
+        height: 60,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: AppTheme.primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
               side: const BorderSide(color: Colors.black12), // subtle border
@@ -29,17 +32,12 @@ class EmailSignInButton extends StatelessWidget {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.email_outlined,
-                color: Colors.black87,
-              ),
-              SizedBox(width: 20),
               Text(
-                'Continue with Email',
+                'Get Started',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
             ],
