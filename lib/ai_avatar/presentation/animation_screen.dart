@@ -19,7 +19,6 @@ class _AnimationScreenState extends ConsumerState<AnimationScreen> {
 
   @override
   void initState() {
-    print('animation screen init state');
     super.initState();
 
     rootBundle.load('assets/bear_character.riv').then(
@@ -33,21 +32,21 @@ class _AnimationScreenState extends ConsumerState<AnimationScreen> {
             artboard.addController(controller);
             isHearing = controller.findSMI('Hear');
             talk = controller.findSMI('Talk');
-            setState(
-              () {
-                riveArtboard = artboard;
-              },
-            );
+            setState(() {
+              riveArtboard = artboard;
+            });
+            // Apply current state after the artboard is ready
+            _toggleAnimation(ref.read(animationStateControllerProvider));
           }
         } catch (e) {
-          print(e);
+          debugPrint('❌ Rive load error: $e');
         }
       },
     );
   }
 
   void _toggleAnimation(AnimationState newValue) {
-    print('toggle animation, is hearing: ${newValue.isHearing}');
+    debugPrint('toggle animation, is hearing: ${newValue.isHearing}');
     isHearing?.value = newValue.isHearing;
     talk?.value = newValue.isTalking;
   }
@@ -57,20 +56,22 @@ class _AnimationScreenState extends ConsumerState<AnimationScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    final animState = ref.watch(animationStateControllerProvider);
-    print('Built animation screen');
-    _toggleAnimation(animState);
+
+    ref.listen(animationStateControllerProvider, (_, next) {
+      _toggleAnimation(next);
+    });
+
     return Align(
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.center,
       child: FractionallySizedBox(
         widthFactor: 1,
-        heightFactor: 0.45,
+        heightFactor: 0.65,
         child: riveArtboard == null
             ? const SizedBox()
             : Rive(
                 artboard: riveArtboard!,
-                alignment: Alignment.topCenter,
-                fit: BoxFit.fitWidth,
+                alignment: Alignment.center,
+                fit: BoxFit.contain,
               ),
       ),
     );

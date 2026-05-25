@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:patient/ai_avatar/utils/text_to_speech_api.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'google_cloud_repository.g.dart';
@@ -17,6 +20,16 @@ class GoogleCloudRepository {
   Future<ByteAudioSource> synthesizeText(String text, String lang) async {
     final audioBytes = await ttsAPI.synthesizeText(text, lang);
     return ByteAudioSource(audioBytes);
+  }
+
+  /// Writes audio to a temp file and returns a file-URI AudioSource.
+  /// Avoids just_audio's local HTTP server (no cleartext traffic issue).
+  Future<AudioSource> synthesizeToFileSource(String text, String lang) async {
+    final audioBytes = await ttsAPI.synthesizeText(text, lang);
+    final dir = await getTemporaryDirectory();
+    final file = File('${dir.path}/poly_tts.mp3');
+    await file.writeAsBytes(audioBytes);
+    return AudioSource.uri(Uri.file(file.path));
   }
 }
 

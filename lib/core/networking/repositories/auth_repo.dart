@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/responses/login_response_model.dart';
-import '../../../model/requests/signup_request_model.dart';
+import '../../models/responses/login_response_model.dart';
+import '../../models/requests/signup_request_model.dart';
 import '../api_client.dart';
 
 class AuthRepository {

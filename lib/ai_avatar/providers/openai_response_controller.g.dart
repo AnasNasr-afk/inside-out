@@ -7,7 +7,7 @@ part of 'openai_response_controller.dart';
 // **************************************************************************
 
 String _$openAIResponseControllerHash() =>
-    r'6af9e812ab3aa040e1145c24a051a2b9e83fb320';
+    r'689e7cf8279432f4cf46bd0c4f21822bb0d1665e';
 
 /// See also [OpenAIResponseController].
 @ProviderFor(OpenAIResponseController)
@@ -24,4 +24,4 @@ final openAIResponseControllerProvider = AutoDisposeNotifierProvider<
 
 typedef _$OpenAIResponseController = AutoDisposeNotifier<AsyncValue<String?>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

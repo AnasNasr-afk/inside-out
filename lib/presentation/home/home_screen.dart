@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patient/core/businessLogic/auth_cubit/auth_cubit.dart';
-import 'package:patient/core/businessLogic/task_cubit/task_cubit.dart';
+import 'package:patient/core/cubits/auth_cubit/auth_cubit.dart';
+import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/presentation/home/widgets/bottom_nav_bar.dart';
 import 'package:patient/presentation/home/widgets/home_content.dart';

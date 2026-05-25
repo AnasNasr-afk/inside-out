@@ -6,7 +6,7 @@ import '../core/helpers/shared_pref.dart';
 import '../core/helpers/shared_pref_keys.dart';
 import '../core/theme/theme.dart';
 import '../gen/assets.gen.dart';
-import '../routing/routes.dart';
+import '../core/routing/routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:patient/presentation/childMood/widgets/child_mode_body.dart';
+import 'package:patient/presentation/child_mood/widgets/child_mode_body.dart';
 
-import '../../core/networking/data/auth_repo.dart';
+import '../../core/networking/repositories/auth_repo.dart';
 
 
 // ═══════════════════════════════════════════════════════════

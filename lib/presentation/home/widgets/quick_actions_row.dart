@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/presentation/appointments/appointment_list_screen.dart';
-import 'package:patient/presentation/childMood/child_mode_screen.dart';
+import 'package:patient/presentation/child_mood/child_mode_screen.dart';
 import 'package:patient/presentation/home/widgets/quick_action_button.dart';
 
-import '../../../routing/routes.dart';
+import '../../../core/routing/routes.dart';
 
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});

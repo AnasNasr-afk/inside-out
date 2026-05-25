@@ -11,6 +11,18 @@ class AppTheme {
   static const Color orange = Color(0xFFF0956A);
   static const Color hoverColor = Color(0xFF83859C);
 
+  // Spin-wheel segment palette — change here to retheme the whole wheel
+  static const List<Color> wheelColors = [
+    Color(0xFFE53935), // red
+    Color(0xFFF57C00), // orange
+    Color(0xFFFFB300), // amber
+    Color(0xFF2E7D32), // green
+    Color(0xFF1565C0), // blue
+    Color(0xFF6A1B9A), // purple
+    Color(0xFFAD1457), // pink
+    Color(0xFF00838F), // teal
+  ];
+
   static ThemeData lightTheme() {
     return ThemeData(
       primaryColor: primaryColor,

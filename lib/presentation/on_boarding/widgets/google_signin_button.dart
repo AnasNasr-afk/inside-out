@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/businessLogic/auth_cubit/auth_cubit.dart';
-import '../../../core/businessLogic/auth_cubit/auth_listener.dart';
+import '../../../core/cubits/auth_cubit/auth_cubit.dart';
+import '../../../core/cubits/auth_cubit/auth_listener.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../routing/routes.dart';
+import '../../../core/routing/routes.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({super.key});

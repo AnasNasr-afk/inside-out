@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/businessLogic/avatar_cubit/avatar_cubit.dart';
-import '../../../core/businessLogic/avatar_cubit/avatar_states.dart';
+import '../../../core/cubits/avatar_cubit/avatar_cubit.dart';
+import '../../../core/cubits/avatar_cubit/avatar_states.dart';
 
 class AvatarView extends StatelessWidget {
   const AvatarView({super.key});
