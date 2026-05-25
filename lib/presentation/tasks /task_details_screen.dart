@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:patient/model/task_model.dart';
+import 'package:patient/core/models/task_model.dart';
 import 'package:patient/presentation/tasks%20/widgets/detail_card.dart';
 
 class TaskDetailsScreen extends StatefulWidget {

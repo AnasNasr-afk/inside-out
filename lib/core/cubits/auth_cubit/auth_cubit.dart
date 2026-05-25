@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../model/responses/login_response_model.dart';
-import '../../../model/requests/signup_request_model.dart';
-import '../../../model/user_model.dart';
+import '../../models/responses/login_response_model.dart';
+import '../../models/requests/signup_request_model.dart';
+import '../../models/user_model.dart';
 import '../../networking/api_client.dart';
-import '../../networking/data/auth_repo.dart';
+import '../../networking/repositories/auth_repo.dart';
 import '../../helpers/shared_pref.dart';
 import '../../helpers/shared_pref_keys.dart';
 import 'auth_listener.dart';

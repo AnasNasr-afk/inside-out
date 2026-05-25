@@ -1,4 +1,4 @@
-import '../../../model/task_model.dart';
+import '../../models/task_model.dart';
 import '../api_client.dart';
 
 class TaskRepository {

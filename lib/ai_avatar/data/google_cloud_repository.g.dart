@@ -21,6 +21,8 @@ final googleCloudRepositoryProvider = Provider<GoogleCloudRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GoogleCloudRepositoryRef = ProviderRef<GoogleCloudRepository>;
 String _$voicesFutureHash() => r'6675c523d4477c80550b1c5db203a60d69ea05fa';
 
@@ -35,6 +37,8 @@ final voicesFutureProvider = AutoDisposeFutureProvider<List<Voice>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef VoicesFutureRef = AutoDisposeFutureProviderRef<List<Voice>>;
 String _$synthesizeTextFutureHash() =>
     r'1e607d720c7dfd0bd694710257c272a4e23b1cf3';
@@ -186,6 +190,8 @@ class SynthesizeTextFutureProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin SynthesizeTextFutureRef on AutoDisposeFutureProviderRef<ByteAudioSource> {
   /// The parameter `text` of this provider.
   String get text;
@@ -205,4 +211,4 @@ class _SynthesizeTextFutureProviderElement
   String get lang => (origin as SynthesizeTextFutureProvider).lang;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

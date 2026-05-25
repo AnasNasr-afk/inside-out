@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patient/core/businessLogic/task_cubit/task_cubit.dart';
+import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/presentation/tasks%20/widgets/progress_banner.dart';
 import 'package:patient/presentation/tasks%20/widgets/task_card.dart';
 import 'package:patient/presentation/tasks%20/widgets/task_header.dart';
 
-import '../../core/businessLogic/task_cubit/task_listener.dart';
-import '../../model/task_model.dart';
+import '../../core/cubits/task_cubit/task_listener.dart';
+import '../../core/models/task_model.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});

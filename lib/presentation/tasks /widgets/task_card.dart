@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../model/task_model.dart';
-import '../../../routing/routes.dart';
+import '../../../core/models/task_model.dart';
+import '../../../core/routing/routes.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task});

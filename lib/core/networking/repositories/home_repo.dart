@@ -1,4 +1,4 @@
-import '../../../model/responses/parent_child_response_model.dart';
+import '../../models/responses/parent_child_response_model.dart';
 import '../api_client.dart';
 
 class HomeRepository {

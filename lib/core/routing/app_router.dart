@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:patient/ai_avatar/presentation/home_screen.dart';
-import 'package:patient/core/businessLogic/task_cubit/task_cubit.dart';
+import 'package:patient/ai_avatar/presentation/avatar_screen.dart';
+import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/presentation/auth/login_screen.dart';
 import 'package:patient/presentation/auth/signup_screen.dart';
 import 'package:patient/presentation/avatar/avatar_screen.dart';
 import 'package:patient/presentation/chat/chat_screen.dart';
 import 'package:patient/presentation/reports/report_screen.dart';
 import 'package:patient/presentation/splash_screen.dart';
-import 'package:patient/model/task_model.dart';
+import 'package:patient/core/models/task_model.dart';
 import 'package:patient/presentation/tasks%20/task_details_screen.dart';
-import 'package:patient/routing/routes.dart';
+import 'package:patient/core/routing/routes.dart';
 
-import '../core/businessLogic/auth_cubit/auth_cubit.dart';
-import '../presentation/home/home_screen.dart';
-import '../presentation/onBoarding/onboarding_screen.dart';
+import '../cubits/auth_cubit/auth_cubit.dart';
+import '../../presentation/home/home_screen.dart';
+import '../../presentation/on_boarding/onboarding_screen.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings settings) {

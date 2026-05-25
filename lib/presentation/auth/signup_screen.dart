@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patient/core/appWidgets/app_text_form_field.dart';
-import 'package:patient/core/businessLogic/auth_cubit/auth_cubit.dart';
+import 'package:patient/core/widgets/app_text_form_field.dart';
+import 'package:patient/core/cubits/auth_cubit/auth_cubit.dart';
 import 'package:patient/core/theme/theme.dart';
 
-import '../../core/businessLogic/auth_cubit/auth_listener.dart';
-import '../../routing/routes.dart';
+import '../../core/cubits/auth_cubit/auth_listener.dart';
+import '../../core/routing/routes.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});

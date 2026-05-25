@@ -1,13 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patient/core/businessLogic/task_cubit/task_listener.dart';
+import 'package:patient/core/cubits/task_cubit/task_listener.dart';
+import 'package:patient/core/helpers/shared_pref.dart';
+import 'package:patient/core/helpers/shared_pref_keys.dart';
 
-import '../../../model/responses/parent_child_response_model.dart';
-import '../../../model/task_model.dart';
+import '../../models/responses/parent_child_response_model.dart';
+import '../../models/task_model.dart';
 import '../../networking/api_client.dart';
-import '../../networking/data/home_repo.dart';
-import '../../networking/data/tasks_repo.dart';
+import '../../networking/repositories/home_repo.dart';
+import '../../networking/repositories/tasks_repo.dart';
 
 
 class TaskCubit extends Cubit<TaskStates> {
@@ -27,16 +29,15 @@ class TaskCubit extends Cubit<TaskStates> {
 
   Future<void> getParentChildData(int childId) async {
     try {
-      parentChildData =
-      await _homeRepository.getParentChildData(
-        childId,
-      );
+      parentChildData = await _homeRepository.getParentChildData(childId);
+
+      // Persist child profile so the AI avatar can read it without BLoC
+      await SharedPrefHelper.setData(SharedPrefKeys.childAge, parentChildData!.age);
+      await SharedPrefHelper.setData(SharedPrefKeys.childCase, parentChildData!.description);
 
       emit(TaskSuccessState(tasks));
     } catch (e) {
-      emit(TaskErrorState(
-        'Failed to load parent/child data',
-      ));
+      emit(TaskErrorState('Failed to load parent/child data'));
     }
   }
   Future<void> getTasks(int childId) async {

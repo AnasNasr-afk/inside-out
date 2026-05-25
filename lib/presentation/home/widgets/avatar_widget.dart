@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../routing/routes.dart';
+import '../../../core/routing/routes.dart';
 
 class AvatarWidget extends StatelessWidget {
   const AvatarWidget({super.key});

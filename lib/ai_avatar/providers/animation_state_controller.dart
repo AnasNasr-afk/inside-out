@@ -27,6 +27,15 @@ class AnimationStateController extends _$AnimationStateController {
   }
 
   void toggleLanguage() {
-    state = AnimationState(language: state.language == 'en' ? 'jp' : 'en');
+    final next = switch (state.language) {
+      'en' => 'ar',
+      'ar' => 'jp',
+      _ => 'en',
+    };
+    state = AnimationState(
+      language: next,
+      isHearing: state.isHearing,
+      isTalking: state.isTalking,
+    );
   }
 }

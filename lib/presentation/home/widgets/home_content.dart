@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patient/core/businessLogic/task_cubit/task_cubit.dart';
-import 'package:patient/core/businessLogic/task_cubit/task_listener.dart';
+import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
+import 'package:patient/core/cubits/task_cubit/task_listener.dart';
 import 'package:patient/gen/assets.gen.dart';
 import 'package:patient/presentation/home/widgets/quick_actions_row.dart';
 
-import '../../../routing/routes.dart';
+import '../../../core/routing/routes.dart';
 import 'avatar_widget.dart';
 import 'daily_activities_card.dart';
 import 'mood_check_in_card.dart';

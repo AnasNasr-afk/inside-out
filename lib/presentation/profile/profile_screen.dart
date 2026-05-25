@@ -6,10 +6,10 @@ import 'package:patient/presentation/profile/widgets/circular_usage_indicator.da
 import 'package:patient/presentation/profile/widgets/menu_item.dart';
 import 'package:patient/presentation/profile/widgets/person_row.dart';
 
-import '../../core/businessLogic/auth_cubit/auth_cubit.dart';
-import '../../core/businessLogic/auth_cubit/auth_listener.dart';
-import '../../core/businessLogic/task_cubit/task_cubit.dart';
-import '../../routing/routes.dart';
+import '../../core/cubits/auth_cubit/auth_cubit.dart';
+import '../../core/cubits/auth_cubit/auth_listener.dart';
+import '../../core/cubits/task_cubit/task_cubit.dart';
+import '../../core/routing/routes.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
