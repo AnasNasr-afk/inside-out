@@ -13,4 +13,10 @@ class TaskRepository {
         .map((e) => TaskModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+
+  Future<void> completeTask(int taskId, String motherNote) async {
+    await _client.patch(
+      'Task/$taskId/CompleteTaskWithParentNote?motherNote=${Uri.encodeComponent(motherNote)}',
+    );
+  }
 }

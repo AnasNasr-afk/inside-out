@@ -13,3 +13,12 @@ class TaskErrorState extends TaskStates {
   final String message;
   TaskErrorState(this.message);
 }
+
+class TaskCompleteLoadingState extends TaskStates {}
+
+class TaskCompleteSuccessState extends TaskStates {}
+
+class TaskCompleteErrorState extends TaskStates {
+  final String message;
+  TaskCompleteErrorState(this.message);
+}

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
+import 'package:patient/core/cubits/task_cubit/task_listener.dart';
 import 'package:patient/core/models/task_model.dart';
-import 'package:patient/presentation/tasks%20/widgets/detail_card.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
   const TaskDetailsScreen({super.key, required this.task});
@@ -12,325 +14,293 @@ class TaskDetailsScreen extends StatefulWidget {
 }
 
 class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
-  int? _moodBefore;
-  int? _moodAfter;
   late bool _markedDone;
-
-  final List<Map<String, dynamic>> _moods = const [
-    {'emoji': '😢', 'label': 'Very sad'},
-    {'emoji': '😕', 'label': 'Sad'},
-    {'emoji': '😐', 'label': 'Okay'},
-    {'emoji': '🙂', 'label': 'Happy'},
-    {'emoji': '😄', 'label': 'Very happy'},
-  ];
+  bool _isSubmitting = false;
+  bool _showAppBarTitle = false;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _markedDone = widget.task.isCompleted;
+    _scrollController.addListener(() {
+      final show = _scrollController.offset > 72;
+      if (show != _showAppBarTitle) setState(() => _showAppBarTitle = show);
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final task = widget.task;
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF3F4F6),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 16,
-              color: Color(0xFF1F2937),
-            ),
-          ),
-        ),
-        title: Text(
-          task.title,
-          overflow: TextOverflow.ellipsis,
-          style:
-              theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: const Color(0xFFF3F4F6)),
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _StatusPill(task: task),
-                  const SizedBox(height: 16),
-                  DetailCard(
-                    title: 'What to do',
-                    icon: Icons.task_alt_rounded,
-                    iconColor: const Color(0xFF6366F1),
-                    child: Text(
-                      task.description.isEmpty
-                          ? 'No description provided for this task.'
-                          : task.description,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        height: 1.6,
-                        color: const Color(0xFF374151),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  DetailCard(
-                    title: 'Time & schedule',
-                    icon: Icons.schedule_rounded,
-                    iconColor: const Color(0xFF10B981),
-                    child: Column(
-                      children: [
-                        _ScheduleRow(
-                            label: 'Duration', value: task.plannedDaysLabel),
-                        const SizedBox(height: 8),
-                        _ScheduleRow(
-                            label: 'Assigned',
-                            value: task.formattedAssignedDate),
-                        const SizedBox(height: 8),
-                        _ScheduleRow(
-                            label: 'Due', value: task.formattedDueDate),
-                        if (task.isCompleted &&
-                            task.completedAt != null) ...[
-                          const SizedBox(height: 8),
-                          _ScheduleRow(
-                            label: 'Completed',
-                            value: _formatDate(task.completedAt!),
-                          ),
-                        ],
-                        if (task.isCompleted && task.actualDays > 0) ...[
-                          const SizedBox(height: 8),
-                          _ScheduleRow(
-                            label: 'Took',
-                            value:
-                                '${task.actualDays.round()} ${task.actualDays.round() == 1 ? 'day' : 'days'}',
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  DetailCard(
-                    title: 'Mood before task',
-                    icon: Icons.mood_rounded,
-                    iconColor: const Color(0xFF8B5CF6),
-                    child: _MoodPicker(
-                      moods: _moods,
-                      selected: _moodBefore,
-                      onSelect: (i) => setState(() => _moodBefore = i),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  DetailCard(
-                    title: 'Mood after task',
-                    icon: Icons.mood_bad_rounded,
-                    iconColor: const Color(0xFFEC4899),
-                    child: _MoodPicker(
-                      moods: _moods,
-                      selected: _moodAfter,
-                      onSelect: (i) => setState(() => _moodAfter = i),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: Color(0xFFF3F4F6))),
-            ),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () => setState(() => _markedDone = !_markedDone),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: _markedDone
-                          ? const Color(0xFF10B981)
-                          : const Color(0xFF6366F1),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (_markedDone
-                                  ? const Color(0xFF10B981)
-                                  : const Color(0xFF6366F1))
-                              .withValues(alpha: 0.35),
-                          blurRadius: 16,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          _markedDone
-                              ? Icons.check_circle_rounded
-                              : Icons.check_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _markedDone ? 'Completed ✓' : 'Mark as Done',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFFE5E7EB)),
-                    ),
-                    child: const Text(
-                      'Skip for today',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF9CA3AF),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+  void _showParentNoteSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _ParentNoteSheet(
+        onSubmit: (note) {
+          Navigator.pop(context);
+          TaskCubit.get(context).completeTask(widget.task.taskId, note);
+        },
       ),
     );
   }
 
-  String _formatDate(DateTime d) {
+  @override
+  Widget build(BuildContext context) {
+    final task = widget.task;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return BlocListener<TaskCubit, TaskStates>(
+      listenWhen: (_, s) =>
+          s is TaskCompleteLoadingState ||
+          s is TaskCompleteSuccessState ||
+          s is TaskCompleteErrorState,
+      listener: (context, state) {
+        if (state is TaskCompleteLoadingState) {
+          setState(() => _isSubmitting = true);
+        } else if (state is TaskCompleteSuccessState) {
+          setState(() {
+            _markedDone = true;
+            _isSubmitting = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Task marked as completed!'),
+              backgroundColor: Color(0xFF10B981),
+            ),
+          );
+        } else if (state is TaskCompleteErrorState) {
+          setState(() => _isSubmitting = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: const Color(0xFFDC2626),
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF3F4F6),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 16,
+                color: Color(0xFF1F2937),
+              ),
+            ),
+          ),
+          // ── Fades in once title scrolls out of view ──
+          title: AnimatedOpacity(
+            opacity: _showAppBarTitle ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 180),
+            child: Text(
+              task.title,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF111827),
+              ),
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: AnimatedOpacity(
+              opacity: _showAppBarTitle ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 180),
+              child: Container(height: 1, color: const Color(0xFFF3F4F6)),
+            ),
+          ),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ── Title — hero text ───────────────────
+                    Text(
+                      task.title,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF111827),
+                        height: 1.3,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // ── Status: pill or completion banner ───
+                    if (_markedDone)
+                      _CompletionBanner(task: task)
+                    else
+                      _StatusPill(task: task),
+
+                    const SizedBox(height: 32),
+
+                    // ── Description ─────────────────────────
+                    const _SectionLabel('Description'),
+                    const SizedBox(height: 10),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF9FAFB),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        task.description.isEmpty
+                            ? 'No description provided for this task.'
+                            : task.description,
+                        style: TextStyle(
+                          fontSize: 15,
+                          height: 1.7,
+                          color: task.description.isEmpty
+                              ? const Color(0xFF9CA3AF)
+                              : const Color(0xFF374151),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+
+                    // ── Timeline ────────────────────────────
+                    const _SectionLabel('Timeline'),
+                    const SizedBox(height: 16),
+                    _VisualTimeline(task: task, markedDone: _markedDone),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Bottom action ────────────────────────────
+            Container(
+              padding: EdgeInsets.fromLTRB(24, 12, 24, bottomPadding + 12),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(top: BorderSide(color: Color(0xFFF3F4F6))),
+              ),
+              child: _markedDone
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check_circle_rounded,
+                            size: 18, color: Color(0xFF10B981)),
+                        SizedBox(width: 8),
+                        Text(
+                          'Task completed',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF10B981),
+                          ),
+                        ),
+                      ],
+                    )
+                  : GestureDetector(
+                      onTap: _isSubmitting ? null : _showParentNoteSheet,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6366F1),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF6366F1)
+                                  .withValues(alpha: 0.3),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: _isSubmitting
+                            ? const Center(
+                                child: SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                ),
+                              )
+                            : const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.check_rounded,
+                                      color: Colors.white, size: 20),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Mark as Done',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static String fmtDate(DateTime d) {
     const months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
     ];
     return '${months[d.month - 1]} ${d.day}';
   }
 }
 
-class _StatusPill extends StatelessWidget {
-  final TaskModel task;
-  const _StatusPill({required this.task});
+// ── Section label ──────────────────────────────────────────────────────────────
 
-  @override
-  Widget build(BuildContext context) {
-    late final String label;
-    late final Color fg;
-    late final Color bg;
-    late final IconData icon;
-
-    if (!task.isCompleted) {
-      label = 'Pending';
-      fg = const Color(0xFFB45309);
-      bg = const Color(0xFFFEF3C7);
-      icon = Icons.hourglass_empty_rounded;
-    } else if (task.isLate) {
-      label = 'Completed late';
-      fg = const Color(0xFFDC2626);
-      bg = const Color(0xFFFFE4E4);
-      icon = Icons.warning_amber_rounded;
-    } else if (task.isEarly) {
-      label = 'Completed early';
-      fg = const Color(0xFF059669);
-      bg = const Color(0xFFD1FAE5);
-      icon = Icons.bolt_rounded;
-    } else {
-      label = 'Completed on time';
-      fg = const Color(0xFF059669);
-      bg = const Color(0xFFD1FAE5);
-      icon = Icons.check_circle_rounded;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: fg),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: fg,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ScheduleRow extends StatelessWidget {
-  const _ScheduleRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text);
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 80,
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF6B7280),
-            ),
+        Container(
+          width: 3,
+          height: 16,
+          decoration: BoxDecoration(
+            color: const Color(0xFF6366F1),
+            borderRadius: BorderRadius.circular(2),
           ),
         ),
-        const Text(' : ',
-            style: TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
+        const SizedBox(width: 8),
         Text(
-          value,
+          text,
           style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
             color: Color(0xFF1F2937),
           ),
         ),
@@ -339,59 +309,372 @@ class _ScheduleRow extends StatelessWidget {
   }
 }
 
-class _MoodPicker extends StatelessWidget {
-  const _MoodPicker({
-    required this.moods,
-    required this.selected,
-    required this.onSelect,
-  });
+// ── Status pill (pending / overdue only) ───────────────────────────────────────
 
-  final List<Map<String, dynamic>> moods;
-  final int? selected;
-  final ValueChanged<int> onSelect;
+class _StatusPill extends StatelessWidget {
+  final TaskModel task;
+
+  const _StatusPill({required this.task});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(moods.length, (i) {
-        final isSelected = selected == i;
-        return GestureDetector(
-          onTap: () => onSelect(i),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0xFF6366F1)
-                  : const Color(0xFFF3F4F6),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: isSelected
-                    ? const Color(0xFF6366F1)
-                    : const Color(0xFFE5E7EB),
-                width: 1.5,
-              ),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: const Color(0xFF6366F1).withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      )
-                    ]
-                  : [],
+    final bool overdue = task.isOverdue;
+    final Color fg =
+        overdue ? const Color(0xFFDC2626) : const Color(0xFFB45309);
+    final Color bg =
+        overdue ? const Color(0xFFFFE4E4) : const Color(0xFFFEF3C7);
+    final IconData icon = overdue
+        ? Icons.warning_amber_rounded
+        : Icons.hourglass_empty_rounded;
+    final String label = overdue ? 'Overdue' : 'Pending';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: fg),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w700, color: fg),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Completion banner ──────────────────────────────────────────────────────────
+
+class _CompletionBanner extends StatelessWidget {
+  final TaskModel task;
+
+  const _CompletionBanner({required this.task});
+
+  @override
+  Widget build(BuildContext context) {
+    final String dateText = task.completedAt != null
+        ? 'Completed on ${_TaskDetailsScreenState.fmtDate(task.completedAt!)}'
+        : 'Marked as completed';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFECFDF5),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFF10B981).withValues(alpha: 0.3),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFF10B981),
             ),
-            child: Center(
-              child: Text(
-                moods[i]['emoji'],
-                style: TextStyle(fontSize: isSelected ? 26 : 22),
+            child: const Icon(Icons.check_rounded,
+                color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Task Completed',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF065F46),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                dateText,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF059669),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Visual timeline ────────────────────────────────────────────────────────────
+
+class _VisualTimeline extends StatelessWidget {
+  final TaskModel task;
+  final bool markedDone;
+
+  const _VisualTimeline({required this.task, required this.markedDone});
+
+  @override
+  Widget build(BuildContext context) {
+    final Color dueColor = markedDone
+        ? const Color(0xFF10B981)
+        : task.isOverdue
+            ? const Color(0xFFDC2626)
+            : const Color(0xFF6366F1);
+
+    final String dueLabel = markedDone
+        ? 'Completed'
+        : task.isOverdue
+            ? 'Overdue since'
+            : 'Due';
+
+    final String dueDate = markedDone
+        ? (task.completedAt != null
+            ? _TaskDetailsScreenState.fmtDate(task.completedAt!)
+            : _TaskDetailsScreenState.fmtDate(DateTime.now()))
+        : task.formattedDueDate;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ── Dot + connector column ────────────
+        SizedBox(
+          width: 16,
+          child: Column(
+            children: [
+              const SizedBox(height: 3),
+              Container(
+                width: 14,
+                height: 14,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF6366F1),
+                ),
+              ),
+              Container(
+                width: 2,
+                height: 36,
+                color: const Color(0xFFE5E7EB),
+              ),
+              Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: markedDone ? dueColor : Colors.white,
+                  border: Border.all(color: dueColor, width: 2),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 16),
+
+        // ── Label + date column ───────────────
+        Expanded(
+          child: Column(
+            children: [
+              // Assigned
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Assigned',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                  Text(
+                    task.formattedAssignedDate,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF111827),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 36),
+
+              // Due / Completed
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    dueLabel,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: dueColor,
+                    ),
+                  ),
+                  Text(
+                    dueDate,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: dueColor,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Parent note sheet ──────────────────────────────────────────────────────────
+
+class _ParentNoteSheet extends StatefulWidget {
+  const _ParentNoteSheet({required this.onSubmit});
+
+  final void Function(String note) onSubmit;
+
+  @override
+  State<_ParentNoteSheet> createState() => _ParentNoteSheetState();
+}
+
+class _ParentNoteSheetState extends State<_ParentNoteSheet> {
+  final _controller = TextEditingController();
+  bool _showError = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final note = _controller.text.trim();
+    if (note.isEmpty) {
+      setState(() => _showError = true);
+      return;
+    }
+    widget.onSubmit(note);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        12,
+        20,
+        MediaQuery.of(context).viewInsets.bottom + 28,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE5E7EB),
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
           ),
-        );
-      }),
+          const SizedBox(height: 20),
+          const Text(
+            "Parent's Note",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF1F2937),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Share what was challenging and what went well during this task.',
+            style: TextStyle(
+              fontSize: 13,
+              color: Color(0xFF6B7280),
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _controller,
+            maxLines: 4,
+            textInputAction: TextInputAction.newline,
+            onChanged: (_) {
+              if (_showError) setState(() => _showError = false);
+            },
+            decoration: InputDecoration(
+              hintText:
+                  'e.g. "She struggled with pronunciation but loved the pictures..."',
+              hintStyle: const TextStyle(
+                color: Color(0xFF9CA3AF),
+                fontSize: 13,
+              ),
+              errorText:
+                  _showError ? 'Please write a note before submitting.' : null,
+              filled: true,
+              fillColor: const Color(0xFFF9FAFB),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: _showError
+                      ? const Color(0xFFDC2626)
+                      : const Color(0xFFE5E7EB),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: _showError
+                      ? const Color(0xFFDC2626)
+                      : const Color(0xFF6366F1),
+                  width: 1.5,
+                ),
+              ),
+              contentPadding: const EdgeInsets.all(14),
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _submit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6366F1),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Submit',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
