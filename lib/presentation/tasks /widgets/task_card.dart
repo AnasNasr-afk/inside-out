@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/theme/theme.dart';
+import '../../../core/cubits/task_cubit/task_cubit.dart';
+import '../../../core/helpers/shared_pref.dart';
+import '../../../core/helpers/shared_pref_keys.dart';
 import '../../../core/models/task_model.dart';
 import '../../../core/routing/routes.dart';
+import '../../../core/theme/theme.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task});
@@ -43,11 +47,19 @@ class TaskCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        Routes.taskDetailsScreen,
-        arguments: task,
-      ),
+      onTap: () async {
+        final result = await Navigator.pushNamed(
+          context,
+          Routes.taskDetailsScreen,
+          arguments: task,
+        );
+        if (result == true && context.mounted) {
+          final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
+          if (childId != 0) {
+            TaskCubit.get(context).getTasks(childId);
+          }
+        }
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         decoration: BoxDecoration(

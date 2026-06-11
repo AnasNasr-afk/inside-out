@@ -8,6 +8,8 @@ class TaskModel {
   final double plannedDays;
   final double actualDays;
   final bool isCompleted;
+  // null = regular task; 'memory_cards' | 'color_match' | 'emotion_match' = game task
+  final String? gameType;
 
   const TaskModel({
     required this.taskId,
@@ -19,7 +21,17 @@ class TaskModel {
     required this.plannedDays,
     required this.actualDays,
     required this.isCompleted,
+    this.gameType,
   });
+
+  bool get isGameTask => gameType != null && gameType!.isNotEmpty;
+
+  String get gameDisplayName => switch (gameType) {
+        'memory_cards' => 'Memory Cards',
+        'color_match' => 'Color Match',
+        'emotion_match' => 'Emotion Match',
+        _ => '',
+      };
 
   // factory TaskModel.fromJson(Map<String, dynamic> json) {
   //   final status = json['taskStatus'] ?? 'Pending';
@@ -69,7 +81,17 @@ class TaskModel {
       plannedDays: (json['plannedDays'] as num?)?.toDouble() ?? 0,
       actualDays: (json['actualDays'] as num?)?.toDouble() ?? 0,
       isCompleted: isCompleted,
+      gameType: (json['gameType'] as String?) ?? _inferGameType(json['title'] as String? ?? ''),
     );
+  }
+
+  // TODO: remove once backend sends gameType in task response
+  static String? _inferGameType(String title) {
+    final t = title.toLowerCase();
+    if (t.contains('memory')) return 'memory_cards';
+    if (t.contains('color')) return 'color_match';
+    if (t.contains('emotion')) return 'emotion_match';
+    return null;
   }
 
   static bool _deriveIsCompleted(Map<String, dynamic> json, DateTime? completedAt) {

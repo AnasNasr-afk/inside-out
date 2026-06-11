@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_listener.dart';
 import 'package:patient/core/models/task_model.dart';
+import 'package:patient/presentation/games/color_match_game.dart';
+import 'package:patient/presentation/games/emotion_game.dart';
+import 'package:patient/presentation/games/memory_game.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
   const TaskDetailsScreen({super.key, required this.task});
@@ -49,6 +52,25 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
     );
   }
 
+  Future<void> _launchGame() async {
+    final task = widget.task;
+    final Widget gameScreen = switch (task.gameType) {
+      'memory_cards' => MemoryGame(taskId: task.taskId),
+      'color_match' => ColorMatchGame(taskId: task.taskId),
+      'emotion_match' => EmotionGame(taskId: task.taskId),
+      _ => const SizedBox.shrink(),
+    };
+
+    final completed = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => gameScreen),
+    );
+
+    if (completed == true && mounted) {
+      setState(() => _markedDone = true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final task = widget.task;
@@ -83,14 +105,19 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
           );
         }
       },
-      child: Scaffold(
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) Navigator.pop(context, _markedDone);
+        },
+        child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           scrolledUnderElevation: 0,
           leading: GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.pop(context, _markedDone),
             child: Container(
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -166,18 +193,39 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                         color: const Color(0xFFF9FAFB),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        task.description.isEmpty
-                            ? 'No description provided for this task.'
-                            : task.description,
-                        style: TextStyle(
-                          fontSize: 15,
-                          height: 1.7,
-                          color: task.description.isEmpty
-                              ? const Color(0xFF9CA3AF)
-                              : const Color(0xFF374151),
-                        ),
-                      ),
+                      child: task.isGameTask && task.description.isEmpty
+                          ? Row(
+                              children: [
+                                const Icon(
+                                  Icons.sports_esports_rounded,
+                                  size: 18,
+                                  color: Color(0xFF7C3AED),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'Tap "Play ${task.gameDisplayName}" below to start the game.',
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      height: 1.6,
+                                      color: Color(0xFF7C3AED),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              task.description.isEmpty
+                                  ? 'No description provided for this task.'
+                                  : task.description,
+                              style: TextStyle(
+                                fontSize: 15,
+                                height: 1.7,
+                                color: task.description.isEmpty
+                                    ? const Color(0xFF9CA3AF)
+                                    : const Color(0xFF374151),
+                              ),
+                            ),
                     ),
                     const SizedBox(height: 28),
 
@@ -214,57 +262,63 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                         ),
                       ],
                     )
-                  : GestureDetector(
-                      onTap: _isSubmitting ? null : _showParentNoteSheet,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF6366F1),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF6366F1)
-                                  .withValues(alpha: 0.3),
-                              blurRadius: 16,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
-                        ),
-                        child: _isSubmitting
-                            ? const Center(
-                                child: SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2.5,
-                                  ),
+                  : widget.task.isGameTask
+                      ? _PlayGameButton(
+                          gameName: widget.task.gameDisplayName,
+                          onTap: _launchGame,
+                        )
+                      : GestureDetector(
+                          onTap: _isSubmitting ? null : _showParentNoteSheet,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF6366F1),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF6366F1)
+                                      .withValues(alpha: 0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
                                 ),
-                              )
-                            : const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.check_rounded,
-                                      color: Colors.white, size: 20),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Mark as Done',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
+                              ],
+                            ),
+                            child: _isSubmitting
+                                ? const Center(
+                                    child: SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
                                     ),
+                                  )
+                                : const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.check_rounded,
+                                          color: Colors.white, size: 20),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Mark as Done',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                      ),
-                    ),
+                          ),
+                        ),
             ),
           ],
         ),
       ),
+        ),
     );
   }
 
@@ -531,6 +585,55 @@ class _VisualTimeline extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Play game button ───────────────────────────────────────────────────────────
+
+class _PlayGameButton extends StatelessWidget {
+  const _PlayGameButton({required this.gameName, required this.onTap});
+
+  final String gameName;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF10B981), Color(0xFF059669)],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF10B981).withValues(alpha: 0.35),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.sports_esports_rounded,
+                color: Colors.white, size: 22),
+            const SizedBox(width: 10),
+            Text(
+              'Play $gameName',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
