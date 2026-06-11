@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 class DetailCard extends StatelessWidget {
   const DetailCard({
     required this.title,
-    required this.icon,
-    required this.iconColor,
     required this.child,
+    this.icon,
+    this.iconColor,
   });
 
   final String title;
-  final IconData icon;
-  final Color iconColor;
   final Widget child;
+  final IconData? icon;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +32,13 @@ class DetailCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Card header
-          Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: iconColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, size: 16, color: iconColor),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F2937),
-                ),
-              ),
-            ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF1F2937),
+            ),
           ),
           const SizedBox(height: 12),
           const Divider(height: 1, color: Color(0xFFF3F4F6)),

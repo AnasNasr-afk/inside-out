@@ -8,7 +8,6 @@ class TaskModel {
   final double plannedDays;
   final double actualDays;
   final bool isCompleted;
-  final String punctualityStatus;
 
   const TaskModel({
     required this.taskId,
@@ -20,7 +19,6 @@ class TaskModel {
     required this.plannedDays,
     required this.actualDays,
     required this.isCompleted,
-    required this.punctualityStatus,
   });
 
   // factory TaskModel.fromJson(Map<String, dynamic> json) {
@@ -71,29 +69,7 @@ class TaskModel {
       plannedDays: (json['plannedDays'] as num?)?.toDouble() ?? 0,
       actualDays: (json['actualDays'] as num?)?.toDouble() ?? 0,
       isCompleted: isCompleted,
-      punctualityStatus: _derivePunctuality(
-        isCompleted: isCompleted,
-        completedAt: completedAt,
-        dueDate: dueDate,
-      ),
     );
-  }
-
-  static String _derivePunctuality({
-    required bool isCompleted,
-    required DateTime? completedAt,
-    required DateTime dueDate,
-  }) {
-    if (!isCompleted) return 'Pending';
-    if (completedAt == null) return 'On Time';
-
-    final completedDay =
-        DateTime(completedAt.year, completedAt.month, completedAt.day);
-    final dueDay = DateTime(dueDate.year, dueDate.month, dueDate.day);
-
-    if (completedDay.isAfter(dueDay)) return 'Late';
-    if (completedDay.isBefore(dueDay)) return 'Early';
-    return 'On Time';
   }
 
   static bool _deriveIsCompleted(Map<String, dynamic> json, DateTime? completedAt) {
@@ -133,8 +109,23 @@ class TaskModel {
     return '$n ${n == 1 ? 'day' : 'days'}';
   }
 
-  /// Status pill color logic
-  bool get isLate => punctualityStatus == 'Late';
-  bool get isOnTime => punctualityStatus == 'On Time';
-  bool get isEarly => punctualityStatus == 'Early';
+  bool get isOverdue => !isCompleted && DateTime.now().isAfter(dueDate);
+
+  String get timeLabel {
+    if (isCompleted) {
+      return completedAt != null
+          ? 'Completed ${_fmt(completedAt!)}'
+          : 'Completed';
+    }
+    if (isOverdue) return 'Overdue since ${_fmt(dueDate)}';
+    return 'Due ${_fmt(dueDate)}';
+  }
+
+  static String _fmt(DateTime d) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+    return '${months[d.month - 1]} ${d.day}';
+  }
 }

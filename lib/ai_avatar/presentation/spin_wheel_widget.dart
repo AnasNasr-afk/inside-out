@@ -160,7 +160,6 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
             plannedDays: 0,
             actualDays: 0,
             isCompleted: false,
-            punctualityStatus: 'Pending',
           )
         : active[_selectedIndex];
     ref
@@ -206,7 +205,6 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
             plannedDays: 0,
             actualDays: 0,
             isCompleted: false,
-            punctualityStatus: 'Pending',
           ),
           childName: widget.childName,
         ),

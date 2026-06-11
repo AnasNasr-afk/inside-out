@@ -136,7 +136,6 @@ class _FreeFormButton extends ConsumerWidget {
               plannedDays: 0,
               actualDays: 0,
               isCompleted: false,
-              punctualityStatus: 'Pending',
             );
             ref
                 .read(sessionStateControllerProvider.notifier)

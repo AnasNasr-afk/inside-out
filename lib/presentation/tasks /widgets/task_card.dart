@@ -9,20 +9,33 @@ class TaskCard extends StatelessWidget {
   final TaskModel task;
 
   String get _statusLabel {
-    if (!task.isCompleted) return 'Pending';
-    return task.punctualityStatus; // 'On Time' or 'Late'
+    if (task.isCompleted) return 'Completed';
+    if (task.isOverdue) return 'Overdue';
+    return 'Pending';
   }
 
   Color get _statusColor {
-    if (!task.isCompleted) return AppTheme.orange;
-    if (task.isLate) return const Color(0xFFDC2626);
-    return const Color(0xFF059669);
+    if (task.isCompleted) return const Color(0xFF059669);
+    if (task.isOverdue) return const Color(0xFFDC2626);
+    return AppTheme.orange;
   }
 
   Color get _statusBg {
-    if (!task.isCompleted) return const Color(0xFFFEF3C7);
-    if (task.isLate) return const Color(0xFFFFE4E4);
-    return const Color(0xFFD1FAE5);
+    if (task.isCompleted) return const Color(0xFFD1FAE5);
+    if (task.isOverdue) return const Color(0xFFFFE4E4);
+    return const Color(0xFFFEF3C7);
+  }
+
+  Color get _timeLabelColor {
+    if (task.isCompleted) return const Color(0xFF059669);
+    if (task.isOverdue) return const Color(0xFFDC2626);
+    return const Color(0xFF6B7280);
+  }
+
+  IconData get _timeLabelIcon {
+    if (task.isCompleted) return Icons.check_circle_outline_rounded;
+    if (task.isOverdue) return Icons.warning_amber_rounded;
+    return Icons.calendar_today_rounded;
   }
 
   @override
@@ -99,20 +112,19 @@ class TaskCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today_rounded,
-                      size: 13, color: theme.textTheme.bodyMedium?.color),
-                  const SizedBox(width: 4),
-                  Text(
-                    task.formattedDueDate,
-                    style: theme.textTheme.bodyMedium?.copyWith(fontSize: 12),
+                  Icon(
+                    _timeLabelIcon,
+                    size: 13,
+                    color: _timeLabelColor,
                   ),
-                  const Spacer(),
-                  Icon(Icons.schedule_rounded,
-                      size: 13, color: theme.textTheme.bodyMedium?.color),
                   const SizedBox(width: 4),
                   Text(
-                    task.plannedDaysLabel,
-                    style: theme.textTheme.bodyMedium?.copyWith(fontSize: 12),
+                    task.timeLabel,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontSize: 12,
+                      color: _timeLabelColor,
+                      fontWeight: task.isOverdue ? FontWeight.w700 : FontWeight.normal,
+                    ),
                   ),
                 ],
               ),

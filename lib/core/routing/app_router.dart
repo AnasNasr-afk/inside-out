@@ -54,7 +54,10 @@ class AppRouter {
           );
         }
         return MaterialPageRoute(
-          builder: (_) => TaskDetailsScreen(task: task),
+          builder: (_) => BlocProvider(
+            create: (_) => TaskCubit(),
+            child: TaskDetailsScreen(task: task),
+          ),
         );
       case Routes.avatarScreen:
         return MaterialPageRoute(builder: (_) => const AvatarTestScreen());

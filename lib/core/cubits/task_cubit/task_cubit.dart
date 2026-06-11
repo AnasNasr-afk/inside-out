@@ -51,4 +51,16 @@ class TaskCubit extends Cubit<TaskStates> {
       emit(TaskErrorState('Something went wrong. Please try again.'));
     }
   }
+
+  Future<void> completeTask(int taskId, String motherNote) async {
+    emit(TaskCompleteLoadingState());
+    try {
+      await _taskRepository.completeTask(taskId, motherNote);
+      emit(TaskCompleteSuccessState());
+    } on ApiException catch (e) {
+      emit(TaskCompleteErrorState(e.message));
+    } catch (e) {
+      emit(TaskCompleteErrorState('Something went wrong. Please try again.'));
+    }
+  }
 }

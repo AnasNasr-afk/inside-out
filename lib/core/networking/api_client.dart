@@ -35,10 +35,11 @@ class ApiClient {
   Future<dynamic> patch(String endpoint, {Map<String, dynamic>? body}) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
     debugPrint('PATCH $uri');
+    if (body != null) debugPrint('BODY ${jsonEncode(body)}');
     final response = await http.patch(
       uri,
       headers: _headers,
-      body: jsonEncode(body),
+      body: body != null ? jsonEncode(body) : null,
     );
     return _handleResponse(response);
   }
