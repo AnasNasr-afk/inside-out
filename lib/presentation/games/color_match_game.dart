@@ -1,14 +1,23 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:patient/core/networking/repositories/assessment_repo.dart';
 import 'package:patient/core/theme/theme.dart';
+import 'game_haptics.dart';
+import 'game_records.dart';
 
 class ColorMatchGame extends StatefulWidget {
-  const ColorMatchGame({super.key});
+  const ColorMatchGame({super.key, this.taskId});
+
+  final int? taskId;
 
   @override
   State<ColorMatchGame> createState() => _ColorMatchGameState();
 }
 
 class _ColorMatchGameState extends State<ColorMatchGame> {
+  static const _gameKey = 'color_match';
+
   final List<Color> _colors = [
     Colors.red,
     Colors.blue,
@@ -17,44 +26,157 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
     Colors.orange,
     Colors.purple,
   ];
-  
-  Color? _selectedColor;
+
+  late List<Color> _queue;
+  int _queueIndex = 0;
   Color? _targetColor;
   int _score = 0;
-  int _attempts = 0;
-  String _message = 'Select a color to match!';
+  int _moves = 0;
+  bool _isLocked = false;
+  String _message = 'Match this color!';
+
+  Color? _lastTappedColor;
+  bool _lastTapCorrect = false;
+
+  Timer? _timer;
+  int _elapsedSeconds = 0;
+
+  int? _prevBestMoves;
+  int? _prevBestTime;
+
+  bool _resultSaved = false;
+  bool _isSavingResult = false;
+  String? _saveError;
+
+  bool get _isComplete => _score == 6;
+
+  String get _timeLabel => GameRecords.formatTime(_elapsedSeconds);
+
+  String get _bestLabel {
+    if (_prevBestMoves == null) return '';
+    if (_moves < _prevBestMoves! ||
+        _elapsedSeconds < (_prevBestTime ?? 999999)) {
+      return 'New personal best!';
+    }
+    return 'Best: $_prevBestMoves moves · ${GameRecords.formatTime(_prevBestTime!)}';
+  }
 
   @override
   void initState() {
     super.initState();
-    _generateTargetColor();
+    _initGame();
+    _startTimer();
+    _loadBestRecord();
   }
 
-  void _generateTargetColor() {
-    _targetColor = _colors[DateTime.now().millisecondsSinceEpoch % _colors.length];
-    _selectedColor = null;
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _saveTaskResult() async {
+    if (widget.taskId == null) return;
     setState(() {
-      _message = 'Match this color!';
+      _isSavingResult = true;
+      _saveError = null;
+    });
+    try {
+      await AssessmentRepository().saveTaskResult(
+        specialistTaskId: widget.taskId!,
+        totalMoves: _moves,
+        timeTaken: _elapsedSeconds,
+        roundsCount: 6,
+        motherNote:
+            'Completed Color Match: $_moves moves in $_timeLabel, matched all 6 colors.',
+      ).timeout(const Duration(seconds: 15));
+      if (mounted) setState(() { _resultSaved = true; _isSavingResult = false; });
+    } catch (e) {
+      if (mounted) {
+        setState(() { _saveError = 'Could not save result. Tap to retry.'; _isSavingResult = false; });
+      }
+    }
+  }
+
+  Future<void> _loadBestRecord() async {
+    final record = await GameRecords.load(_gameKey);
+    if (mounted) {
+      setState(() {
+        _prevBestMoves = record.moves;
+        _prevBestTime = record.seconds;
+      });
+    }
+  }
+
+  void _initGame() {
+    _queue = List.from(_colors)..shuffle(Random());
+    _queueIndex = 0;
+    _score = 0;
+    _moves = 0;
+    _isLocked = false;
+    _lastTappedColor = null;
+    _lastTapCorrect = false;
+    _targetColor = _queue[0];
+    _message = 'Match this color!';
+    _elapsedSeconds = 0;
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() => _elapsedSeconds++);
+        if (_elapsedSeconds >= 300) _timer?.cancel();
+      }
     });
   }
 
   void _selectColor(Color color) {
+    if (_isLocked || _isComplete) return;
+
+    bool didComplete = false;
     setState(() {
-      _selectedColor = color;
-      _attempts++;
-      
+      _moves++;
+      _lastTappedColor = color;
+
       if (color == _targetColor) {
+        _lastTapCorrect = true;
         _score++;
-        _message = 'Great! Match found! 🎉';
+        _isLocked = true;
+        if (_score == 6) {
+          _timer?.cancel();
+          _message = 'Amazing! You matched all colors!';
+          GameHaptics.onComplete();
+          GameRecords.save(_gameKey, _moves, _elapsedSeconds);
+          didComplete = true;
+        } else {
+          _message = 'Great match!';
+          GameHaptics.onCorrect();
+        }
       } else {
+        _lastTapCorrect = false;
         _message = 'Try again!';
+        GameHaptics.onWrong();
       }
     });
+    if (didComplete) _saveTaskResult();
 
-    if (color == _targetColor) {
+    if (color != _targetColor) {
+      Future.delayed(const Duration(milliseconds: 600), () {
+        if (mounted) setState(() => _lastTappedColor = null);
+      });
+    }
+
+    if (color == _targetColor && _score < 6) {
       Future.delayed(const Duration(seconds: 1), () {
         if (mounted) {
-          _generateTargetColor();
+          setState(() {
+            _queueIndex++;
+            _targetColor = _queue[_queueIndex];
+            _lastTappedColor = null;
+            _isLocked = false;
+            _message = 'Match this color!';
+          });
         }
       });
     }
@@ -62,13 +184,36 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: !_isSavingResult,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Saving result, please wait…'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: const Text('Color Match'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (_isSavingResult) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Saving result, please wait…'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              return;
+            }
+            Navigator.pop(context, _resultSaved);
+          },
         ),
       ),
       body: Padding(
@@ -76,27 +221,62 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatCard('Score', _score.toString()),
-                _buildStatCard('Attempts', _attempts.toString()),
+                Expanded(child: _buildStatCard('Moves', _moves.toString())),
+                const SizedBox(width: 12),
+                Expanded(child: _buildStatCard('Score', '$_score/6')),
+                const SizedBox(width: 12),
+                Expanded(child: _buildStatCard('Time', _timeLabel)),
               ],
             ),
             const SizedBox(height: 30),
-            Text(
-              _message,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                color: _targetColor,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 3),
+
+            if (_isComplete)
+              _CompletionBanner(
+                moves: _moves,
+                timeLabel: _timeLabel,
+                bestLabel: _bestLabel,
+              )
+            else ...[
+              Text(
+                _message,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+              const SizedBox(height: 20),
+              // Target circle with checkmark overlay when locked
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      color: _targetColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black, width: 3),
+                    ),
+                  ),
+                  if (_isLocked)
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.25),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check_rounded,
+                        size: 72,
+                        color: Colors.white,
+                      ),
+                    ),
+                ],
+              ),
+            ],
+
             const SizedBox(height: 40),
             Expanded(
               child: GridView.builder(
@@ -108,17 +288,26 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                 itemCount: _colors.length,
                 itemBuilder: (context, index) {
                   final color = _colors[index];
-                  final isSelected = _selectedColor == color;
-                  
-                  return GestureDetector(
-                    onTap: () => _selectColor(color),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isSelected ? AppTheme.primaryColor : Colors.black,
-                          width: isSelected ? 4 : 2,
+                  final isTapped = _lastTappedColor == color;
+                  final borderColor = isTapped
+                      ? (_lastTapCorrect ? Colors.green : Colors.red)
+                      : Colors.black;
+
+                  return AnimatedScale(
+                    scale: (isTapped && _lastTapCorrect) ? 1.18 : 1.0,
+                    duration: const Duration(milliseconds: 150),
+                    curve: Curves.easeOut,
+                    child: GestureDetector(
+                      onTap: () => _selectColor(color),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: borderColor,
+                            width: isTapped ? 4.0 : 2.0,
+                          ),
                         ),
                       ),
                     ),
@@ -126,27 +315,84 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                 },
               ),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _score = 0;
-                    _attempts = 0;
-                    _generateTargetColor();
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                ),
-                child: const Text('Reset Game'),
+              child: Column(
+                children: [
+                  if (_saveError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        _saveError!,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.red, fontSize: 13),
+                      ),
+                    ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: widget.taskId != null && _isComplete
+                          ? (_isSavingResult
+                              ? null
+                              : _saveError != null
+                                  ? _saveTaskResult
+                                  : () => Navigator.pop(context, _resultSaved))
+                          : () {
+                              setState(_initGame);
+                              _startTimer();
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            _isComplete ? Colors.green : AppTheme.primaryColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: _isSavingResult
+                          ? const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Saving result…',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              widget.taskId != null && _isComplete
+                                  ? (_saveError != null
+                                      ? 'Retry Save'
+                                      : 'Back to Task')
+                                  : (_isComplete ? 'Play Again' : 'Reset Game'),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -155,18 +401,17 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
     return Card(
       color: AppTheme.primaryColor.withValues(alpha: 0.1),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Column(
           children: [
-            Text(
-              label,
-              style: const TextStyle(fontSize: 14, color: Colors.black87),
-            ),
+            Text(label,
+                style:
+                    const TextStyle(fontSize: 12, color: Colors.black87)),
             const SizedBox(height: 4),
             Text(
               value,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -178,3 +423,85 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
   }
 }
 
+class _CompletionBanner extends StatelessWidget {
+  const _CompletionBanner({
+    required this.moves,
+    required this.timeLabel,
+    required this.bestLabel,
+  });
+
+  final int moves;
+  final String timeLabel;
+  final String bestLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.green.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.green.withValues(alpha: 0.35),
+          width: 1.5,
+        ),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.celebration_rounded, color: Colors.green, size: 44),
+          const SizedBox(height: 8),
+          const Text(
+            'You did it!',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '$moves moves · $timeLabel',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.green.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          if (bestLabel.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.green.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    bestLabel.startsWith('New')
+                        ? Icons.star_rounded
+                        : Icons.emoji_events_rounded,
+                    size: 16,
+                    color: Colors.green.shade700,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    bestLabel,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green.shade700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}

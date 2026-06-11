@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/games/color_match_game.dart';
 import 'package:patient/presentation/games/memory_game.dart';
 import 'package:patient/presentation/games/emotion_game.dart';
@@ -19,46 +18,47 @@ class GamesScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GameCard(
+            const Text(
+              'Choose a game!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 24),
+            _ChildGameCard(
               title: 'Color Match',
-              description: 'Match colors to improve focus and pattern recognition',
-              icon: Icons.palette,
-              color: const Color(0xFFE3F2FD),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ColorMatchGame()),
-                );
-              },
+              icon: Icons.palette_rounded,
+              color: Colors.orange,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ColorMatchGame()),
+              ),
             ),
-            const SizedBox(height: 20),
-            GameCard(
+            const SizedBox(height: 16),
+            _ChildGameCard(
               title: 'Memory Cards',
-              description: 'Flip cards and find matches to enhance memory',
-              icon: Icons.memory,
-              color: const Color(0xFFF3E5F5),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MemoryGame()),
-                );
-              },
+              icon: Icons.grid_view_rounded,
+              color: Colors.purple,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const MemoryGame()),
+              ),
             ),
-            const SizedBox(height: 20),
-            GameCard(
-              title: 'Emotion Recognition',
-              description: 'Identify emotions to improve social understanding',
-              icon: Icons.emoji_emotions,
-              color: const Color(0xFFFFF3E0),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const EmotionGame()),
-                );
-              },
+            const SizedBox(height: 16),
+            _ChildGameCard(
+              title: 'Emotion Match',
+              icon: Icons.sentiment_very_satisfied_rounded,
+              color: Colors.blue,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EmotionGame()),
+              ),
             ),
           ],
         ),
@@ -67,74 +67,53 @@ class GamesScreen extends StatelessWidget {
   }
 }
 
-class GameCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const GameCard({
-    super.key,
+class _ChildGameCard extends StatelessWidget {
+  const _ChildGameCard({
     required this.title,
-    required this.description,
     required this.icon,
     required this.color,
     required this.onTap,
   });
 
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        elevation: 0,
-        color: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: Colors.white, size: 32),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios, size: 20),
-            ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+            width: 1.5,
           ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              child: Icon(icon, size: 40, color: Colors.white),
+            ),
+            const SizedBox(width: 20),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
