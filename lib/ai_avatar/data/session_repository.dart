@@ -7,4 +7,14 @@ class SessionRepository {
   Future<void> submitReport(SessionReportRequestModel model) async {
     await _client.post('Session/report', body: model.toJson());
   }
+
+  Future<void> saveAvatarReport({
+    required int childId,
+    required String avatarReport,
+  }) async {
+    await _client.post('assessment/save-avatar-report', body: {
+      'childId': childId,
+      'avatarReport': avatarReport,
+    });
+  }
 }
