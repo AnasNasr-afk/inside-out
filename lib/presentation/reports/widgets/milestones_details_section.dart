@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:patient/core/models/responses/child_report_model.dart';
 import 'package:patient/presentation/reports/widgets/report_colors.dart';
 
 class MilestonesDetailsSection extends StatefulWidget {
-  const MilestonesDetailsSection({super.key});
+  const MilestonesDetailsSection({super.key, required this.reports});
+
+  final List<ChildReportEntry> reports;
 
   @override
   State<MilestonesDetailsSection> createState() =>
@@ -10,71 +13,65 @@ class MilestonesDetailsSection extends StatefulWidget {
 }
 
 class _MilestoneDetailsSectionState extends State<MilestonesDetailsSection> {
-  // Which panel is open: null = all closed
-  String? _openPanel;
-
-  // Dummy milestone data — replace with real data from your provider
-  final _completedItems = const ['Morning walk', 'Medication', 'Therapy session'];
-  final _missedItems = const ['Evening exercise'];
-  final _lateItems = const ['Journal entry', 'Sleep on time'];
+  int? _openIndex;
 
   @override
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
 
+    if (widget.reports.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32),
+          child: Text(
+            'No reports yet',
+            style: tt.bodyMedium?.copyWith(color: Colors.grey),
+          ),
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Milestones in Details',
+          'Session Reports',
           style: tt.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 12),
-        _AccordionTile(
-          title: 'Completed Milestones',
-          items: _completedItems,
-          dotColor: ReportColors.completedIcon,
-          isOpen: _openPanel == 'completed',
-          onTap: () => setState(() =>
-          _openPanel = _openPanel == 'completed' ? null : 'completed'),
-        ),
-        const Divider(color: ReportColors.divider, height: 1),
-        _AccordionTile(
-          title: 'Missed Milestones',
-          items: _missedItems,
-          dotColor: ReportColors.missedIcon,
-          isOpen: _openPanel == 'missed',
-          onTap: () => setState(
-                  () => _openPanel = _openPanel == 'missed' ? null : 'missed'),
-        ),
-        const Divider(color: ReportColors.divider, height: 1),
-        _AccordionTile(
-          title: 'Late Milestones',
-          items: _lateItems,
-          dotColor: ReportColors.lateIcon,
-          isOpen: _openPanel == 'late',
-          onTap: () => setState(
-                  () => _openPanel = _openPanel == 'late' ? null : 'late'),
-        ),
-        const Divider(color: ReportColors.divider, height: 1),
+        ...List.generate(widget.reports.length, (i) {
+          final entry = widget.reports[i];
+          return Column(
+            children: [
+              _ReportTile(
+                date: entry.formattedDate,
+                specialist: entry.studentName,
+                content: entry.content,
+                isOpen: _openIndex == i,
+                onTap: () =>
+                    setState(() => _openIndex = _openIndex == i ? null : i),
+              ),
+              const Divider(color: ReportColors.divider, height: 1),
+            ],
+          );
+        }),
       ],
     );
   }
 }
 
-// ── Single accordion tile ──────────────────────────────────
-class _AccordionTile extends StatelessWidget {
-  const _AccordionTile({
-    required this.title,
-    required this.items,
-    required this.dotColor,
+class _ReportTile extends StatelessWidget {
+  const _ReportTile({
+    required this.date,
+    required this.specialist,
+    required this.content,
     required this.isOpen,
     required this.onTap,
   });
 
-  final String title;
-  final List<String> items;
-  final Color dotColor;
+  final String date;
+  final String specialist;
+  final String content;
   final bool isOpen;
   final VoidCallback onTap;
 
@@ -88,51 +85,60 @@ class _AccordionTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
               children: [
-                Text(title, style: tt.bodyLarge),
-                const Spacer(),
+                Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.only(right: 12),
+                  decoration: const BoxDecoration(
+                    color: ReportColors.completedIcon,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(date, style: tt.bodyLarge),
+                      if (specialist.isNotEmpty)
+                        Text(
+                          specialist,
+                          style: tt.bodyMedium?.copyWith(
+                            fontSize: 12,
+                            color: const Color(0xFF6B7280),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
                 AnimatedRotation(
                   turns: isOpen ? 0.5 : 0,
                   duration: const Duration(milliseconds: 200),
-                  child: const Icon(Icons.keyboard_arrow_down_rounded,
-                      color: Color(0xFF6B7280)),
+                  child: const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: Color(0xFF6B7280),
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        // Expandable content
         AnimatedCrossFade(
           firstChild: const SizedBox.shrink(),
           secondChild: Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: Column(
-              children: items
-                  .map((item) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        color: dotColor,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Text(item, style: tt.bodyMedium),
-                  ],
-                ),
-              ))
-                  .toList(),
+            padding: const EdgeInsets.only(bottom: 16, left: 20),
+            child: Text(
+              content,
+              style: tt.bodyMedium?.copyWith(
+                color: const Color(0xFF374151),
+                height: 1.6,
+              ),
             ),
           ),
-          crossFadeState: isOpen
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
+          crossFadeState:
+              isOpen ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 200),
         ),
       ],
