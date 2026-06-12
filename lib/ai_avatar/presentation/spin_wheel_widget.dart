@@ -3,17 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:patient/ai_avatar/providers/session_state_controller.dart';
-import 'package:patient/ai_avatar/providers/tasks_provider.dart';
-import 'package:patient/core/theme/theme.dart';
+import 'package:patient/ai_avatar/providers/wheel_tasks_provider.dart';
+import 'package:patient/core/helpers/shared_pref.dart';
+import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/models/task_model.dart';
+import 'package:patient/core/theme/theme.dart';
 
 const _kWheelDiameter = 240.0;
 const _kWheelRadius = _kWheelDiameter / 2;
 
+TaskModel _freeFormTask() => TaskModel(
+      taskId: -1,
+      title: 'Talk to Poly',
+      description: '',
+      assignedDate: DateTime.now(),
+      dueDate: DateTime.now(),
+      plannedDays: 0,
+      actualDays: 0,
+      isCompleted: false,
+    );
+
 class SpinWheelWidget extends ConsumerStatefulWidget {
-  const SpinWheelWidget({super.key, required this.childName});
-  final String childName;
+  const SpinWheelWidget({super.key, required this.onTaskSelected});
+
+  /// Called when the child confirms a wheel selection.
+  final void Function(TaskModel task) onTaskSelected;
 
   @override
   ConsumerState<SpinWheelWidget> createState() => _SpinWheelWidgetState();
@@ -69,10 +83,9 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
   }
 
   List<String> _buildLabels() {
-    final tasks = ref.read(tasksProvider);
-    final active = tasks.where((t) => t.isCompleted).toList();
+    final tasks = ref.read(wheelTasksProvider).valueOrNull ?? [];
     return [
-      ...active.map((t) {
+      ...tasks.map((t) {
         final title = t.title;
         return title.length > 12 ? '${title.substring(0, 10)}..' : title;
       }),
@@ -81,7 +94,7 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
   }
 
   List<TaskModel> _activeTasks() =>
-      ref.read(tasksProvider).where((t) => t.isCompleted).toList();
+      ref.read(wheelTasksProvider).valueOrNull ?? [];
 
   int _calcSelected(List<String> labels) {
     final n = labels.length;
@@ -146,34 +159,22 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
     _angularVelocity = 0;
   }
 
-  // ── Continue / Try Again ───────────────────────────────────────────────────
-
   void _onContinue() {
     final active = _activeTasks();
     final task = _selectedIndex >= active.length
-        ? TaskModel(
-            taskId: -1,
-            title: 'Talk to Poly',
-            description: '',
-            assignedDate: DateTime.now(),
-            dueDate: DateTime.now(),
-            plannedDays: 0,
-            actualDays: 0,
-            isCompleted: false,
-          )
+        ? _freeFormTask()
         : active[_selectedIndex];
-    ref
-        .read(sessionStateControllerProvider.notifier)
-        .selectTask(task, childName: widget.childName);
+    widget.onTaskSelected(task);
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(tasksLoadingProvider);
-    if (isLoading) {
-      return Column(
+    final wheelState = ref.watch(wheelTasksProvider);
+
+    return wheelState.when(
+      loading: () => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const CircularProgressIndicator(color: Colors.white),
@@ -187,104 +188,89 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
             ),
           ),
         ],
-      );
-    }
+      ),
+      error: (_, __) => _ErrorView(
+        onRetry: () {
+          final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
+          ref.read(wheelTasksProvider.notifier).load(childId);
+        },
+      ),
+      data: (active) {
+        if (active.isEmpty) {
+          return _NoTasksView(
+            onTap: () => widget.onTaskSelected(_freeFormTask()),
+          );
+        }
 
-    final tasks = ref.watch(tasksProvider);
-    final active = tasks.where((t) => t.isCompleted).toList();
+        final labels = [
+          ...active.map((t) {
+            final title = t.title;
+            return title.length > 12 ? '${title.substring(0, 10)}..' : title;
+          }),
+          'Talk\nto Poly',
+        ];
+        final fullLabels = [
+          ...active.map((t) => t.title),
+          'Talk to Poly',
+        ];
+        final labelStyle = GoogleFonts.poppins(
+          color: Colors.white,
+          fontWeight: FontWeight.w800,
+          height: 1.2,
+          shadows: const [Shadow(color: Colors.black54, blurRadius: 4)],
+        );
 
-    if (active.isEmpty) {
-      return _NoTasksView(
-        onTap: () => ref.read(sessionStateControllerProvider.notifier).selectTask(
-          TaskModel(
-            taskId: -1,
-            title: 'Talk to Poly',
-            description: '',
-            assignedDate: DateTime.now(),
-            dueDate: DateTime.now(),
-            plannedDays: 0,
-            actualDays: 0,
-            isCompleted: false,
-          ),
-          childName: widget.childName,
-        ),
-      );
-    }
-
-    // Truncated labels for the wheel segments (space-constrained)
-    final labels = [
-      ...active.map((t) {
-        final title = t.title;
-        return title.length > 12 ? '${title.substring(0, 10)}..' : title;
-      }),
-      'Talk\nto Poly',
-    ];
-    // Full titles for the result card
-    final fullLabels = [
-      ...active.map((t) => t.title),
-      'Talk to Poly',
-    ];
-
-    // Build Poppins style here so the painter can use it without BuildContext
-    final labelStyle = GoogleFonts.poppins(
-      color: Colors.white,
-      fontWeight: FontWeight.w800,
-      height: 1.2,
-      shadows: const [Shadow(color: Colors.black54, blurRadius: 4)],
-    );
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          width: _kWheelDiameter,
-          height: _kWheelDiameter + 26,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              const Positioned(
-                top: 0,
-                child: _PointerArrow(),
-              ),
-              Positioned(
-                top: 24,
-                child: GestureDetector(
-                  onPanStart: _onPanStart,
-                  onPanUpdate: _onPanUpdate,
-                  onPanEnd: (d) => _onPanEnd(d, labels),
-                  child: CustomPaint(
-                    size: const Size(_kWheelDiameter, _kWheelDiameter),
-                    painter: _WheelPainter(
-                      labels: labels,
-                      angle: _displayAngle,
-                      selectedIndex: _showResult ? _selectedIndex : -1,
-                      labelStyle: labelStyle,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: _kWheelDiameter,
+              height: _kWheelDiameter + 26,
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  const Positioned(top: 0, child: _PointerArrow()),
+                  Positioned(
+                    top: 24,
+                    child: GestureDetector(
+                      onPanStart: _onPanStart,
+                      onPanUpdate: _onPanUpdate,
+                      onPanEnd: (d) => _onPanEnd(d, labels),
+                      child: CustomPaint(
+                        size: const Size(_kWheelDiameter, _kWheelDiameter),
+                        painter: _WheelPainter(
+                          labels: labels,
+                          angle: _displayAngle,
+                          selectedIndex: _showResult ? _selectedIndex : -1,
+                          labelStyle: labelStyle,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          transitionBuilder: (child, anim) =>
-              FadeTransition(opacity: anim, child: child),
-          child: _showResult
-              ? _ResultCard(
-                  key: const ValueKey('result'),
-                  label: fullLabels[_selectedIndex],
-                  onContinue: _onContinue,
-                  onTryAgain: () => _spin(labels),
-                )
-              : _SpinButton(
-                  key: const ValueKey('spin'),
-                  isSpinning: _isSpinning,
-                  onTap: () => _spin(labels),
-                ),
-        ),
-      ],
+            ),
+            const SizedBox(height: 10),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, anim) =>
+                  FadeTransition(opacity: anim, child: child),
+              child: _showResult
+                  ? _ResultCard(
+                      key: const ValueKey('result'),
+                      label: fullLabels[_selectedIndex],
+                      onContinue: _onContinue,
+                      onTryAgain: () => _spin(labels),
+                    )
+                  : _SpinButton(
+                      key: const ValueKey('spin'),
+                      isSpinning: _isSpinning,
+                      onTap: () => _spin(labels),
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -301,7 +287,7 @@ class _WheelPainter extends CustomPainter {
 
   final List<String> labels;
   final double angle;
-  final int selectedIndex; // -1 means no selection shown
+  final int selectedIndex;
   final TextStyle labelStyle;
 
   bool get _hasResult => selectedIndex >= 0;
@@ -322,14 +308,12 @@ class _WheelPainter extends CustomPainter {
       final start = -pi / 2 + i * segAngle;
       final isSelected = i == selectedIndex;
       final baseColor = AppTheme.wheelColors[i % AppTheme.wheelColors.length];
-      // Dim non-selected segments when a result is showing
       final fillColor = _hasResult && !isSelected
           ? Color.lerp(baseColor, Colors.black, 0.45)!
           : baseColor;
 
       canvas.drawArc(arcRect, start, segAngle, true, Paint()..color = fillColor);
 
-      // Separator lines
       canvas.drawArc(
         arcRect,
         start,
@@ -341,7 +325,6 @@ class _WheelPainter extends CustomPainter {
           ..strokeWidth = 2.5,
       );
 
-      // Gold highlight border on winning segment
       if (isSelected) {
         canvas.drawArc(
           arcRect,
@@ -355,7 +338,6 @@ class _WheelPainter extends CustomPainter {
         );
       }
 
-      // Radial text
       canvas.save();
       canvas.rotate(start + segAngle / 2);
       canvas.translate(r * 0.58, 0);
@@ -375,7 +357,6 @@ class _WheelPainter extends CustomPainter {
       canvas.restore();
     }
 
-    // Hub
     canvas.drawCircle(
       Offset.zero,
       22,
@@ -384,8 +365,7 @@ class _WheelPainter extends CustomPainter {
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
     );
     canvas.drawCircle(Offset.zero, 20, Paint()..color = Colors.white);
-    canvas.drawCircle(
-        Offset.zero, 14, Paint()..color = AppTheme.primaryColor);
+    canvas.drawCircle(Offset.zero, 14, Paint()..color = AppTheme.primaryColor);
 
     canvas.restore();
   }
@@ -415,23 +395,18 @@ class _ArrowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final path = Path()
-      ..moveTo(size.width / 2, size.height) // tip
+      ..moveTo(size.width / 2, size.height)
       ..lineTo(0, 0)
       ..lineTo(size.width, 0)
       ..close();
 
-    // Drop shadow
     canvas.drawPath(
       path.shift(const Offset(0, 3)),
       Paint()
         ..color = Colors.black38
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
     );
-
-    // White fill
     canvas.drawPath(path, Paint()..color = Colors.white);
-
-    // Theme-coloured outline
     canvas.drawPath(
       path,
       Paint()
@@ -474,7 +449,6 @@ class _ResultCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Accent strip
           Container(
             height: 4,
             decoration: const BoxDecoration(
@@ -564,6 +538,49 @@ class _ResultCard extends StatelessWidget {
   }
 }
 
+// ── Error view ────────────────────────────────────────────────────────────────
+
+class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.onRetry});
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Could not load tasks',
+          style: GoogleFonts.poppins(
+            color: Colors.white70,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ElevatedButton.icon(
+          onPressed: onRetry,
+          icon: const Icon(Icons.refresh_rounded, size: 18),
+          label: Text(
+            'Retry',
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppTheme.primaryColor,
+            foregroundColor: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 // ── No tasks view ─────────────────────────────────────────────────────────────
 
 class _NoTasksView extends StatelessWidget {
@@ -599,8 +616,8 @@ class _NoTasksView extends StatelessWidget {
             backgroundColor: AppTheme.primaryColor,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             elevation: 6,
           ),
         ),
@@ -612,8 +629,7 @@ class _NoTasksView extends StatelessWidget {
 // ── Spin button ───────────────────────────────────────────────────────────────
 
 class _SpinButton extends StatelessWidget {
-  const _SpinButton(
-      {super.key, required this.isSpinning, required this.onTap});
+  const _SpinButton({super.key, required this.isSpinning, required this.onTap});
   final bool isSpinning;
   final VoidCallback onTap;
 
@@ -639,10 +655,9 @@ class _SpinButton extends StatelessWidget {
             disabledBackgroundColor:
                 AppTheme.primaryColor.withValues(alpha: 0.4),
             disabledForegroundColor: Colors.white54,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             elevation: 6,
           ),
         ),

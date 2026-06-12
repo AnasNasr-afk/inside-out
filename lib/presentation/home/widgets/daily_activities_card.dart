@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_listener.dart';
+import 'package:patient/core/helpers/shared_pref.dart';
+import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/models/task_model.dart';
 import '../../../core/theme/theme.dart';
 
@@ -88,7 +90,10 @@ class DailyActivitiesPreviewCard extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
-            onPressed: () => TaskCubit.get(context).getTasks(1),
+            onPressed: () {
+              final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
+              if (childId != 0) TaskCubit.get(context).getTasks(childId);
+            },
             child: Text(
               'Retry',
               style: GoogleFonts.poppins(

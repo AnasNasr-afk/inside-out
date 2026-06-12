@@ -7,6 +7,7 @@ class ParentChildResponseModel {
   final String parentName;
   final String specialistName;
   final String specialistEmail;
+  final int specialistId;
 
   ParentChildResponseModel({
     required this.parentPhone,
@@ -17,11 +18,10 @@ class ParentChildResponseModel {
     required this.parentName,
     required this.specialistName,
     required this.specialistEmail,
+    required this.specialistId,
   });
 
-  factory ParentChildResponseModel.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory ParentChildResponseModel.fromJson(Map<String, dynamic> json) {
     return ParentChildResponseModel(
       parentPhone: json['parentPhone'] ?? '',
       parentEmail: json['parentEmail'] ?? '',
@@ -31,6 +31,7 @@ class ParentChildResponseModel {
       parentName: json['parentName'] ?? '',
       specialistName: json['specialistName'] ?? '',
       specialistEmail: json['specialistEmail'] ?? '',
+      specialistId: (json['specialistId'] as num?)?.toInt() ?? 0,
     );
   }
 }

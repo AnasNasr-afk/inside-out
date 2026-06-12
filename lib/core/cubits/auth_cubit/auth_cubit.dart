@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 import '../../models/responses/login_response_model.dart';
 import '../../models/requests/signup_request_model.dart';
@@ -125,15 +126,17 @@ class AuthCubit extends Cubit<AuthStates> {
         await _authRepository.logout(userId);
         debugPrint('✅ Backend logout successful');
       }
+
+      // Disconnect Sendbird so the next user connects with fresh credentials
+      await SendbirdChat.disconnect();
+      debugPrint('✅ Sendbird disconnected');
     } catch (e) {
-      // Backend logout failed — still clear local data
-      // User must be logged out locally regardless
-      debugPrint('⚠️ Backend logout failed: $e — clearing local data anyway');
+      // Any logout step failed — still clear local data
+      debugPrint('⚠️ Logout cleanup error: $e — clearing local data anyway');
     } finally {
-      // Always clear local session
-      await SharedPrefHelper.clearAllData();
+      // Clear session but preserve discussedTaskIds_* across logout/login
+      await SharedPrefHelper.clearSessionData();
       currentUser = null;
-      debugPrint('🧹 Local session cleared');
       emit(LogoutSuccessState());
     }
   }

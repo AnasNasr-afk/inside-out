@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  emoji_picker_flutter
   gtk
+  isar_community_flutter_libs
   rive_common
   url_launcher_linux
 )

@@ -97,6 +97,9 @@ dependencies:
   shared_preferences: ^2.5.5
   path_provider: ^2.1.5
   url_launcher: ^6.3.2
+  sendbird_chat_sdk: ^4.2.2
+  emoji_picker_flutter: ^4.4.0
+  file_picker: ^8.1.7
 
 dev_dependencies:
   flutter_test:
