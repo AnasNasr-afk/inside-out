@@ -12,6 +12,11 @@ class AssessmentRepository {
           .map((e) => ChildReportEntry.fromJson(e as Map<String, dynamic>))
           .toList();
       return (reports: reports, isFallback: false);
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) {
+        return (reports: <ChildReportEntry>[], isFallback: false);
+      }
+      return (reports: ChildReportEntry.fallback(), isFallback: true);
     } catch (_) {
       return (reports: ChildReportEntry.fallback(), isFallback: true);
     }

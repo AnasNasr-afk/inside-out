@@ -128,16 +128,19 @@ class _MoodCheckInCardState
             mainAxisAlignment:
             MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'How is ${widget.childName} feeling today?',
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight:
-                  FontWeight.w700,
-                  color: Colors.white,
+              Flexible(
+                child: Text(
+                  'How is ${widget.childName} feeling today?',
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight:
+                    FontWeight.w700,
+                    color: Colors.white,
+                  ),
                 ),
               ),
 
+              const SizedBox(width: 8),
               Container(
                 padding:
                 const EdgeInsets.symmetric(

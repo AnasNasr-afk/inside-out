@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:rive/rive.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 import 'package:patient/core/routing/app_router.dart';
 import 'package:patient/core/routing/routes.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
   await RiveFile.initialize();
   await dotenv.load(fileName: '.env');
   await SharedPrefHelper.init();
+  await SendbirdChat.init(appId: 'DA80361B-5BD9-4C6E-8D79-00319DD73F05');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'constants.dart';
+import '../helpers/shared_pref.dart';
+import '../helpers/shared_pref_keys.dart';
 
 class ApiClient {
   ApiClient._();
@@ -53,11 +55,15 @@ class ApiClient {
   }
 
   // ── Headers ────────────────────────────────────────────
-  Map<String, String> get _headers => {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'ngrok-skip-browser-warning': 'true',
-  };
+  Map<String, String> get _headers {
+    final token = SharedPrefHelper.getString(SharedPrefKeys.token);
+    return {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+    };
+  }
 
   // ── Response handler ───────────────────────────────────
   dynamic _handleResponse(http.Response response) {

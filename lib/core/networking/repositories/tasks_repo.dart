@@ -10,7 +10,9 @@ class TaskRepository {
     final list = response as List<dynamic>;
 
     return list
-        .map((e) => TaskModel.fromJson(e as Map<String, dynamic>))
+        .map((e) => e as Map<String, dynamic>)
+        .where((e) => e['taskId'] != null || e['id'] != null)
+        .map((e) => TaskModel.fromJson(e))
         .toList();
   }
 

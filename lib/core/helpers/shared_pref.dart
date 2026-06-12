@@ -22,6 +22,30 @@ class SharedPrefHelper {
     debugPrint('🧹 Cleared all SharedPreferences');
   }
 
+  /// Clears all session data but preserves discussedTaskIds_* keys so the
+  /// wheel remembers which tasks the child already discussed across logout/login.
+  static Future<void> clearSessionData() async {
+    final allKeys = _prefs.getKeys();
+
+    // Snapshot the keys we want to keep before wiping
+    final preserved = <String, String>{};
+    for (final key in allKeys) {
+      if (key.startsWith('discussedTaskIds_')) {
+        final value = _prefs.getString(key);
+        if (value != null && value.isNotEmpty) preserved[key] = value;
+      }
+    }
+
+    await _prefs.clear();
+
+    // Restore preserved values
+    for (final entry in preserved.entries) {
+      await _prefs.setString(entry.key, entry.value);
+    }
+
+    debugPrint('🧹 Session cleared — preserved ${preserved.length} discussed-task key(s)');
+  }
+
   static Future<void> setData(String key, dynamic value) async {
     debugPrint('💾 Saving "$key" = "$value"');
     switch (value.runtimeType) {

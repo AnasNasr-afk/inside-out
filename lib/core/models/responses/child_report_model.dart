@@ -16,7 +16,7 @@ class ChildReportEntry {
       id: (json['id'] as num?)?.toInt() ?? 0,
       content: json['content']?.toString() ?? '',
       assignedDate: DateTime.tryParse(json['assignedDate']?.toString() ?? '') ?? DateTime.now(),
-      studentName: json['studentName']?.toString() ?? '',
+      studentName: (json['specialistName'] ?? json['studentName'])?.toString() ?? '',
     );
   }
 

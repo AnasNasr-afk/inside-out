@@ -11,6 +11,8 @@ class SharedPrefKeys {
   static const String checkInMood = 'checkInMood';
   static const String childAge  = 'childAge';
   static const String childCase = 'childCase';
-  // Prefix — append childId: 'completedTaskIds_66'
-  static const String completedTaskIdsPrefix = 'completedTaskIds_';
+  static const String specialistId = 'specialistId';
+  static const String specialistName = 'specialistName';
+  // Prefix — append childId: 'discussedTaskIds_66'
+  static const String discussedTaskIdsPrefix = 'discussedTaskIds_';
 }

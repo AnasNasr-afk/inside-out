@@ -32,8 +32,11 @@ class TaskCubit extends Cubit<TaskStates> {
       parentChildData = await _homeRepository.getParentChildData(childId);
 
       // Persist child profile so the AI avatar can read it without BLoC
-      await SharedPrefHelper.setData(SharedPrefKeys.childAge, parentChildData!.age);
+      await SharedPrefHelper.setData(SharedPrefKeys.childName, parentChildData!.childName);
+      await SharedPrefHelper.setData(SharedPrefKeys.childAge,  parentChildData!.age);
       await SharedPrefHelper.setData(SharedPrefKeys.childCase, parentChildData!.description);
+      await SharedPrefHelper.setData(SharedPrefKeys.specialistId, parentChildData!.specialistId);
+      await SharedPrefHelper.setData(SharedPrefKeys.specialistName, parentChildData!.specialistName);
 
       emit(TaskSuccessState(tasks));
     } catch (e) {
