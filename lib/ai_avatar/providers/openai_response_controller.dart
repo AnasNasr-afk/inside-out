@@ -23,11 +23,10 @@ class OpenAIResponseController extends _$OpenAIResponseController {
     final repository = ref.read(openAIRepostitoryProvider);
     final language = ref.read(animationStateControllerProvider).language;
     final profile = ref.read(childProfileProvider);
-    // If the session was primed with task context via primeWithTaskContext,
-    // don't inject it again per-turn — the system message in history already covers it.
-    final taskContext = repository.isTaskPrimed
-        ? ''
-        : ref.read(taskContextProvider);
+    // Always include task context per turn so GPT stays anchored to the specific
+    // task even as conversation history grows. The primed system message covers
+    // full detail; this acts as a lightweight per-turn reminder.
+    final taskContext = ref.read(taskContextProvider);
     final contextualPrompt = InputPreprocessor.buildPrompt(
       prompt,
       language,

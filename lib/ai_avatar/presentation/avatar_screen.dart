@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:patient/ai_avatar/data/openai_repository.dart';
+import 'package:patient/ai_avatar/data/session_repository.dart';
+import 'package:patient/ai_avatar/data/session_report_cache.dart';
 import 'package:patient/ai_avatar/presentation/animation_screen.dart';
 import 'package:patient/ai_avatar/presentation/flag_switch.dart';
 import 'package:patient/ai_avatar/presentation/speech_to_text.dart';
@@ -15,9 +17,12 @@ import 'package:patient/ai_avatar/providers/session_state_controller.dart';
 import 'package:patient/ai_avatar/providers/child_profile_provider.dart';
 import 'package:patient/ai_avatar/providers/task_context_provider.dart';
 import 'package:patient/ai_avatar/providers/tasks_provider.dart';
+import 'package:patient/ai_avatar/utils/input_preprocessor.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/networking/repositories/tasks_repo.dart';
+
+enum _SubmissionStatus { none, submitting, success, failed }
 
 class AiBearScreen extends ConsumerStatefulWidget {
   const AiBearScreen({super.key});
@@ -29,6 +34,14 @@ class AiBearScreen extends ConsumerStatefulWidget {
 class _AiBearScreenState extends ConsumerState<AiBearScreen> {
   String _version = '';
   String _childName = '';
+
+  // ── Per-session metrics ────────────────────────────────────────────────────
+  DateTime? _sessionStartTime;
+  int _turnCount = 0;
+  final List<String> _emotionsPerTurn = [];
+  final StringBuffer _fullTranscript = StringBuffer();
+  Future<void>? _pendingCacheWrite;
+  _SubmissionStatus _submissionStatus = _SubmissionStatus.none;
 
   @override
   void initState() {
@@ -82,9 +95,22 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
       // Filter out tasks the child already dismissed locally
       final dismissedKey = '${SharedPrefKeys.completedTaskIdsPrefix}$childId';
       final dismissedStr = SharedPrefHelper.getString(dismissedKey);
-      final dismissedIds = dismissedStr.isEmpty
+      var dismissedIds = dismissedStr.isEmpty
           ? <int>{}
           : dismissedStr.split(',').map(int.parse).toSet();
+
+      // Remove stale dismissed IDs that no longer exist in backend
+      final backendTaskIds = tasks.map((t) => t.taskId).toSet();
+      final validDismissed = dismissedIds.intersection(backendTaskIds);
+      if (validDismissed.length != dismissedIds.length) {
+        dismissedIds = validDismissed;
+        SharedPrefHelper.setData(
+          dismissedKey,
+          validDismissed.isEmpty ? '' : validDismissed.map((id) => id.toString()).join(','),
+        );
+        debugPrint('🧹 Cleaned stale dismissed task IDs');
+      }
+
       final filteredTasks = dismissedIds.isEmpty
           ? tasks
           : tasks.where((t) => !dismissedIds.contains(t.taskId)).toList();
@@ -93,6 +119,12 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
       final contextSummary = activeTasks.isEmpty
           ? ''
           : 'Specialist tasks: ${activeTasks.map((t) => t.description.isNotEmpty ? '${t.title} (${t.description})' : t.title).join(' | ')}';
+
+      // Retry: if wheel is already empty but a previous submission failed, retry now
+      if (filteredTasks.isEmpty && await SessionReportCache.hasReports(childId)) {
+        debugPrint('🔄 Wheel empty on open with cached reports — retrying submission');
+        _submitCachedReports();
+      }
 
       ref.read(tasksProvider.notifier).state = filteredTasks;
       ref.read(taskContextProvider.notifier).state = contextSummary;
@@ -109,6 +141,11 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
   void _handleGreeting(SessionState session) {
     final task = session.selectedTask;
     if (task == null) return;
+
+    _sessionStartTime = DateTime.now();
+    _turnCount = 0;
+    _emotionsPerTurn.clear();
+    _fullTranscript.clear();
 
     final repo = ref.read(openAIRepostitoryProvider);
     repo.clearHistory();
@@ -165,6 +202,13 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
     final task = session.selectedTask;
     if (task == null || session.transcript.isEmpty) return;
 
+    if (task.taskId != -1) {
+      _turnCount++;
+      _emotionsPerTurn.add(InputPreprocessor.classifyEmotion(session.transcript));
+      if (_fullTranscript.isNotEmpty) _fullTranscript.write(' ');
+      _fullTranscript.write(session.transcript);
+    }
+
     final taskContext = task.taskId == -1
         ? ''
         : 'Specialist task: ${task.title}${task.description.isNotEmpty ? " — ${task.description}" : ""}';
@@ -185,35 +229,74 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
     }
   }
 
-  Future<void> _generateAndPrintReport(SessionState session) async {
+  Future<void> _appendTaskReport({
+    required SessionState session,
+    required int durationSeconds,
+    required int turnCount,
+    required List<String> emotionsPerTurn,
+    required String fullTranscript,
+  }) async {
     final task = session.selectedTask;
-    if (task == null || task.taskId == -1 || session.transcript.isEmpty) return;
+    if (task == null || task.taskId == -1 || fullTranscript.isEmpty) return;
+
+    final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
+    if (childId <= 0) return;
+
     try {
-      final report = await ref.read(openAIRepostitoryProvider).generateReport(
+      final wordCount = fullTranscript.trim().split(RegExp(r'\s+')).length;
+      final reportLine = await ref.read(openAIRepostitoryProvider).generateReport(
+            taskId: task.taskId,
             taskTitle: task.title,
             taskDescription: task.description,
-            transcript: session.transcript,
+            transcript: fullTranscript,
+            durationSeconds: durationSeconds,
+            turnCount: turnCount,
+            emotionsPerTurn: emotionsPerTurn,
+            wordCount: wordCount,
           );
-      debugPrint(
-        '\n📋 ══════════════════════════════════\n'
-        '$report\n'
-        '──────────────────────────────────\n'
-        'TRANSCRIPT: ${session.transcript}\n'
-        '══════════════════════════════════\n',
-      );
-      // TODO: submit report to backend once endpoint is ready
-      // final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
-      // if (childId > 0) {
-      //   await SessionRepository().submitReport(SessionReportRequestModel(
-      //     childId: childId,
-      //     taskId: task.taskId,
-      //     taskTitle: task.title,
-      //     report: report,
-      //   ));
-      // }
+      await SessionReportCache.append(childId, reportLine);
+      debugPrint('📋 Report cached — task ${task.taskId}');
     } catch (e) {
-      debugPrint('❌ Report generation failed: $e');
+      debugPrint('❌ Report caching failed: $e');
     }
+  }
+
+  Future<void> _submitCachedReports() async {
+    final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
+    if (childId <= 0) return;
+
+    final reports = await SessionReportCache.loadAll(childId);
+    if (reports.isEmpty) return;
+
+    try {
+      await SessionRepository().saveAvatarReport(
+        childId: childId,
+        avatarReport: reports.join(' '),
+      );
+      await SessionReportCache.clear(childId);
+      debugPrint('✅ Avatar report submitted (${reports.length} tasks)');
+      if (mounted) {
+        setState(() => _submissionStatus = _SubmissionStatus.success);
+        Future.delayed(const Duration(seconds: 3), () {
+          if (mounted) setState(() => _submissionStatus = _SubmissionStatus.none);
+        });
+      }
+    } catch (e) {
+      debugPrint('❌ Report submission failed, kept in cache: $e');
+      if (mounted) setState(() => _submissionStatus = _SubmissionStatus.failed);
+    }
+  }
+
+  // Awaits the pending cache write then submits — called when wheel hits zero.
+  Future<void> _submitWhenReady() async {
+    await _pendingCacheWrite;
+    if (mounted) setState(() => _submissionStatus = _SubmissionStatus.submitting);
+    await _submitCachedReports();
+  }
+
+  Future<void> _submitAndPop() async {
+    ref.read(sessionStateControllerProvider.notifier).reset();
+    if (mounted) Navigator.of(context).pop();
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -236,7 +319,12 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
       }
     });
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _submitAndPop();
+      },
+      child: Scaffold(
       backgroundColor: const Color(0xFFD6E2EA),
       body: Stack(
         children: [
@@ -257,10 +345,7 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
                 tooltip: 'Back',
-                onPressed: () {
-                  ref.read(sessionStateControllerProvider.notifier).reset();
-                  Navigator.of(context).maybePop();
-                },
+                onPressed: _submitAndPop,
               ),
             ),
           ),
@@ -283,6 +368,13 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
               ),
             ),
           ),
+          if (_submissionStatus != _SubmissionStatus.none)
+            Positioned(
+              bottom: 120,
+              left: 24,
+              right: 24,
+              child: _SubmissionBanner(status: _submissionStatus),
+            ),
           Positioned(
             bottom: 0,
             left: 0,
@@ -297,20 +389,41 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
           ),
         ],
       ),
+      ),
     );
   }
 
   void _handleDone(SessionState session) {
     final task = session.selectedTask;
     if (task != null && task.taskId != -1) {
-      // Generate report with the full accumulated transcript before resetting
-      _generateAndPrintReport(session);
+      final duration = _sessionStartTime != null
+          ? DateTime.now().difference(_sessionStartTime!).inSeconds
+          : 0;
+
+      _pendingCacheWrite = _appendTaskReport(
+        session: session,
+        durationSeconds: duration,
+        turnCount: _turnCount,
+        emotionsPerTurn: List.from(_emotionsPerTurn),
+        fullTranscript: _fullTranscript.toString(),
+      );
 
       final current = ref.read(tasksProvider);
-      ref.read(tasksProvider.notifier).state =
-          current.where((t) => t.taskId != task.taskId).toList();
+      final remaining = current.where((t) => t.taskId != task.taskId).toList();
+      ref.read(tasksProvider.notifier).state = remaining;
       _persistDismissedTaskId(task.taskId);
+
+      // Option G: spin wheel just hit zero → all tasks discussed → submit
+      if (remaining.isEmpty) {
+        debugPrint('🎯 Spin wheel empty — submitting full report');
+        _submitWhenReady();
+      }
     }
+
+    _sessionStartTime = null;
+    _turnCount = 0;
+    _emotionsPerTurn.clear();
+    _fullTranscript.clear();
     ref.read(sessionStateControllerProvider.notifier).reset();
   }
 
@@ -392,6 +505,80 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SubmissionBanner extends StatelessWidget {
+  const _SubmissionBanner({required this.status});
+  final _SubmissionStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, message, color) = switch (status) {
+      _SubmissionStatus.submitting => (
+          const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          ),
+          'Sending report…',
+          const Color(0xFF1565C0),
+        ),
+      _SubmissionStatus.success => (
+          const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+          'Report sent!',
+          const Color(0xFF2E7D32),
+        ),
+      _SubmissionStatus.failed => (
+          const Icon(Icons.error_rounded, color: Colors.white, size: 18),
+          'Could not send report — will retry next time',
+          const Color(0xFFC62828),
+        ),
+      _SubmissionStatus.none => (
+          const SizedBox.shrink(),
+          '',
+          Colors.transparent,
+        ),
+    };
+
+    return AnimatedOpacity(
+      opacity: status == _SubmissionStatus.none ? 0.0 : 1.0,
+      duration: const Duration(milliseconds: 250),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            const SizedBox(width: 10),
+            Flexible(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
