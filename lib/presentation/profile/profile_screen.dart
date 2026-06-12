@@ -86,11 +86,11 @@ class ProfileScreen extends StatelessWidget {
             ),
             MenuItem(
               label: 'Terms & Conditions',
-              onTap: () => _launchUrl('https://example.com/terms'),
+              onTap: () => _launchUrl('https://anasnasr-afk.github.io/inside-out/terms.html'),
             ),
             MenuItem(
               label: 'Privacy Policy',
-              onTap: () => _launchUrl('https://example.com/privacy'),
+              onTap: () => _launchUrl('https://anasnasr-afk.github.io/inside-out/privacy.html'),
             ),
             MenuItem(
               label: 'About App',
