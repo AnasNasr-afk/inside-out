@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppointmentListScreen extends StatelessWidget {
   const AppointmentListScreen({super.key});
@@ -39,17 +40,17 @@ class AppointmentListScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Colors.black87,
-            size: 18,
+            size: 18.sp,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Appointments',
           style: GoogleFonts.poppins(
-            fontSize: 18,
+            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
             color: const Color(0xFF1F2937),
           ),
@@ -58,24 +59,24 @@ class AppointmentListScreen extends StatelessWidget {
         // ── Schedule button lives here — one entry point only ────────────
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 16.w),
             child: GestureDetector(
               onTap: () {
                 // TODO: navigate to create screen
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 7,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 14.w,
+                  vertical: 7.h,
                 ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF6366F1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
                   '+ New',
                   style: GoogleFonts.poppins(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
@@ -96,44 +97,44 @@ class AppointmentListScreen extends StatelessWidget {
   // ── Empty State ──────────────────────────────────────────────────────────
   Widget _buildEmptyState(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+      padding: EdgeInsets.symmetric(horizontal: 32.w),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Illustration placeholder
           Container(
-            width: 80,
-            height: 80,
+            width: 80.w,
+            height: 80.h,
             decoration: BoxDecoration(
               color: const Color(0xFFF5F3FF),
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(24.r),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.calendar_month_outlined,
-              size: 40,
+              size: 40.sp,
               color: Color(0xFF6366F1),
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           Text(
             'No Appointments Yet',
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF1F2937),
             ),
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           Text(
             'Your recurring therapy sessions\nwill appear here.',
             style: GoogleFonts.poppins(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: const Color(0xFF9CA3AF),
-              height: 1.5,
+              height: 1.5.h,
             ),
             textAlign: TextAlign.center,
           ),
@@ -145,9 +146,9 @@ class AppointmentListScreen extends StatelessWidget {
   // ── Appointments List ────────────────────────────────────────────────────
   Widget _buildList(BuildContext context) {
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 32.h),
       itemCount: _appointments.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, __) => SizedBox(height: 12.h),
       itemBuilder: (context, index) {
         final apt = _appointments[index];
         return _AppointmentCard(appointment: apt);
@@ -170,15 +171,15 @@ class _AppointmentCard extends StatelessWidget {
       background: _dismissBackground(),
       confirmDismiss: (_) => _confirmDelete(context),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFE8E8E8), width: 1),
+          borderRadius: BorderRadius.circular(18.r),
+          border: Border.all(color: const Color(0xFFE8E8E8), width: 1.w),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.shade100,
-              blurRadius: 8,
+              blurRadius: 8.r,
               offset: const Offset(0, 2),
             ),
           ],
@@ -187,20 +188,20 @@ class _AppointmentCard extends StatelessWidget {
           children: [
             // ── Icon container ─────────────────────────────────────────
             Container(
-              width: 46,
-              height: 46,
+              width: 46.w,
+              height: 46.h,
               decoration: BoxDecoration(
                 color: const Color(0xFFF5F3FF),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(14.r),
               ),
               child: Icon(
                 appointment['icon'] as IconData,
-                size: 22,
+                size: 22.sp,
                 color: const Color(0xFF6366F1),
               ),
             ),
 
-            const SizedBox(width: 14),
+            SizedBox(width: 14.w),
 
             // ── Text ───────────────────────────────────────────────────
             Expanded(
@@ -210,24 +211,24 @@ class _AppointmentCard extends StatelessWidget {
                   Text(
                     appointment['serviceType'],
                     style: GoogleFonts.poppins(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: const Color(0xFF1F2937),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.repeat_rounded,
-                        size: 13,
+                        size: 13.sp,
                         color: Color(0xFF9CA3AF),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4.w),
                       Text(
                         '${appointment['day']}  ·  ${appointment['time']}',
                         style: GoogleFonts.poppins(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           color: const Color(0xFF9CA3AF),
                         ),
                       ),
@@ -239,15 +240,15 @@ class _AppointmentCard extends StatelessWidget {
 
             // ── Recurring badge ────────────────────────────────────────
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: const Color(0xFFF5F3FF),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
                 'Weekly',
                 style: GoogleFonts.poppins(
-                  fontSize: 11,
+                  fontSize: 11.sp,
                   fontWeight: FontWeight.w500,
                   color: const Color(0xFF6366F1),
                 ),
@@ -263,15 +264,15 @@ class _AppointmentCard extends StatelessWidget {
   Widget _dismissBackground() {
     return Container(
       alignment: Alignment.centerRight,
-      padding: const EdgeInsets.only(right: 20),
+      padding: EdgeInsets.only(right: 20.w),
       decoration: BoxDecoration(
         color: const Color(0xFFFFE4E4),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
       ),
-      child: const Icon(
+      child: Icon(
         Icons.delete_outline_rounded,
         color: Color(0xFFEF4444),
-        size: 24,
+        size: 24.sp,
       ),
     );
   }
@@ -282,20 +283,20 @@ class _AppointmentCard extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         title: Text(
           'Remove Appointment?',
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
-            fontSize: 16,
+            fontSize: 16.sp,
             color: const Color(0xFF1F2937),
           ),
         ),
         content: Text(
           'This will remove "${appointment['serviceType']}" from your schedule.',
           style: GoogleFonts.poppins(
-            fontSize: 13,
+            fontSize: 13.sp,
             color: const Color(0xFF6B7280),
           ),
         ),

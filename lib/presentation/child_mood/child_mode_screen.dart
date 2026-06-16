@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:patient/presentation/child_mood/widgets/child_mode_body.dart';
 
 import '../../core/networking/repositories/auth_repo.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 // ═══════════════════════════════════════════════════════════
@@ -128,30 +129,30 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
+      insetPadding: EdgeInsets.symmetric(horizontal: 32.w),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+        padding: EdgeInsets.fromLTRB(24.w, 32.h, 24.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _LockIcon(color: _purple, bgColor: _purpleBg),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _DialogTitle(),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _PasswordField(
               controller: _controller,
               errorText: _errorText,
               accentColor: _purple,
               onSubmitted: (_) => _isLoading ? null : _verify(),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _ConfirmButton(
               isLoading: _isLoading,
               accentColor: _purple,
               onPressed: _verify,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             _CancelButton(
               onPressed: () => Navigator.of(context).pop(),
             ),
@@ -174,10 +175,10 @@ class _LockIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 56,
-      height: 56,
+      width: 56.w,
+      height: 56.h,
       decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
-      child: Icon(Icons.lock_outline_rounded, size: 28, color: color),
+      child: Icon(Icons.lock_outline_rounded, size: 28.sp, color: color),
     );
   }
 }
@@ -187,14 +188,14 @@ class _DialogTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    return Text(
       'Parent should enter\npassword to exit',
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 16,
+        fontSize: 16.sp,
         fontWeight: FontWeight.w700,
         color: Colors.black,
-        height: 1.4,
+        height: 1.4.h,
       ),
     );
   }
@@ -221,41 +222,41 @@ class _PasswordField extends StatelessWidget {
       keyboardType: TextInputType.visiblePassword,
       textAlign: TextAlign.center,
       autofocus: true,
-      style: const TextStyle(
-        fontSize: 15,
+      style: TextStyle(
+        fontSize: 15.sp,
         fontWeight: FontWeight.w600,
-        letterSpacing: 6,
+        letterSpacing: 6.sp,
       ),
       decoration: InputDecoration(
         hintText: 'Enter Password',
         hintStyle: TextStyle(
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w400,
-          letterSpacing: 0,
+          letterSpacing: 0.sp,
           color: Colors.grey.shade400,
         ),
         errorText: errorText,
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(50.r),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(50.r),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: BorderSide(color: accentColor, width: 1.5),
+          borderRadius: BorderRadius.circular(50.r),
+          borderSide: BorderSide(color: accentColor, width: 1.5.w),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(50.r),
           borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(color: Colors.red, width: 1.5),
+          borderRadius: BorderRadius.circular(50.r),
+          borderSide: BorderSide(color: Colors.red, width: 1.5.w),
         ),
       ),
       onSubmitted: onSubmitted,
@@ -282,26 +283,26 @@ class _ConfirmButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: accentColor,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: 14.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(50.r),
           ),
           elevation: 0,
         ),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
-            ? const SizedBox(
-          height: 20,
-          width: 20,
+            ? SizedBox(
+          height: 20.h,
+          width: 20.w,
           child: CircularProgressIndicator(
             color: Colors.white,
-            strokeWidth: 2.5,
+            strokeWidth: 2.5.w,
           ),
         )
-            : const Text(
+            : Text(
           'Confirm',
           style:
-          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -318,7 +319,7 @@ class _CancelButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         'Cancel',
-        style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+        style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade500),
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:patient/presentation/tasks%20/widgets/task_header.dart';
 
 import '../../core/cubits/task_cubit/task_listener.dart';
 import '../../core/models/task_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -69,7 +70,7 @@ class _TasksScreenState extends State<TasksScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TaskHeader(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           BlocBuilder<TaskCubit, TaskStates>(
             builder: (context, state) {
               final cubit = TaskCubit.get(context);
@@ -79,9 +80,9 @@ class _TasksScreenState extends State<TasksScreen> {
               );
             },
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           _buildFilterChips(),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Expanded(child: _buildTaskList()),
         ],
       ),
@@ -90,30 +91,30 @@ class _TasksScreenState extends State<TasksScreen> {
 
   Widget _buildFilterChips() {
     return SizedBox(
-      height: 36,
+      height: 36.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         itemCount: _filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => SizedBox(width: 8.w),
         itemBuilder: (context, i) {
           final active = _selectedFilter == _filters[i];
           return GestureDetector(
             onTap: () => setState(() => _selectedFilter = _filters[i]),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
                 color: active ? const Color(0xFF6366F1) : Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 boxShadow: active
-                    ? [BoxShadow(color: const Color(0xFF6366F1).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]
-                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6)],
+                    ? [BoxShadow(color: const Color(0xFF6366F1).withValues(alpha: 0.3), blurRadius: 8.r, offset: const Offset(0, 4))]
+                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6.r)],
               ),
               child: Text(
                 _filters[i],
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                   color: active ? Colors.white : const Color(0xFF6B7280),
                 ),
@@ -151,7 +152,7 @@ class _TasksScreenState extends State<TasksScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(state.message, textAlign: TextAlign.center),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 TextButton(
                   onPressed: _fetchTasks,
                   child: const Text('Retry'),
@@ -169,9 +170,9 @@ class _TasksScreenState extends State<TasksScreen> {
           return RefreshIndicator(
             onRefresh: () async => _fetchTasks(),
             child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: EdgeInsets.fromLTRB(20.w, 0.h, 20.w, 24.h),
               itemCount: filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) => SizedBox(height: 12.h),
               itemBuilder: (context, index) => TaskCard(task: filtered[index]),
             ),
           );

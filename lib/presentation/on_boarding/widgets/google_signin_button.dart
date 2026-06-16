@@ -5,6 +5,7 @@ import '../../../core/cubits/auth_cubit/auth_cubit.dart';
 import '../../../core/cubits/auth_cubit/auth_listener.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../core/routing/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({super.key});
@@ -30,10 +31,10 @@ class GoogleSignInButton extends StatelessWidget {
           bool isLoading = state is GoogleSignInLoadingState;
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 50.h,
               child: ElevatedButton(
                 onPressed: isLoading
                     ? null
@@ -41,10 +42,10 @@ class GoogleSignInButton extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(30.r),
                   ),
                   elevation: 2,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
                 ),
                 child: isLoading
                     ? const CircularProgressIndicator()
@@ -52,12 +53,12 @@ class GoogleSignInButton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Assets.logos.lgGoogle.svg(width: 40, height: 40),
-                    const SizedBox(width: 10),
-                    const Text(
+                    Assets.logos.lgGoogle.svg(width: 40.w, height: 40.h),
+                    SizedBox(width: 10.w),
+                    Text(
                       'Continue with Google',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),

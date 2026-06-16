@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
@@ -29,28 +30,28 @@ class AppTheme {
       scaffoldBackgroundColor: backgroundColor,
       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
         displayLarge: GoogleFonts.poppins(
-          fontSize: 28,
+          fontSize: 28.sp,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
         displayMedium: GoogleFonts.poppins(
-          fontSize: 24,
+          fontSize: 24.sp,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
         bodyLarge: GoogleFonts.poppins(
-          fontSize: 16,
+          fontSize: 16.sp,
           color: textColor,
         ),
         bodyMedium: GoogleFonts.poppins(
-          fontSize: 14,
+          fontSize: 14.sp,
           color: subtitleColor,
         ),
       ),
       appBarTheme: AppBarTheme(
         elevation: 0,
         titleTextStyle: GoogleFonts.poppins(
-          fontSize: 20,
+          fontSize: 20.sp,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
@@ -59,17 +60,17 @@ class AppTheme {
       checkboxTheme: CheckboxThemeData(
         checkColor: const WidgetStatePropertyAll(Colors.white),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(4.r),
         ),
-        side: const BorderSide(
-          color: Color.fromRGBO(139, 139, 139, 1),
-          width: 1,
+        side: BorderSide(
+          color: const Color.fromRGBO(139, 139, 139, 1),
+          width: 1.w,
         ),
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
+      progressIndicatorTheme: ProgressIndicatorThemeData(
         color: primaryColor,
-        linearTrackColor: Color.fromRGBO(99, 102, 241, 0.15),
-        linearMinHeight: 6,
+        linearTrackColor: const Color.fromRGBO(99, 102, 241, 0.15),
+        linearMinHeight: 6.h,
       ),
       colorScheme: const ColorScheme.light(
         primary: primaryColor,
@@ -79,26 +80,26 @@ class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
           style: ButtonStyle(
         backgroundColor: const WidgetStatePropertyAll(primaryColor),
-        minimumSize: const WidgetStatePropertyAll(Size(double.infinity, 56)),
+        minimumSize: WidgetStatePropertyAll(Size(double.infinity, 56.h)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(40.r),
           ),
         ),
       )),
       dropdownMenuTheme: DropdownMenuThemeData(
-        textStyle: const TextStyle(
-          fontSize: 16,
+        textStyle: TextStyle(
+          fontSize: 16.sp,
           color: Colors.black,
         ),
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(color: Colors.grey.shade600),
           ),
           fillColor: Colors.yellowAccent,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(color: Colors.grey.shade600),
           ),
         ),

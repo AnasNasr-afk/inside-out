@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingIndicator extends StatelessWidget {
   final int count;
@@ -18,14 +19,14 @@ class OnboardingIndicator extends StatelessWidget {
         count,
             (index) => AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.only(right: 5),
-          height: 8,
-          width: 8,
+          margin: EdgeInsets.only(right: 5.w),
+          height: 8.h,
+          width: 8.w,
           decoration: BoxDecoration(
             color: currentIndex == index
                 ? Colors.blueAccent
                 : Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(4.r),
           ),
         ),
       ),

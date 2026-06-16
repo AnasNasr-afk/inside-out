@@ -1,6 +1,7 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/ai_avatar/providers/animation_state_controller.dart';
 
 class FlagSwitch extends ConsumerWidget {
@@ -24,23 +25,23 @@ class FlagSwitch extends ConsumerWidget {
 
     return Material(
       color: Colors.black.withValues(alpha: 0.35),
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(20.r),
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         onTap: () =>
             ref.read(animationStateControllerProvider.notifier).toggleLanguage(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flag.fromCode(flagCode, height: 20, width: 28, fit: BoxFit.fill),
-              const SizedBox(width: 6),
+              Flag.fromCode(flagCode, height: 20.h, width: 28.w, fit: BoxFit.fill),
+              SizedBox(width: 6.w),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w700,
                 ),
               ),

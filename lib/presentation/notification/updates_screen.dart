@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../gen/assets.gen.dart';
 import 'article_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UpdatesScreen extends StatelessWidget {
   final List<Map<String, dynamic>> latestVideos = [
@@ -40,48 +41,48 @@ class UpdatesScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "Updates",
                 style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 30.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontFamily: 'League Spartan'),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24.h),
+              Text(
                 "Latest Videos",
                 style: TextStyle(
-                    fontSize: 19,
+                    fontSize: 19.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontFamily: 'League Spartan'),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
               SizedBox(
-                height: 190, // Adjust height based on design
+                height: 190.h, // Adjust height based on design
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: latestVideos.length,
                   itemBuilder: (context, index) {
                     final video = latestVideos[index];
                     return Padding(
-                      padding: const EdgeInsets.only(right: 12),
+                      padding: EdgeInsets.only(right: 12.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                             child: Assets.placeholders.thumbnail1.image(
-                              width: 200,
-                              height: 130,
+                              width: 200.w,
+                              height: 130.h,
                             ),  
                           ),
-                          const SizedBox(height: 15),
+                          SizedBox(height: 15.h),
                           Text(
                             video['title']!,
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -96,16 +97,16 @@ class UpdatesScreen extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 40),
-              const Text(
+              SizedBox(height: 40.h),
+              Text(
                 "Latest Articles",
                 style: TextStyle(
-                    fontSize: 19,
+                    fontSize: 19.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontFamily: 'League Spartan'),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Expanded(
                 child: ListView.builder(
                   itemCount: latestArticles.length,
@@ -122,17 +123,17 @@ class UpdatesScreen extends StatelessWidget {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 15),
+                        padding: EdgeInsets.only(bottom: 15.h),
                         child: Row(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8.r),
                               child: Assets.placeholders.thumbnail1.image(
-                              width: 200,
-                              height: 130,
+                              width: 200.w,
+                              height: 130.h,
                             ),  
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10.w),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

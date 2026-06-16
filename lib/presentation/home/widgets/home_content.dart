@@ -9,6 +9,7 @@ import '../../../core/routing/routes.dart';
 import 'avatar_widget.dart';
 import 'daily_activities_card.dart';
 import 'mood_check_in_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeContent extends StatelessWidget {
   final VoidCallback onSeeAllTasks;
@@ -47,10 +48,10 @@ class HomeContent extends StatelessWidget {
             crossAxisAlignment:
             CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Welcome Back',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   color: Color.fromARGB(
                     255,
                     2,
@@ -64,8 +65,8 @@ class HomeContent extends StatelessWidget {
                 children: [
                   Text(
                     displayName,
-                    style: const TextStyle(
-                      fontSize: 35,
+                    style: TextStyle(
+                      fontSize: 35.sp,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(
                         255,
@@ -86,34 +87,34 @@ class HomeContent extends StatelessWidget {
                       );
                     },
                     child: Assets.icons.icChat.svg(
-                      width: 40,
-                      height: 40,
+                      width: 40.w,
+                      height: 40.h,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               MoodCheckInCard(
                 childName: displayChild,
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               const AvatarWidget(),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               const QuickActionsRow(),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               DailyActivitiesPreviewCard(
                 onSeeAll: onSeeAllTasks,
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         );

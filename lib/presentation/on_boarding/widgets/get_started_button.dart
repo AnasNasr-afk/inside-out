@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GetStartedButton extends StatelessWidget {
   const GetStartedButton({
@@ -13,29 +14,29 @@ class GetStartedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20
-          , vertical: 30),
+      padding: EdgeInsets.symmetric(horizontal: 20.w
+          , vertical: 30.h),
       child: SizedBox(
         width: double.infinity,
-        height: 60,
+        height: 60.h,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primaryColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(30.r),
               side: const BorderSide(color: Colors.black12), // subtle border
             ),
             elevation: 2,
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 12.h),
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Get Started',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),

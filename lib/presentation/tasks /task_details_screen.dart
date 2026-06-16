@@ -6,6 +6,7 @@ import 'package:patient/core/models/task_model.dart';
 import 'package:patient/presentation/games/color_match_game.dart';
 import 'package:patient/presentation/games/emotion_game.dart';
 import 'package:patient/presentation/games/memory_game.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
   const TaskDetailsScreen({super.key, required this.task});
@@ -119,14 +120,14 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
           leading: GestureDetector(
             onTap: () => Navigator.pop(context, _markedDone),
             child: Container(
-              margin: const EdgeInsets.all(8),
+              margin: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
                 color: const Color(0xFFF3F4F6),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_back_ios_new_rounded,
-                size: 16,
+                size: 16.sp,
                 color: Color(0xFF1F2937),
               ),
             ),
@@ -138,8 +139,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             child: Text(
               task.title,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 15,
+              style: TextStyle(
+                fontSize: 15.sp,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF111827),
               ),
@@ -150,7 +151,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             child: AnimatedOpacity(
               opacity: _showAppBarTitle ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 180),
-              child: Container(height: 1, color: const Color(0xFFF3F4F6)),
+              child: Container(height: 1.h, color: const Color(0xFFF3F4F6)),
             ),
           ),
         ),
@@ -159,21 +160,21 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+                padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 32.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ── Title — hero text ───────────────────
                     Text(
                       task.title,
-                      style: const TextStyle(
-                        fontSize: 24,
+                      style: TextStyle(
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF111827),
-                        height: 1.3,
+                        height: 1.3.h,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     // ── Status: pill or completion banner ───
                     if (_markedDone)
@@ -181,33 +182,33 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                     else
                       _StatusPill(task: task),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
 
                     // ── Description ─────────────────────────
                     const _SectionLabel('Description'),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF9FAFB),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: task.isGameTask && task.description.isEmpty
                           ? Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.sports_esports_rounded,
-                                  size: 18,
+                                  size: 18.sp,
                                   color: Color(0xFF7C3AED),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10.w),
                                 Expanded(
                                   child: Text(
                                     'Tap "Play ${task.gameDisplayName}" below to start the game.',
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      height: 1.6,
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      height: 1.6.h,
                                       color: Color(0xFF7C3AED),
                                     ),
                                   ),
@@ -219,19 +220,19 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                   ? 'No description provided for this task.'
                                   : task.description,
                               style: TextStyle(
-                                fontSize: 15,
-                                height: 1.7,
+                                fontSize: 15.sp,
+                                height: 1.7.h,
                                 color: task.description.isEmpty
                                     ? const Color(0xFF9CA3AF)
                                     : const Color(0xFF374151),
                               ),
                             ),
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28.h),
 
                     // ── Timeline ────────────────────────────
                     const _SectionLabel('Timeline'),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     _VisualTimeline(task: task, markedDone: _markedDone),
                   ],
                 ),
@@ -240,22 +241,22 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
             // ── Bottom action ────────────────────────────
             Container(
-              padding: EdgeInsets.fromLTRB(24, 12, 24, bottomPadding + 12),
+              padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, bottomPadding + 12),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 border: Border(top: BorderSide(color: Color(0xFFF3F4F6))),
               ),
               child: _markedDone
-                  ? const Row(
+                  ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.check_circle_rounded,
-                            size: 18, color: Color(0xFF10B981)),
-                        SizedBox(width: 8),
+                            size: 18.sp, color: Color(0xFF10B981)),
+                        SizedBox(width: 8.w),
                         Text(
                           'Task completed',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF10B981),
                           ),
@@ -272,41 +273,41 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 250),
                             width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                             decoration: BoxDecoration(
                               color: const Color(0xFF6366F1),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
                                   color: const Color(0xFF6366F1)
                                       .withValues(alpha: 0.3),
-                                  blurRadius: 16,
+                                  blurRadius: 16.r,
                                   offset: const Offset(0, 6),
                                 ),
                               ],
                             ),
                             child: _isSubmitting
-                                ? const Center(
+                                ? Center(
                                     child: SizedBox(
-                                      width: 22,
-                                      height: 22,
+                                      width: 22.w,
+                                      height: 22.h,
                                       child: CircularProgressIndicator(
                                         color: Colors.white,
-                                        strokeWidth: 2.5,
+                                        strokeWidth: 2.5.w,
                                       ),
                                     ),
                                   )
-                                : const Row(
+                                : Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.check_rounded,
-                                          color: Colors.white, size: 20),
-                                      SizedBox(width: 8),
+                                          color: Colors.white, size: 20.sp),
+                                      SizedBox(width: 8.w),
                                       Text(
                                         'Mark as Done',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -342,18 +343,18 @@ class _SectionLabel extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 3,
-          height: 16,
+          width: 3.w,
+          height: 16.h,
           decoration: BoxDecoration(
             color: const Color(0xFF6366F1),
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(2.r),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8.w),
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w700,
             color: Color(0xFF1F2937),
           ),
@@ -383,20 +384,20 @@ class _StatusPill extends StatelessWidget {
     final String label = overdue ? 'Overdue' : 'Pending';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: fg),
-          const SizedBox(width: 5),
+          Icon(icon, size: 12.sp, color: fg),
+          SizedBox(width: 5.w),
           Text(
             label,
             style: TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w700, color: fg),
+                fontSize: 12.sp, fontWeight: FontWeight.w700, color: fg),
           ),
         ],
       ),
@@ -419,10 +420,10 @@ class _CompletionBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: const Color(0xFFECFDF5),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: const Color(0xFF10B981).withValues(alpha: 0.3),
         ),
@@ -430,32 +431,32 @@ class _CompletionBanner extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 40.w,
+            height: 40.h,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Color(0xFF10B981),
             ),
-            child: const Icon(Icons.check_rounded,
-                color: Colors.white, size: 22),
+            child: Icon(Icons.check_rounded,
+                color: Colors.white, size: 22.sp),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Task Completed',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF065F46),
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2.h),
               Text(
                 dateText,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: 12.sp,
                   color: Color(0xFF059669),
                 ),
               ),
@@ -500,36 +501,36 @@ class _VisualTimeline extends StatelessWidget {
       children: [
         // ── Dot + connector column ────────────
         SizedBox(
-          width: 16,
+          width: 16.w,
           child: Column(
             children: [
-              const SizedBox(height: 3),
+              SizedBox(height: 3.h),
               Container(
-                width: 14,
-                height: 14,
+                width: 14.w,
+                height: 14.h,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(0xFF6366F1),
                 ),
               ),
               Container(
-                width: 2,
-                height: 36,
+                width: 2.w,
+                height: 36.h,
                 color: const Color(0xFFE5E7EB),
               ),
               Container(
-                width: 14,
-                height: 14,
+                width: 14.w,
+                height: 14.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: markedDone ? dueColor : Colors.white,
-                  border: Border.all(color: dueColor, width: 2),
+                  border: Border.all(color: dueColor, width: 2.w),
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16.w),
 
         // ── Label + date column ───────────────
         Expanded(
@@ -539,25 +540,25 @@ class _VisualTimeline extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Assigned',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF6B7280),
                     ),
                   ),
                   Text(
                     task.formattedAssignedDate,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: TextStyle(
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF111827),
+                      color: const Color(0xFF111827),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 36),
+              SizedBox(height: 36.h),
 
               // Due / Completed
               Row(
@@ -566,7 +567,7 @@ class _VisualTimeline extends StatelessWidget {
                   Text(
                     dueLabel,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: dueColor,
                     ),
@@ -574,7 +575,7 @@ class _VisualTimeline extends StatelessWidget {
                   Text(
                     dueDate,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: dueColor,
                     ),
@@ -603,31 +604,31 @@ class _PlayGameButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF10B981), Color(0xFF059669)],
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: const Color(0xFF10B981).withValues(alpha: 0.35),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
+              blurRadius: 16.r,
+              offset: Offset(0, 6.h),
             ),
           ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.sports_esports_rounded,
-                color: Colors.white, size: 22),
-            const SizedBox(width: 10),
+            Icon(Icons.sports_esports_rounded,
+                color: Colors.white, size: 22.sp),
+            SizedBox(width: 10.w),
             Text(
               'Play $gameName',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -671,15 +672,15 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       padding: EdgeInsets.fromLTRB(
-        20,
-        12,
-        20,
-        MediaQuery.of(context).viewInsets.bottom + 28,
+        20.w,
+        12.h,
+        20.w,
+        MediaQuery.of(context).viewInsets.bottom + 28.h,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -687,33 +688,33 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
         children: [
           Center(
             child: Container(
-              width: 36,
-              height: 4,
+              width: 36.w,
+              height: 4.h,
               decoration: BoxDecoration(
                 color: const Color(0xFFE5E7EB),
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(2.r),
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20.h),
+          Text(
             "Parent's Note",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1F2937),
+              color: const Color(0xFF1F2937),
             ),
           ),
-          const SizedBox(height: 4),
-          const Text(
+          SizedBox(height: 4.h),
+          Text(
             'Share what was challenging and what went well during this task.',
             style: TextStyle(
-              fontSize: 13,
-              color: Color(0xFF6B7280),
+              fontSize: 13.sp,
+              color: const Color(0xFF6B7280),
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           TextField(
             controller: _controller,
             maxLines: 4,
@@ -724,20 +725,20 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
             decoration: InputDecoration(
               hintText:
                   'e.g. "She struggled with pronunciation but loved the pictures..."',
-              hintStyle: const TextStyle(
-                color: Color(0xFF9CA3AF),
-                fontSize: 13,
+              hintStyle: TextStyle(
+                color: const Color(0xFF9CA3AF),
+                fontSize: 13.sp,
               ),
               errorText:
                   _showError ? 'Please write a note before submitting.' : null,
               filled: true,
               fillColor: const Color(0xFFF9FAFB),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide: BorderSide(
                   color: _showError
                       ? const Color(0xFFDC2626)
@@ -745,18 +746,18 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide: BorderSide(
                   color: _showError
                       ? const Color(0xFFDC2626)
                       : const Color(0xFF6366F1),
-                  width: 1.5,
+                  width: 1.5.w,
                 ),
               ),
-              contentPadding: const EdgeInsets.all(14),
+              contentPadding: EdgeInsets.all(14.r),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -764,15 +765,15 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6366F1),
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 elevation: 0,
               ),
-              child: const Text(
+              child: Text(
                 'Submit',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
               ),
             ),
           ),

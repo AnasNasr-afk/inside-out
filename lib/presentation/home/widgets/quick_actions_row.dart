@@ -6,6 +6,7 @@ import 'package:patient/presentation/child_mood/child_mode_screen.dart';
 import 'package:patient/presentation/home/widgets/quick_action_button.dart';
 
 import '../../../core/routing/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
@@ -22,12 +23,12 @@ class QuickActionsRow extends StatelessWidget {
         Text(
           'Quick Actions',
           style: GoogleFonts.poppins(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
             color: const Color(0xFF1F2937),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         Row(
           children: [
             Expanded(
@@ -37,7 +38,7 @@ class QuickActionsRow extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(context, Routes.reportScreen),
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10.w),
             Expanded(
               child: QuickActionButton(
                 icon: Icons.child_care_outlined,
@@ -58,7 +59,7 @@ class QuickActionsRow extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10.w),
             Expanded(
               child: QuickActionButton(
                 icon: Icons.calendar_month_rounded,

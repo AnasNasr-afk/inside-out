@@ -8,6 +8,7 @@ import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/networking/repositories/chat_repo.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const _primary      = Color(0xFF6366F1);
 const _bgPage       = Color(0xFFF5F5F0);
@@ -210,7 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           if (_showEmojiPicker)
             SizedBox(
-              height: 280,
+              height: 280.h,
               child: ep.EmojiPicker(
                 textEditingController: _controller,
                 onEmojiSelected: (_, __) {},
@@ -248,16 +249,16 @@ class _ChatScreenState extends State<ChatScreen> {
     if (_error != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.r),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _error!,
-                style: GoogleFonts.poppins(color: _textMid, fontSize: 14),
+                style: GoogleFonts.poppins(color: _textMid, fontSize: 14.sp),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -270,7 +271,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   backgroundColor: _primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12.r)),
                 ),
                 child: Text('Try again',
                     style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
@@ -284,7 +285,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return Center(
         child: Text(
           'No messages yet. Say hi! 👋',
-          style: GoogleFonts.poppins(color: _textLight, fontSize: 14),
+          style: GoogleFonts.poppins(color: _textLight, fontSize: 14.sp),
         ),
       );
     }
@@ -294,7 +295,7 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: ListView.builder(
         controller: _scrollCtrl,
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
         itemCount: _messages.length,
         itemBuilder: (context, i) {
           final msg = _messages[i];
@@ -312,9 +313,9 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Text(
                 msg.message,
                 style: GoogleFonts.poppins(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: isMe ? Colors.white : _textDark,
-                  height: 1.5,
+                  height: 1.5.h,
                 ),
               ),
             );
@@ -329,10 +330,10 @@ class _ChatScreenState extends State<ChatScreen> {
               senderInitial: isMe ? _parentInitial : _specialistInitial,
               child: isImage
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                       child: Image.network(
                         msg.url,
-                        width: 200,
+                        width: 200.w,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => const Icon(
                             Icons.broken_image_rounded,
@@ -343,13 +344,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.insert_drive_file_rounded,
-                            color: isMe ? Colors.white70 : _textMid, size: 20),
-                        const SizedBox(width: 8),
+                            color: isMe ? Colors.white70 : _textMid, size: 20.sp),
+                        SizedBox(width: 8.w),
                         Flexible(
                           child: Text(
                             msg.name ?? 'File',
                             style: GoogleFonts.poppins(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               color: isMe ? Colors.white : _textDark,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -373,8 +374,8 @@ class _ChatScreenState extends State<ChatScreen> {
       elevation: 0,
       centerTitle: false,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded,
-            size: 18, color: _textDark),
+        icon: Icon(Icons.arrow_back_ios_new_rounded,
+            size: 18.sp, color: _textDark),
         onPressed: () => Navigator.pop(context),
       ),
       title: Row(
@@ -382,39 +383,39 @@ class _ChatScreenState extends State<ChatScreen> {
           Stack(
             children: [
               CircleAvatar(
-                radius: 18,
+                radius: 18.r,
                 backgroundColor: const Color(0xFFEDE8FF),
                 child: Text(
                   _specialistInitial,
                   style: GoogleFonts.poppins(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: _primary),
                 ),
               ),
               Positioned(
-                right: 0,
-                bottom: 0,
+                right: 0.w,
+                bottom: 0.h,
                 child: Container(
-                  width: 10,
-                  height: 10,
+                  width: 10.w,
+                  height: 10.h,
                   decoration: BoxDecoration(
                     color: isConnected ? _onlineGreen : _textLight,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
+                    border: Border.all(color: Colors.white, width: 1.5.w),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 _specialistName,
                 style: GoogleFonts.poppins(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
                     color: _textDark),
               ),
@@ -423,7 +424,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ? 'Connecting...'
                     : (_error != null ? 'Unavailable' : 'Online'),
                 style: GoogleFonts.poppins(
-                  fontSize: 11,
+                  fontSize: 11.sp,
                   fontWeight: FontWeight.w500,
                   color: isConnected ? _onlineGreen : _textLight,
                 ),
@@ -440,7 +441,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Container(height: 0.5, color: _inputBorder),
+        child: Container(height: 0.5.h, color: _inputBorder),
       ),
     );
   }
@@ -478,7 +479,7 @@ class _BubbleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         mainAxisAlignment:
             isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -487,16 +488,16 @@ class _BubbleRow extends StatelessWidget {
           if (!isMe) ...[
             showAvatar
                 ? CircleAvatar(
-                    radius: 16,
+                    radius: 16.r,
                     backgroundColor: const Color(0xFFEDE8FF),
                     child: Text(senderInitial,
                         style: GoogleFonts.poppins(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w600,
                             color: _primary)),
                   )
-                : const SizedBox(width: 32),
-            const SizedBox(width: 8),
+                : SizedBox(width: 32.w),
+            SizedBox(width: 8.w),
           ],
           Flexible(
             child: Column(
@@ -504,34 +505,34 @@ class _BubbleRow extends StatelessWidget {
                   isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 10),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 14.w, vertical: 10.h),
                   decoration: BoxDecoration(
                     color: isMe ? _bubbleOut : _bubbleIn,
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(18),
-                      topRight: const Radius.circular(18),
+                      topLeft: Radius.circular(18.r),
+                      topRight: Radius.circular(18.r),
                       bottomLeft: Radius.circular(isMe ? 18 : 4),
                       bottomRight: Radius.circular(isMe ? 4 : 18),
                     ),
                   ),
                   child: child,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(time,
                     style:
-                        GoogleFonts.poppins(fontSize: 11, color: _textLight)),
+                        GoogleFonts.poppins(fontSize: 11.sp, color: _textLight)),
               ],
             ),
           ),
           if (isMe) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             CircleAvatar(
-              radius: 16,
+              radius: 16.r,
               backgroundColor: const Color(0xFFEDE8FF),
               child: Text(senderInitial,
                   style: GoogleFonts.poppins(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                       color: _primary)),
             ),
@@ -549,16 +550,16 @@ class _LoggedBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       color: Colors.white,
       child: Text(
         'COMMUNICATION IS LOGGED FOR CLINICAL RECORD',
         textAlign: TextAlign.center,
         style: GoogleFonts.poppins(
-          fontSize: 10,
+          fontSize: 10.sp,
           fontWeight: FontWeight.w500,
           color: _loggedBanner,
-          letterSpacing: 0.5,
+          letterSpacing: 0.5.sp,
         ),
       ),
     );
@@ -585,19 +586,19 @@ class _InputBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 20),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.fromLTRB(12.w, 10.h, 12.w, 20.h),
+      decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: _inputBorder, width: 0.5)),
+        border: Border(top: BorderSide(color: _inputBorder, width: 0.5.w)),
       ),
       child: Row(
         children: [
           IconButton(
             onPressed: onPickFile,
-            icon: const Icon(Icons.attach_file_rounded,
-                color: _textMid, size: 22),
+            icon: Icon(Icons.attach_file_rounded,
+                color: _textMid, size: 22.sp),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+            constraints: BoxConstraints(minWidth: 36.w, minHeight: 36.h),
           ),
           IconButton(
             onPressed: onToggleEmoji,
@@ -606,23 +607,23 @@ class _InputBar extends StatelessWidget {
                   ? Icons.keyboard_rounded
                   : Icons.sentiment_satisfied_alt_rounded,
               color: emojiActive ? _primary : _textMid,
-              size: 22,
+              size: 22.sp,
             ),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+            constraints: BoxConstraints(minWidth: 36.w, minHeight: 36.h),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4.w),
           Expanded(
             child: TextField(
               controller: controller,
-              style: GoogleFonts.poppins(fontSize: 14, color: _textDark),
+              style: GoogleFonts.poppins(fontSize: 14.sp, color: _textDark),
               decoration: InputDecoration(
                 hintText: 'Type your message here...',
                 hintStyle:
-                    GoogleFonts.poppins(fontSize: 14, color: _textLight),
+                    GoogleFonts.poppins(fontSize: 14.sp, color: _textLight),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                contentPadding: EdgeInsets.symmetric(vertical: 8.h),
               ),
               onSubmitted: (_) => onSend(),
               textInputAction: TextInputAction.send,
@@ -630,16 +631,16 @@ class _InputBar extends StatelessWidget {
               minLines: 1,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           GestureDetector(
             onTap: onSend,
             child: Container(
-              width: 40,
-              height: 40,
+              width: 40.w,
+              height: 40.h,
               decoration: const BoxDecoration(
                   color: _primary, shape: BoxShape.circle),
-              child: const Icon(Icons.send_rounded,
-                  color: Colors.white, size: 18),
+              child: Icon(Icons.send_rounded,
+                  color: Colors.white, size: 18.sp),
             ),
           ),
         ],

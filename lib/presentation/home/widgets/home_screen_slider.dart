@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LevelIndicator extends StatelessWidget {
   final double currentLevel; // Dynamic value from backend
@@ -16,22 +17,22 @@ class LevelIndicator extends StatelessWidget {
       elevation: 0,
       color: const Color(0xFFCB6CE6),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(20.0.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Autism Level',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: 25.h),
             Row(
               children: [
                 Expanded(
@@ -40,10 +41,10 @@ class LevelIndicator extends StatelessWidget {
                     children: [
                       // Slider track
                       Container(
-                        height: 40, // Increased height for better visibility
+                        height: 40.h, // Increased height for better visibility
                         decoration: BoxDecoration(
                           color: const Color(0xFFCB6CE6),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
                       ),
                       // Tick marks
@@ -55,7 +56,7 @@ class LevelIndicator extends StatelessWidget {
                             height: index % 2 == 0
                                 ? 20
                                 : 15, // Alternating heights for ticks
-                            width: 2,
+                            width: 2.w,
                             color: Colors.white.withValues(alpha:0.7),
                           ),
                         ),
@@ -70,13 +71,13 @@ class LevelIndicator extends StatelessWidget {
                           children: [
                             Text(
                               currentLevel.toStringAsFixed(0),
-                              style: const TextStyle(
-                                fontSize: 25,
+                              style: TextStyle(
+                                fontSize: 25.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(height: 5),
+                            SizedBox(height: 5.h),
                             CustomPaint(
                               size: const Size(20, 20),
                               painter: TrianglePainter(),
@@ -87,7 +88,7 @@ class LevelIndicator extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
               ],
             ),
           ],

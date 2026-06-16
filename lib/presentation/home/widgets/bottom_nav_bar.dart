@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../gen/assets.gen.dart'; // IMPORTANT
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -22,7 +23,7 @@ class BottomNavBar extends StatelessWidget {
     ];
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade200)),
@@ -52,8 +53,8 @@ class BottomNavBar extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(index),
       child: icon.svg(
-        width: 24,
-        height: 24,
+        width: 24.w,
+        height: 24.h,
         color: isSelected ? AppTheme.primaryColor : Colors.grey,
       ),
     );

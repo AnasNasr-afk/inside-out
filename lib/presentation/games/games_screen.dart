@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:patient/presentation/games/color_match_game.dart';
 import 'package:patient/presentation/games/memory_game.dart';
 import 'package:patient/presentation/games/emotion_game.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GamesScreen extends StatelessWidget {
   const GamesScreen({super.key});
@@ -18,19 +19,19 @@ class GamesScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+        padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 20.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Choose a game!',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _ChildGameCard(
               title: 'Color Match',
               icon: Icons.palette_rounded,
@@ -40,7 +41,7 @@ class GamesScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const ColorMatchGame()),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _ChildGameCard(
               title: 'Memory Cards',
               icon: Icons.grid_view_rounded,
@@ -50,7 +51,7 @@ class GamesScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const MemoryGame()),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _ChildGameCard(
               title: 'Emotion Match',
               icon: Icons.sentiment_very_satisfied_rounded,
@@ -85,28 +86,28 @@ class _ChildGameCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 22.h),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
             color: color.withValues(alpha: 0.3),
-            width: 1.5,
+            width: 1.5.w,
           ),
         ),
         child: Row(
           children: [
             Container(
-              width: 72,
-              height: 72,
+              width: 72.w,
+              height: 72.h,
               decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-              child: Icon(icon, size: 40, color: Colors.white),
+              child: Icon(icon, size: 40.sp, color: Colors.white),
             ),
-            const SizedBox(width: 20),
+            SizedBox(width: 20.w),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 24,
+              style: TextStyle(
+                fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),

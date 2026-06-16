@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/assets.gen.dart';
 import '../../games/games_screen.dart';
 import '../../home/widgets/therapy_goal_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChildModeBody extends StatelessWidget {
   const ChildModeBody();
@@ -10,7 +11,7 @@ class ChildModeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       children: [
         // ── Online Tasks card ───────────────────────────────
         GestureDetector(
@@ -25,7 +26,7 @@ class ChildModeBody extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 15),
+        SizedBox(height: 15.h),
 
         // ── Games card ──────────────────────────────────────
         GestureDetector(

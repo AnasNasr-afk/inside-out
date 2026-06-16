@@ -5,6 +5,7 @@ import 'package:patient/core/networking/repositories/assessment_repo.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'game_haptics.dart';
 import 'game_records.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmotionGame extends StatefulWidget {
   const EmotionGame({super.key, this.taskId});
@@ -223,20 +224,20 @@ class _EmotionGameState extends State<EmotionGame> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(20.0.r),
         child: Column(
           children: [
             // ── Stat row ──────────────────────────────────────
             Row(
               children: [
                 Expanded(child: _buildStatCard('Moves', _moves.toString())),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(child: _buildStatCard('Score', '$_score/6')),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(child: _buildStatCard('Time', _timeLabel)),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // ── Instruction / completion banner ───────────────
             if (_isComplete)
@@ -248,32 +249,32 @@ class _EmotionGameState extends State<EmotionGame> {
             else
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 14.h,
                 ),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryColor.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       _message,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: TextStyle(
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: AppTheme.primaryColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     if (_isWrongTap && _targetEmotion != null) ...[
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(
                         _targetEmotion!,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.primaryColor.withValues(alpha: 0.65),
                         ),
@@ -284,7 +285,7 @@ class _EmotionGameState extends State<EmotionGame> {
                 ),
               ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // ── Emotion grid — 3 columns, no scroll ───────────
             GridView.builder(
@@ -320,13 +321,13 @@ class _EmotionGameState extends State<EmotionGame> {
                         duration: const Duration(milliseconds: 150),
                         decoration: BoxDecoration(
                           color: emotion.color.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: borderColor, width: 3),
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(color: borderColor, width: 3.w),
                         ),
                         child: Center(
                           child: Icon(
                             emotion.icon,
-                            size: 64,
+                            size: 64.sp,
                             color: emotion.color,
                           ),
                         ),
@@ -337,16 +338,16 @@ class _EmotionGameState extends State<EmotionGame> {
               },
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // ── Button ────────────────────────────────────────
             if (_saveError != null)
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: 8.h),
                 child: Text(
                   _saveError!,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                  style: TextStyle(color: Colors.red, fontSize: 13.sp),
                 ),
               ),
             SizedBox(
@@ -366,29 +367,29 @@ class _EmotionGameState extends State<EmotionGame> {
                   backgroundColor:
                       _isComplete ? Colors.green : AppTheme.primaryColor,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: EdgeInsets.symmetric(vertical: 14.h),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   elevation: 0,
                 ),
                 child: _isSavingResult
-                    ? const Row(
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 18,
-                            height: 18,
+                            width: 18.w,
+                            height: 18.h,
                             child: CircularProgressIndicator(
                               color: Colors.white,
-                              strokeWidth: 2.5,
+                              strokeWidth: 2.5.w,
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Text(
                             'Saving result…',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -398,8 +399,8 @@ class _EmotionGameState extends State<EmotionGame> {
                         widget.taskId != null && _isComplete
                             ? (_saveError != null ? 'Retry Save' : 'Back to Task')
                             : (_isComplete ? 'Play Again' : 'Reset Game'),
-                        style: const TextStyle(
-                          fontSize: 15,
+                        style: TextStyle(
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -416,16 +417,16 @@ class _EmotionGameState extends State<EmotionGame> {
     return Card(
       color: AppTheme.primaryColor.withValues(alpha: 0.1),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
         child: Column(
           children: [
             Text(label,
-                style: const TextStyle(fontSize: 12, color: Colors.black87)),
-            const SizedBox(height: 4),
+                style: TextStyle(fontSize: 12.sp, color: Colors.black87)),
+            SizedBox(height: 4.h),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 20,
+              style: TextStyle(
+                fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -452,43 +453,43 @@ class _CompletionBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
       decoration: BoxDecoration(
         color: Colors.green.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: Colors.green.withValues(alpha: 0.35),
-          width: 1.5,
+          width: 1.5.w,
         ),
       ),
       child: Column(
         children: [
-          const Icon(Icons.celebration_rounded, color: Colors.green, size: 44),
-          const SizedBox(height: 8),
-          const Text(
+          Icon(Icons.celebration_rounded, color: Colors.green, size: 44.sp),
+          SizedBox(height: 8.h),
+          Text(
             'You did it!',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
               color: Colors.green,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             '$moves moves · $timeLabel',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: Colors.green.shade700,
               fontWeight: FontWeight.w500,
             ),
           ),
           if (bestLabel.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
                 color: Colors.green.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -497,14 +498,14 @@ class _CompletionBanner extends StatelessWidget {
                     bestLabel.startsWith('New')
                         ? Icons.star_rounded
                         : Icons.emoji_events_rounded,
-                    size: 16,
+                    size: 16.sp,
                     color: Colors.green.shade700,
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6.w),
                   Text(
                     bestLabel,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.green.shade700,
                     ),

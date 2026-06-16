@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/helpers/check_in_helper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MoodCheckInCard extends StatefulWidget {
   final String childName;
@@ -103,9 +104,9 @@ class _MoodCheckInCardState
   Widget _buildCheckIn() {
     return Container(
       key: const ValueKey('checkin'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 18,
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.w,
+        vertical: 18.h,
       ),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -117,7 +118,7 @@ class _MoodCheckInCardState
           end: Alignment.bottomRight,
         ),
         borderRadius:
-        BorderRadius.circular(22),
+        BorderRadius.circular(22.r),
       ),
       child: Column(
         crossAxisAlignment:
@@ -132,7 +133,7 @@ class _MoodCheckInCardState
                 child: Text(
                   'How is ${widget.childName} feeling today?',
                   style: GoogleFonts.poppins(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight:
                     FontWeight.w700,
                     color: Colors.white,
@@ -140,12 +141,12 @@ class _MoodCheckInCardState
                 ),
               ),
 
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Container(
                 padding:
-                const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
+                EdgeInsets.symmetric(
+                  horizontal: 10.w,
+                  vertical: 4.h,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white12,
@@ -158,7 +159,7 @@ class _MoodCheckInCardState
                   _formattedDate(),
                   style:
                   GoogleFonts.poppins(
-                    fontSize: 11,
+                    fontSize: 11.sp,
                     color:
                     Colors.white70,
                     fontWeight:
@@ -169,7 +170,7 @@ class _MoodCheckInCardState
             ],
           ),
 
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
 
           // ── Emoji row ───────────────────────
           Row(
@@ -189,8 +190,8 @@ class _MoodCheckInCardState
                     const Duration(
                       milliseconds: 180,
                     ),
-                    width: 48,
-                    height: 48,
+                    width: 48.w,
+                    height: 48.h,
                     decoration: BoxDecoration(
                       color: isSelected
                           ? Colors.white
@@ -200,7 +201,7 @@ class _MoodCheckInCardState
                         color: isSelected
                             ? Colors.white
                             : Colors.white24,
-                        width: 1.5,
+                        width: 1.5.w,
                       ),
                       boxShadow: isSelected
                           ? [
@@ -209,7 +210,7 @@ class _MoodCheckInCardState
                               .withValues(
                             alpha: 0.12,
                           ),
-                          blurRadius: 6,
+                          blurRadius: 6.r,
                           offset:
                           const Offset(
                             0,
@@ -246,9 +247,9 @@ class _MoodCheckInCardState
 
     return Container(
       key: const ValueKey('confirmed'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 18,
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.w,
+        vertical: 18.h,
       ),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -260,33 +261,33 @@ class _MoodCheckInCardState
           end: Alignment.bottomRight,
         ),
         borderRadius:
-        BorderRadius.circular(22),
+        BorderRadius.circular(22.r),
       ),
       child: Row(
         children: [
           // Emoji circle
           Container(
-            width: 48,
-            height: 48,
+            width: 48.w,
+            height: 48.h,
             decoration: BoxDecoration(
               color: Colors.white12,
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.white30,
-                width: 1.5,
+                width: 1.5.w,
               ),
             ),
             child: Center(
               child: Text(
                 mood.emoji,
-                style: const TextStyle(
-                  fontSize: 24,
+                style: TextStyle(
+                  fontSize: 24.sp,
                 ),
               ),
             ),
           ),
 
-          const SizedBox(width: 14),
+          SizedBox(width: 14.w),
 
           Expanded(
             child: Column(
@@ -297,7 +298,7 @@ class _MoodCheckInCardState
                   'Mood logged ✓',
                   style:
                   GoogleFonts.poppins(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight:
                     FontWeight.w700,
                     color:
@@ -305,13 +306,13 @@ class _MoodCheckInCardState
                   ),
                 ),
 
-                const SizedBox(height: 3),
+                SizedBox(height: 3.h),
 
                 Text(
                   '${widget.childName} is feeling ${mood.label} today',
                   style:
                   GoogleFonts.poppins(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color:
                     Colors.white70,
                   ),
