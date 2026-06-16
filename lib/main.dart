@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,6 +13,8 @@ import 'package:patient/core/routing/app_router.dart';
 import 'package:patient/core/routing/routes.dart';
 
 import 'core/helpers/shared_pref.dart';
+import 'core/services/notification_service.dart';
+import 'core/services/notification_store.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -23,6 +26,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  await NotificationStore.instance.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.white,
@@ -33,8 +38,8 @@ Future<void> main() async {
   );
 
   runApp(
-    ProviderScope(
-        child: const MyApp()
+    const ProviderScope(
+        child: MyApp()
     ),
   );
 }
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Patient App',
+        title: 'InsideOut',
         theme: AppTheme.lightTheme(),
         onGenerateRoute: AppRouter().onGenerateRoute,
         initialRoute: Routes.splashScreen,
