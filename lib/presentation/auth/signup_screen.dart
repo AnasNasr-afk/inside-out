@@ -7,6 +7,7 @@ import 'package:patient/core/theme/theme.dart';
 
 import '../../core/cubits/auth_cubit/auth_listener.dart';
 import '../../core/routing/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -18,16 +19,16 @@ class SignupScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.r),
             child: Form(
               key: cubit.formSignupKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Personal Details",
                     style: TextStyle(
-                      fontSize: 27,
+                      fontSize: 27.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
@@ -35,8 +36,8 @@ class SignupScreen extends StatelessWidget {
                   const Text(
                     "Tell us a bit about yourself",
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: 30.h,
                   ),
                   AppTextFormField(
                     hintText: "John Doe",
@@ -48,8 +49,8 @@ class SignupScreen extends StatelessWidget {
                         }
                       },
                       labelText: "Full Name"),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 20.h,
                   ),
                   AppTextFormField(
                         controller: cubit.phoneController,
@@ -59,8 +60,8 @@ class SignupScreen extends StatelessWidget {
                         }
                       },
                       labelText: "Phone Number"),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 20.h,
                   ),
                   AppTextFormField(
                         controller: cubit.emailSignupController,
@@ -70,8 +71,8 @@ class SignupScreen extends StatelessWidget {
                         }
                       },
                       labelText: "Email Address"),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 20.h,
                   ),
                   AppTextFormField(
                         controller: cubit.passwordSignupController,
@@ -82,10 +83,10 @@ class SignupScreen extends StatelessWidget {
                   },
                       isObscureText: true,
                       labelText: "Password"),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.r),
                     ),
                     child: Column(
                       children: [
@@ -103,7 +104,7 @@ class SignupScreen extends StatelessWidget {
                                 labelText: "Child's name",
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12.w),
                             Expanded(
                               flex: 1,
                               child: AppTextFormField(
@@ -118,7 +119,7 @@ class SignupScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         AppTextFormField(
                           controller: cubit.childCaseController,
                           validator: (value) {
@@ -131,7 +132,7 @@ class SignupScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   BlocConsumer<AuthCubit, AuthStates>(
                     listener: (context, state) {
                       if (state is RegisterSuccessState) {
@@ -149,7 +150,7 @@ class SignupScreen extends StatelessWidget {
                           backgroundColor: AppTheme.primaryColor,
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                         onPressed: state is RegisterLoadingState
@@ -157,18 +158,18 @@ class SignupScreen extends StatelessWidget {
                             : () => AuthCubit.get(context).register(),
                         child: state is RegisterLoadingState
                             ? const CircularProgressIndicator(color: AppTheme.primaryColor)
-                            : const Text(
+                            : Text(
                             "Sign Up",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                             )
                         ),
                       );
                     },
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15.h),
                   Center(
                     child: Text.rich(
                       TextSpan(
@@ -181,10 +182,10 @@ class SignupScreen extends StatelessWidget {
                           ),
                           TextSpan(
                             text: "Sign In",
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppTheme.primaryColor,
                               decoration: TextDecoration.underline,
-                              height: 1.5,
+                              height: 1.5.h,
                               fontWeight: FontWeight.bold,
                             ),
                             recognizer: TapGestureRecognizer()

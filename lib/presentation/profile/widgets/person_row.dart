@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PersonRow extends StatelessWidget {
   final String? initials;
@@ -27,38 +28,38 @@ class PersonRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+      padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 4.h),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 24,
+            radius: 24.r,
             backgroundColor: avatarColor,
             child: icon != null
-                ? Icon(icon, color: avatarTextColor, size: 22)
+                ? Icon(icon, color: avatarTextColor, size: 22.sp)
                 : Text(initials ?? '',
                 style: TextStyle(
                     color: avatarTextColor,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14)),
+                    fontSize: 14.sp)),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600)),
-                Text(subtitle, style: GoogleFonts.poppins(fontSize: 13, color: const Color(0xFF6B7280))),
+                Text(name, style: GoogleFonts.poppins(fontSize: 15.sp, fontWeight: FontWeight.w600)),
+                Text(subtitle, style: GoogleFonts.poppins(fontSize: 13.sp, color: const Color(0xFF6B7280))),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
             decoration: BoxDecoration(
               color: badgeColor,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
             ),
             child: Text(badgeLabel,
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: badgeTextColor)),
+                style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w600, color: badgeTextColor)),
           ),
         ],
       ),
@@ -76,19 +77,19 @@ class DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: const Color(0xFF9CA3AF)),
-          const SizedBox(width: 10),
+          Icon(icon, size: 16.sp, color: const Color(0xFF9CA3AF)),
+          SizedBox(width: 10.w),
           SizedBox(
-            width: 52,
+            width: 52.w,
             child: Text(label,
-                style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF9CA3AF))),
+                style: GoogleFonts.poppins(fontSize: 12.sp, color: const Color(0xFF9CA3AF))),
           ),
           Expanded(
             child: Text(value,
-                style: GoogleFonts.poppins(fontSize: 13, color: const Color(0xFF374151)),
+                style: GoogleFonts.poppins(fontSize: 13.sp, color: const Color(0xFF374151)),
                 overflow: TextOverflow.ellipsis),
           ),
         ],

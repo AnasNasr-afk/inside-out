@@ -6,6 +6,7 @@ import 'package:patient/core/networking/repositories/assessment_repo.dart';
 import 'package:patient/presentation/reports/widgets/milestones_completion_banner.dart';
 import 'package:patient/presentation/reports/widgets/milestones_details_section.dart';
 import 'package:patient/presentation/reports/widgets/milstones_progress_section.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -66,28 +67,28 @@ class _ReportScreenState extends State<ReportScreen> {
 
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_isFallback)
             Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              margin: EdgeInsets.only(bottom: 16.h),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF3CD),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(color: const Color(0xFFFFD54F)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.wifi_off_rounded, size: 16, color: Color(0xFF795548)),
-                  SizedBox(width: 8),
+                  Icon(Icons.wifi_off_rounded, size: 16.sp, color: Color(0xFF795548)),
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
                       'Could not load — showing sample data',
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         color: Color(0xFF795548),
                       ),
                     ),
@@ -100,12 +101,12 @@ class _ReportScreenState extends State<ReportScreen> {
             latestDate: latestDate,
             specialistName: specialist,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           MilestonesCompletionBanner(
             totalReports: reports.length,
             childName: childName,
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
           MilestonesDetailsSection(reports: reports),
         ],
       ),

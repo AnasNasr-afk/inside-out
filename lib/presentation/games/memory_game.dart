@@ -5,6 +5,7 @@ import 'package:patient/core/networking/repositories/assessment_repo.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'game_haptics.dart';
 import 'game_records.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MemoryGame extends StatefulWidget {
   const MemoryGame({super.key, this.taskId});
@@ -201,19 +202,19 @@ class _MemoryGameState extends State<MemoryGame> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(20.0.r),
         child: Column(
           children: [
             Row(
               children: [
                 Expanded(child: _buildStatCard('Moves', _moves.toString())),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(child: _buildStatCard('Score', '$_matches/6')),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(child: _buildStatCard('Time', _timeLabel)),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             if (_isComplete) ...[
               _CompletionBanner(
@@ -221,7 +222,7 @@ class _MemoryGameState extends State<MemoryGame> {
                 timeLabel: _timeLabel,
                 bestLabel: _bestLabel,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
 
             Expanded(
@@ -266,14 +267,14 @@ class _MemoryGameState extends State<MemoryGame> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             if (_saveError != null)
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: 8.h),
                 child: Text(
                   _saveError!,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                  style: TextStyle(color: Colors.red, fontSize: 13.sp),
                 ),
               ),
             SizedBox(
@@ -292,29 +293,29 @@ class _MemoryGameState extends State<MemoryGame> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isComplete ? Colors.green : AppTheme.primaryColor,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: EdgeInsets.symmetric(vertical: 14.h),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   elevation: 0,
                 ),
                 child: _isSavingResult
-                    ? const Row(
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 18,
-                            height: 18,
+                            width: 18.w,
+                            height: 18.h,
                             child: CircularProgressIndicator(
                               color: Colors.white,
-                              strokeWidth: 2.5,
+                              strokeWidth: 2.5.w,
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Text(
                             'Saving result…',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -324,8 +325,8 @@ class _MemoryGameState extends State<MemoryGame> {
                         widget.taskId != null && _isComplete
                             ? (_saveError != null ? 'Retry Save' : 'Back to Task')
                             : (_isComplete ? 'Play Again' : 'Reset Game'),
-                        style: const TextStyle(
-                          fontSize: 15,
+                        style: TextStyle(
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -347,7 +348,7 @@ class _MemoryGameState extends State<MemoryGame> {
         child: Text(
           _cards[index].toString(),
           style: TextStyle(
-            fontSize: 32,
+            fontSize: 32.sp,
             fontWeight: FontWeight.bold,
             color: isMatched ? Colors.green : Colors.black,
           ),
@@ -359,7 +360,7 @@ class _MemoryGameState extends State<MemoryGame> {
   Widget _buildCardBack() {
     return Card(
       color: Colors.grey.shade300,
-      child: const Center(child: Icon(Icons.help_outline, size: 40)),
+      child: Center(child: Icon(Icons.help_outline, size: 40.sp)),
     );
   }
 
@@ -367,17 +368,17 @@ class _MemoryGameState extends State<MemoryGame> {
     return Card(
       color: AppTheme.primaryColor.withValues(alpha: 0.1),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
         child: Column(
           children: [
             Text(label,
                 style:
-                    const TextStyle(fontSize: 12, color: Colors.black87)),
-            const SizedBox(height: 4),
+                    TextStyle(fontSize: 12.sp, color: Colors.black87)),
+            SizedBox(height: 4.h),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 20,
+              style: TextStyle(
+                fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -404,44 +405,44 @@ class _CompletionBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
       decoration: BoxDecoration(
         color: Colors.green.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: Colors.green.withValues(alpha: 0.35),
-          width: 1.5,
+          width: 1.5.w,
         ),
       ),
       child: Column(
         children: [
-          const Icon(Icons.celebration_rounded, color: Colors.green, size: 44),
-          const SizedBox(height: 8),
-          const Text(
+          Icon(Icons.celebration_rounded, color: Colors.green, size: 44.sp),
+          SizedBox(height: 8.h),
+          Text(
             'You did it!',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
               color: Colors.green,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             '$moves moves · $timeLabel',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: Colors.green.shade700,
               fontWeight: FontWeight.w500,
             ),
           ),
           if (bestLabel.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
                 color: Colors.green.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -450,14 +451,14 @@ class _CompletionBanner extends StatelessWidget {
                     bestLabel.startsWith('New')
                         ? Icons.star_rounded
                         : Icons.emoji_events_rounded,
-                    size: 16,
+                    size: 16.sp,
                     color: Colors.green.shade700,
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6.w),
                   Text(
                     bestLabel,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.green.shade700,
                     ),

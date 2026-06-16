@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/ai_avatar/providers/openai_response_controller.dart';
 import 'package:patient/ai_avatar/providers/animation_state_controller.dart';
@@ -288,7 +289,7 @@ class _STTWidgetState extends ConsumerState<STTWidget>
           offset: Offset(0, isIdle ? _idleAnimation.value : 0),
           child: Material(
             color: _getButtonColor(inSessionMode),
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30.r),
             elevation: 6,
             child: InkWell(
               onTap: isDisabled
@@ -309,25 +310,25 @@ class _STTWidgetState extends ConsumerState<STTWidget>
                         _isListening ? _stopListening() : _startListening();
                       }
                     },
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(30.r),
               child: Semantics(
                 label: _getSemanticLabel(inSessionMode),
                 button: true,
                 enabled: !isDisabled,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 14),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 24.w, vertical: 14.h),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(_getIconData(inSessionMode),
-                          color: Colors.white, size: 28),
-                      const SizedBox(width: 12),
+                          color: Colors.white, size: 28.sp),
+                      SizedBox(width: 12.w),
                       Text(
                         _getDisplayText(inSessionMode),
                         style: GoogleFonts.poppins(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.4,
                         ),

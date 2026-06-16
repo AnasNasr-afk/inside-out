@@ -7,6 +7,7 @@ import 'package:patient/core/theme/theme.dart';
 
 import '../../core/cubits/auth_cubit/auth_listener.dart';
 import '../../core/routing/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -19,33 +20,33 @@ class LoginScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.r),
             child: Form(
               key: cubit.formLoginKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   // ── Header ──────────────────────────────
-                  const Text(
+                  Text(
                     "Welcome Back",
                     style: TextStyle(
-                      fontSize: 27,
+                      fontSize: 27.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  const Text(
+                  SizedBox(height: 6.h),
+                  Text(
                     "Sign in to continue",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       color: Color(0xFF83859C),
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
 
                   // ── Email ───────────────────────────────
                   AppTextFormField(
@@ -64,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                     },
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   // ── Password ────────────────────────────
                   AppTextFormField(
@@ -80,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                     },
                   ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
 
                   // ── Forgot password ─────────────────────
                   Align(
@@ -89,18 +90,18 @@ class LoginScreen extends StatelessWidget {
                       onTap: () {
                         // navigate to forgot password screen
                       },
-                      child: const Text(
+                      child: Text(
                         "Forgot Password?",
                         style: TextStyle(
                           color: AppTheme.primaryColor,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 32),
+                  SizedBox(height: 32.h),
 
                   // ── Login button ────────────────────────
                   BlocConsumer<AuthCubit, AuthStates>(
@@ -121,7 +122,7 @@ class LoginScreen extends StatelessWidget {
                           backgroundColor: AppTheme.primaryColor,
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                         onPressed: state is LoginLoadingState
@@ -130,11 +131,11 @@ class LoginScreen extends StatelessWidget {
                         child: state is LoginLoadingState
                             ? const CircularProgressIndicator(
                             color: Colors.white)
-                            : const Text(
+                            : Text(
                           "Sign In",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -142,7 +143,7 @@ class LoginScreen extends StatelessWidget {
                     },
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
                   // ── Divider ─────────────────────────────
                   Row(
@@ -154,11 +155,11 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
                         child: Text(
                           "or continue with",
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             color: Colors.grey[500],
                           ),
                         ),
@@ -172,7 +173,7 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   // ── Google Sign In ──────────────────────
                   BlocConsumer<AuthCubit, AuthStates>(
@@ -194,11 +195,11 @@ class LoginScreen extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
-                          side: const BorderSide(
+                          side: BorderSide(
                             color: Color(0xFFC7C8D2),
-                            width: 1.2,
+                            width: 1.2.w,
                           ),
                         ),
                         // onPressed: state is GoogleSignInLoadingState
@@ -215,19 +216,19 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             Image.asset(
                               'assets/images/google_logo.png',
-                              height: 20,
-                              width: 20,
-                              errorBuilder: (_, __, ___) => const Icon(
+                              height: 20.h,
+                              width: 20.w,
+                              errorBuilder: (_, __, ___) => Icon(
                                 Icons.g_mobiledata_rounded,
-                                size: 24,
+                                size: 24.sp,
                                 color: Colors.red,
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            const Text(
+                            SizedBox(width: 10.w),
+                            Text(
                               "Continue with Google",
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xFF545563),
                               ),
@@ -238,7 +239,7 @@ class LoginScreen extends StatelessWidget {
                     },
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
                   // ── Sign up link ────────────────────────
                   Center(
@@ -251,10 +252,10 @@ class LoginScreen extends StatelessWidget {
                           ),
                           TextSpan(
                             text: "Sign Up",
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppTheme.primaryColor,
                               decoration: TextDecoration.underline,
-                              height: 1.5,
+                              height: 1.5.h,
                               fontWeight: FontWeight.bold,
                             ),
                             recognizer: TapGestureRecognizer()
@@ -268,7 +269,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),

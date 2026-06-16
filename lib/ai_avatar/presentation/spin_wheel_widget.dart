@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/ai_avatar/providers/wheel_tasks_provider.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
@@ -9,8 +10,8 @@ import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/models/task_model.dart';
 import 'package:patient/core/theme/theme.dart';
 
-const _kWheelDiameter = 240.0;
-const _kWheelRadius = _kWheelDiameter / 2;
+double get _kWheelDiameter => 240.0.w;
+double get _kWheelRadius => _kWheelDiameter / 2;
 
 TaskModel _freeFormTask() => TaskModel(
       taskId: -1,
@@ -178,12 +179,12 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
         mainAxisSize: MainAxisSize.min,
         children: [
           const CircularProgressIndicator(color: Colors.white),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Text(
             'Loading tasks...',
             style: GoogleFonts.poppins(
               color: Colors.white70,
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -225,19 +226,19 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
           children: [
             SizedBox(
               width: _kWheelDiameter,
-              height: _kWheelDiameter + 26,
+              height: _kWheelDiameter + 26.h,
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
                   const Positioned(top: 0, child: _PointerArrow()),
                   Positioned(
-                    top: 24,
+                    top: 24.h,
                     child: GestureDetector(
                       onPanStart: _onPanStart,
                       onPanUpdate: _onPanUpdate,
                       onPanEnd: (d) => _onPanEnd(d, labels),
                       child: CustomPaint(
-                        size: const Size(_kWheelDiameter, _kWheelDiameter),
+                        size: Size(_kWheelDiameter, _kWheelDiameter),
                         painter: _WheelPainter(
                           labels: labels,
                           angle: _displayAngle,
@@ -250,7 +251,7 @@ class _SpinWheelWidgetState extends ConsumerState<SpinWheelWidget>
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               transitionBuilder: (child, anim) =>
@@ -294,10 +295,13 @@ class _WheelPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final r = size.width / 2 - 2;
+    final r = size.width / 2 - 2.w;
     final segAngle = 2 * pi / labels.length;
-    final fontSize =
-        labels.length <= 4 ? 15.0 : labels.length <= 6 ? 13.5 : 12.0;
+    final fontSize = labels.length <= 4
+        ? 15.0.sp
+        : labels.length <= 6
+            ? 13.5.sp
+            : 12.0.sp;
     final arcRect = Rect.fromCircle(center: Offset.zero, radius: r);
 
     canvas.save();
@@ -322,7 +326,7 @@ class _WheelPainter extends CustomPainter {
         Paint()
           ..color = Colors.white
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.5,
+          ..strokeWidth = 2.5.w,
       );
 
       if (isSelected) {
@@ -334,7 +338,7 @@ class _WheelPainter extends CustomPainter {
           Paint()
             ..color = const Color(0xFFFFD700)
             ..style = PaintingStyle.stroke
-            ..strokeWidth = 5.0,
+            ..strokeWidth = 5.0.w,
         );
       }
 
@@ -359,13 +363,13 @@ class _WheelPainter extends CustomPainter {
 
     canvas.drawCircle(
       Offset.zero,
-      22,
+      22.r,
       Paint()
         ..color = Colors.black26
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4.r),
     );
-    canvas.drawCircle(Offset.zero, 20, Paint()..color = Colors.white);
-    canvas.drawCircle(Offset.zero, 14, Paint()..color = AppTheme.primaryColor);
+    canvas.drawCircle(Offset.zero, 20.r, Paint()..color = Colors.white);
+    canvas.drawCircle(Offset.zero, 14.r, Paint()..color = AppTheme.primaryColor);
 
     canvas.restore();
   }
@@ -385,7 +389,7 @@ class _PointerArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(36, 28),
+      size: Size(36.w, 28.h),
       painter: _ArrowPainter(),
     );
   }
@@ -401,10 +405,10 @@ class _ArrowPainter extends CustomPainter {
       ..close();
 
     canvas.drawPath(
-      path.shift(const Offset(0, 3)),
+      path.shift(Offset(0, 3.h)),
       Paint()
         ..color = Colors.black38
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4.r),
     );
     canvas.drawPath(path, Paint()..color = Colors.white);
     canvas.drawPath(
@@ -412,7 +416,7 @@ class _ArrowPainter extends CustomPainter {
       Paint()
         ..color = AppTheme.primaryColor
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0
+        ..strokeWidth = 2.0.w
         ..strokeJoin = StrokeJoin.round,
     );
   }
@@ -437,27 +441,27 @@ class _ResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.50),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.10),
-          width: 1,
+          width: 1.w,
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: 4,
-            decoration: const BoxDecoration(
+            height: 4.h,
+            decoration: BoxDecoration(
               color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+            padding: EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 16.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -465,34 +469,34 @@ class _ResultCard extends StatelessWidget {
                   'You picked',
                   style: GoogleFonts.poppins(
                     color: Colors.white54,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.4,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   label,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
-                    fontSize: 19,
+                    fontSize: 19.sp,
                     fontWeight: FontWeight.w700,
                     height: 1.2,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: onTryAgain,
-                        icon: const Icon(Icons.refresh_rounded, size: 17),
+                        icon: Icon(Icons.refresh_rounded, size: 17.sp),
                         label: Text(
                           'Try again',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
-                            fontSize: 13,
+                            fontSize: 13.sp,
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -500,29 +504,29 @@ class _ResultCard extends StatelessWidget {
                           side: BorderSide(
                               color: Colors.white.withValues(alpha: 0.35)),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14)),
-                          padding: const EdgeInsets.symmetric(vertical: 11),
+                              borderRadius: BorderRadius.circular(14.r)),
+                          padding: EdgeInsets.symmetric(vertical: 11.h),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: onContinue,
-                        icon: const Icon(Icons.arrow_forward_rounded, size: 17),
+                        icon: Icon(Icons.arrow_forward_rounded, size: 17.sp),
                         label: Text(
                           "Let's go",
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w700,
-                            fontSize: 13,
+                            fontSize: 13.sp,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primaryColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14)),
-                          padding: const EdgeInsets.symmetric(vertical: 11),
+                              borderRadius: BorderRadius.circular(14.r)),
+                          padding: EdgeInsets.symmetric(vertical: 11.h),
                           elevation: 0,
                         ),
                       ),
@@ -553,27 +557,27 @@ class _ErrorView extends StatelessWidget {
           'Could not load tasks',
           style: GoogleFonts.poppins(
             color: Colors.white70,
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         ElevatedButton.icon(
           onPressed: onRetry,
-          icon: const Icon(Icons.refresh_rounded, size: 18),
+          icon: Icon(Icons.refresh_rounded, size: 18.sp),
           label: Text(
             'Retry',
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontSize: 14.sp,
             ),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primaryColor,
             foregroundColor: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24.r)),
+            padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 12.h),
           ),
         ),
       ],
@@ -596,28 +600,28 @@ class _NoTasksView extends StatelessWidget {
           'No tasks yet',
           style: GoogleFonts.poppins(
             color: Colors.white70,
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         ElevatedButton.icon(
           onPressed: onTap,
-          icon: const Icon(Icons.chat_bubble_outline_rounded, size: 20),
+          icon: Icon(Icons.chat_bubble_outline_rounded, size: 20.sp),
           label: Text(
             'Talk to Poly',
             style: GoogleFonts.poppins(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w700,
             ),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primaryColor,
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 14.h),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.r)),
             elevation: 6,
           ),
         ),
@@ -641,7 +645,7 @@ class _SpinButton extends StatelessWidget {
       children: [
         ElevatedButton.icon(
           onPressed: isSpinning ? null : onTap,
-          icon: Icon(Icons.casino_rounded, size: isSpinning ? 20 : 24),
+          icon: Icon(Icons.casino_rounded, size: isSpinning ? 20.sp : 24.sp),
           label: Text(
             isSpinning ? 'Spinning...' : '  Spin!  ',
             style: theme.textTheme.bodyLarge?.copyWith(
@@ -655,20 +659,20 @@ class _SpinButton extends StatelessWidget {
             disabledBackgroundColor:
                 AppTheme.primaryColor.withValues(alpha: 0.4),
             disabledForegroundColor: Colors.white54,
-            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 14.h),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.r)),
             elevation: 6,
           ),
         ),
         if (!isSpinning)
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 5.h),
             child: Text(
               'or drag the wheel to spin',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.white60,
-                fontSize: 11,
+                fontSize: 11.sp,
               ),
             ),
           ),
