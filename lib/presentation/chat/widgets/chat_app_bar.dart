@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'chat_colors.dart';
 
@@ -21,27 +22,27 @@ class ChatAppBar extends StatelessWidget {
     final isConnected = !isLoading && !hasError;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 8.h),
+      decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: chatInputBorder, width: 0.5)),
+        border: Border(bottom: BorderSide(color: chatInputBorder, width: 0.5.w)),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+            icon: Icon(Icons.arrow_back_ios_new_rounded, size: 18.sp),
             color: chatTextDark,
             onPressed: () => Navigator.of(context).pop(),
           ),
           Stack(
             children: [
               CircleAvatar(
-                radius: 20,
+                radius: 20.r,
                 backgroundColor: const Color(0xFFEDE8FF),
                 child: Text(
                   specialistInitial,
                   style: GoogleFonts.poppins(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
                     color: chatPrimary,
                   ),
@@ -51,18 +52,18 @@ class ChatAppBar extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  width: 11,
-                  height: 11,
+                  width: 11.w,
+                  height: 11.h,
                   decoration: BoxDecoration(
                     color: isConnected ? chatOnlineGreen : chatTextLight,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
+                    border: Border.all(color: Colors.white, width: 1.5.w),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +71,7 @@ class ChatAppBar extends StatelessWidget {
                 Text(
                   specialistName,
                   style: GoogleFonts.poppins(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
                     color: chatTextDark,
                   ),
@@ -82,7 +83,7 @@ class ChatAppBar extends StatelessWidget {
                       ? 'Connecting...'
                       : (hasError ? 'Unavailable' : 'Online'),
                   style: GoogleFonts.poppins(
-                    fontSize: 11,
+                    fontSize: 11.sp,
                     fontWeight: FontWeight.w500,
                     color: isConnected ? chatOnlineGreen : chatTextLight,
                   ),

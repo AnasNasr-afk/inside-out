@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'chat_bubble_row.dart';
@@ -37,23 +38,23 @@ class ChatMessageList extends StatelessWidget {
     if (error != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.r),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 error!,
-                style: GoogleFonts.poppins(color: chatTextMid, fontSize: 14),
+                style: GoogleFonts.poppins(color: chatTextMid, fontSize: 14.sp),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               ElevatedButton(
                 onPressed: onRetry,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: chatPrimary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
                 child: Text(
@@ -71,27 +72,27 @@ class ChatMessageList extends StatelessWidget {
       return Center(
         child: Text(
           'No messages yet. Say hi! 👋',
-          style: GoogleFonts.poppins(color: chatTextLight, fontSize: 14),
+          style: GoogleFonts.poppins(color: chatTextLight, fontSize: 14.sp),
         ),
       );
     }
 
     final textStyleOut = GoogleFonts.poppins(
-      fontSize: 14,
+      fontSize: 14.sp,
       color: Colors.white,
       height: 1.5,
     );
     final textStyleIn = GoogleFonts.poppins(
-      fontSize: 14,
+      fontSize: 14.sp,
       color: chatTextDark,
       height: 1.5,
     );
-    final fileStyleOut = GoogleFonts.poppins(fontSize: 13, color: Colors.white);
-    final fileStyleIn = GoogleFonts.poppins(fontSize: 13, color: chatTextDark);
+    final fileStyleOut = GoogleFonts.poppins(fontSize: 13.sp, color: Colors.white);
+    final fileStyleIn = GoogleFonts.poppins(fontSize: 13.sp, color: chatTextDark);
 
     return ListView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
       itemCount: messages.length,
       itemBuilder: (context, i) {
         final msg = messages[i];
@@ -122,10 +123,10 @@ class ChatMessageList extends StatelessWidget {
             senderInitial: isMe ? parentInitial : specialistInitial,
             child: isImage
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                     child: Image.network(
                       msg.url,
-                      width: 200,
+                      width: 200.w,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => const Icon(
                         Icons.broken_image_rounded,
@@ -139,9 +140,9 @@ class ChatMessageList extends StatelessWidget {
                       Icon(
                         Icons.insert_drive_file_rounded,
                         color: isMe ? Colors.white70 : chatTextMid,
-                        size: 20,
+                        size: 20.sp,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Flexible(
                         child: Text(
                           msg.name ?? 'File',

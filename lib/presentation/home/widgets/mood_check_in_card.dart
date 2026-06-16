@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 import '../../../core/helpers/check_in_helper.dart';
@@ -82,7 +83,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(10.r),
       child: Stack(
         children: [
           Image.asset(
@@ -93,7 +94,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
 
           // ── Content ─────────────────────────────────────────────────
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+            padding: EdgeInsets.fromLTRB(15.w, 15.h, 15.w, 15.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -102,29 +103,29 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                   children: [
                     // Daily check-in
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 5.h),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.10),
-                        borderRadius: BorderRadius.circular(999),
+                        borderRadius: BorderRadius.circular(999.r),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            width: 7,
-                            height: 7,
+                            width: 7.w,
+                            height: 7.h,
                             decoration: const BoxDecoration(
                               color: Color(0xFF17E2CD),
                               shape: BoxShape.circle,
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6.w),
                           Text(
                             'Daily check-in',
                             style: T.caption().copyWith(
                               color: Colors.white,
-                              fontSize: 9,
+                              fontSize: 9.sp,
                             ),
                           ),
                         ],
@@ -133,26 +134,26 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                     const Spacer(),
                     // 5-day streak
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 5.h),
                       decoration: BoxDecoration(
                         color: T.gold.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(999),
+                        borderRadius: BorderRadius.circular(999.r),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.local_fire_department_rounded,
-                            size: 12,
+                            size: 12.sp,
                             color: T.gold,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4.w),
                           Text(
                             '5-day streak',
                             style: T.caption().copyWith(
                               color: T.gold,
-                              fontSize: 9,
+                              fontSize: 9.sp,
                             ),
                           ),
                         ],
@@ -160,7 +161,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -186,8 +187,8 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                             child: child,
                           ),
                           child: Container(
-                            width: 70,
-                            height: 70,
+                            width: 70.w,
+                            height: 70.h,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [c1, c2],
@@ -198,8 +199,8 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                               boxShadow: [
                                 BoxShadow(
                                   color: shadow.withValues(alpha: 0.45),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 4),
+                                  blurRadius: 16.r,
+                                  offset: Offset(0, 4.h),
                                 ),
                               ],
                             ),
@@ -212,7 +213,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                               child: Icon(
                                 _moods[_selectedIndex ?? 0].icon,
                                 key: ValueKey(_selectedIndex),
-                                size: 40,
+                                size: 40.sp,
                                 color: Colors.white,
                               ),
                             ),
@@ -221,7 +222,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                       },
                     ),
 
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
 
                     Expanded(
                       child: Column(
@@ -231,7 +232,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                             'How is ${widget.childName}\nfeeling today?',
                             style: T.screenTitle().copyWith(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               height: 1.2,
                             ),
                           ),
@@ -241,7 +242,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                   ],
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
 
                 // ── Mood dots ──────────────────────────────────────────
                 Row(
@@ -257,27 +258,27 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                         children: [
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 180),
-                            width: 40,
-                            height: 40,
+                            width: 40.w,
+                            height: 40.h,
                             decoration: BoxDecoration(
                               color: selected ? m.bright : m.dark,
                               shape: BoxShape.circle,
                             ),
                             child: selected
-                                ? const Center(
+                                ? Center(
                                     child: Icon(
                                       Icons.check_rounded,
-                                      size: 20,
+                                      size: 20.sp,
                                       color: Colors.white,
                                     ),
                                   )
                                 : null,
                           ),
-                          const SizedBox(height: 5),
+                          SizedBox(height: 5.h),
                           Text(
                             m.label,
                             style: T.caption().copyWith(
-                              fontSize: 10,
+                              fontSize: 10.sp,
                               color: selected
                                   ? Colors.white
                                   : Colors.white.withValues(alpha: 0.45),

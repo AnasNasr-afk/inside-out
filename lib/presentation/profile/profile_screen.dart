@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:patient/core/models/responses/parent_child_response_model.dart';
@@ -30,34 +31,34 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildBody(BuildContext context, ParentChildResponseModel? userData) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Profile',
               style: GoogleFonts.poppins(
-                fontSize: 26,
+                fontSize: 26.sp,
                 fontWeight: FontWeight.bold,
                 color: const Color(0xFF1F2937),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // ── Child hero card ───────────────────────────────────────
             _ChildHeroCard(userData: userData),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
 
             // ── Care team ─────────────────────────────────────────────
             Text(
               'Care Team',
               style: GoogleFonts.poppins(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
                 color: const Color(0xFF6B7280),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Row(
               children: [
                 Expanded(child: _CareTeamCard(
@@ -71,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                   detail: userData?.parentEmail ?? '',
                   initials: getInitials(userData?.parentName ?? ''),
                 )),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(child: _CareTeamCard(
                   icon: Icons.medical_services_rounded,
                   avatarColor: const Color(0xFFE0F2FE),
@@ -86,21 +87,21 @@ class ProfileScreen extends StatelessWidget {
                 )),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
 
             // ── Reports button ────────────────────────────────────────
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, Routes.reportScreen),
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
                 decoration: BoxDecoration(
                   color: ReportColors.salmon,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -108,17 +109,17 @@ class ProfileScreen extends StatelessWidget {
                             'Session Reports',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 0.3,
                             ),
                           ),
-                          SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                           Text(
                             'View all therapy session reports',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               height: 1.4,
                             ),
                           ),
@@ -126,23 +127,23 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: 44,
-                      height: 44,
+                      width: 44.w,
+                      height: 44.h,
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.bar_chart_rounded,
                         color: Colors.white,
-                        size: 22,
+                        size: 22.sp,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // ── Menu items ────────────────────────────────────────────
             MenuItem(
@@ -166,7 +167,7 @@ class ProfileScreen extends StatelessWidget {
               isDestructive: true,
               onTap: () => _showLogoutDialog(context),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
@@ -186,36 +187,36 @@ class _ChildHeroCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5.w),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            blurRadius: 12.r,
+            offset: Offset(0, 4.h),
           ),
         ],
       ),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+            padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 20.h),
             child: Row(
               children: [
                 Container(
-                  width: 64,
-                  height: 64,
+                  width: 64.w,
+                  height: 64.h,
                   decoration: const BoxDecoration(
                     color: Color(0xFFEAF3DE),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.mood_rounded,
-                    color: Color(0xFF3B6D11),
-                    size: 32,
+                    color: const Color(0xFF3B6D11),
+                    size: 32.sp,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,16 +224,16 @@ class _ChildHeroCard extends StatelessWidget {
                       Text(
                         userData?.childName ?? 'Child Name',
                         style: GoogleFonts.poppins(
-                          fontSize: 20,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF1F2937),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         '${userData?.age ?? 0} years old',
                         style: GoogleFonts.poppins(
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           color: const Color(0xFF6B7280),
                         ),
                       ),
@@ -240,18 +241,18 @@ class _ChildHeroCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFFEAF3DE),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Child',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF3B6D11),
+                      color: const Color(0xFF3B6D11),
                     ),
                   ),
                 ),
@@ -261,25 +262,25 @@ class _ChildHeroCard extends StatelessWidget {
           if (userData?.description.isNotEmpty == true)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 20, vertical: 12),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF9FAFB),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 20.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFB),
                 borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(20)),
+                    BorderRadius.vertical(bottom: Radius.circular(20.r)),
                 border: Border(
                     top: BorderSide(
-                        color: Color(0xFFE5E7EB), width: 0.5)),
+                        color: const Color(0xFFE5E7EB), width: 0.5.w)),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.psychology_outlined,
-                      size: 15, color: Color(0xFF9CA3AF)),
-                  const SizedBox(width: 8),
+                  Icon(Icons.psychology_outlined,
+                      size: 15.sp, color: const Color(0xFF9CA3AF)),
+                  SizedBox(width: 8.w),
                   Text(
                     'Case: ',
                     style: GoogleFonts.poppins(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: const Color(0xFF9CA3AF),
                     ),
                   ),
@@ -287,7 +288,7 @@ class _ChildHeroCard extends StatelessWidget {
                     child: Text(
                       userData?.description ?? '',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
                         color: const Color(0xFF374151),
                       ),
@@ -331,16 +332,16 @@ class _CareTeamCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5.w),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            blurRadius: 8.r,
+            offset: Offset(0, 2.h),
           ),
         ],
       ),
@@ -350,8 +351,8 @@ class _CareTeamCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 40.w,
+                height: 40.h,
                 decoration: BoxDecoration(
                   color: avatarColor,
                   shape: BoxShape.circle,
@@ -363,24 +364,24 @@ class _CareTeamCard extends StatelessWidget {
                           style: TextStyle(
                             color: iconColor,
                             fontWeight: FontWeight.w700,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                           ),
                         ),
                       )
-                    : Icon(icon, color: iconColor, size: 20),
+                    : Icon(icon, color: iconColor, size: 20.sp),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 3),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 8.w, vertical: 3.h),
                 decoration: BoxDecoration(
                   color: badgeColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
                   badgeLabel,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
                     color: badgeTextColor,
                   ),
@@ -388,11 +389,11 @@ class _CareTeamCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Text(
             name,
             style: GoogleFonts.poppins(
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF1F2937),
             ),
@@ -403,7 +404,7 @@ class _CareTeamCard extends StatelessWidget {
             Text(
               detail,
               style: GoogleFonts.poppins(
-                fontSize: 11,
+                fontSize: 11.sp,
                 color: const Color(0xFF9CA3AF),
               ),
               maxLines: 1,
@@ -447,7 +448,7 @@ void _showLogoutDialog(BuildContext context) {
         builder: (builderContext, state) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             title: Text(
               'Log Out',
@@ -456,7 +457,7 @@ void _showLogoutDialog(BuildContext context) {
             content: Text(
               'Are you sure you want to log out?',
               style: GoogleFonts.poppins(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: const Color(0xFF6B7280),
               ),
             ),
@@ -473,10 +474,10 @@ void _showLogoutDialog(BuildContext context) {
                     ? null
                     : () => authCubit.logout(),
                 child: state is LogoutLoadingState
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                    ? SizedBox(
+                        width: 16.w,
+                        height: 16.h,
+                        child: const CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
                         'Log Out',

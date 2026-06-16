@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 class TaskHeader extends StatelessWidget {
@@ -7,7 +8,7 @@ class TaskHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 0),
       child: Text('Tasks', style: T.screenTitle()),
     );
   }

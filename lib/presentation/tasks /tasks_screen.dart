@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
@@ -73,7 +74,7 @@ class _TasksScreenState extends State<TasksScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TaskHeader(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           BlocBuilder<TaskCubit, TaskStates>(
             builder: (context, state) {
               final cubit = TaskCubit.get(context);
@@ -83,9 +84,9 @@ class _TasksScreenState extends State<TasksScreen> {
               );
             },
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           _buildFilterChips(),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Expanded(child: _buildTaskList()),
         ],
       ),
@@ -95,36 +96,36 @@ class _TasksScreenState extends State<TasksScreen> {
 
   Widget _buildFilterChips() {
     return SizedBox(
-      height: 40,
+      height: 40.h,
       child: ListView.separated(
         clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         itemCount: _filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => SizedBox(width: 8.w),
         itemBuilder: (context, i) {
           final active = _selectedFilter == _filters[i];
           return GestureDetector(
             onTap: () => setState(() => _selectedFilter = _filters[i]),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
                 color: active ? T.primary : T.card,
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: BorderRadius.circular(999.r),
                 border: active ? null : Border.all(color: T.border),
                 boxShadow: active
                     ? [BoxShadow(
                         color: T.primary.withValues(alpha: 0.28),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
+                        blurRadius: 8.r,
+                        offset: Offset(0, 4.h),
                       )]
                     : null,
               ),
               child: Text(
                 _filters[i],
                 style: T.badge().copyWith(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   color: active ? Colors.white : T.muted,
                 ),
               ),
@@ -161,7 +162,7 @@ class _TasksScreenState extends State<TasksScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(state.message, textAlign: TextAlign.center),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 TextButton(
                   onPressed: _fetchTasks,
                   child: const Text('Retry'),
@@ -176,13 +177,13 @@ class _TasksScreenState extends State<TasksScreen> {
           if (filtered.isEmpty) {
             return const Center(child: Text('No tasks found.'));
           }
-          final navBottom = MediaQuery.of(context).padding.bottom + 96;
+          final navBottom = MediaQuery.of(context).padding.bottom + 96.h;
           return RefreshIndicator(
             onRefresh: () async => _fetchTasks(),
             child: ListView.separated(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, navBottom),
+              padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, navBottom),
               itemCount: filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) => SizedBox(height: 12.h),
               itemBuilder: (context, index) => TaskCard(task: filtered[index]),
             ),
           );

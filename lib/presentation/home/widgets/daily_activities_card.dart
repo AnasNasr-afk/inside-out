@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_listener.dart';
@@ -41,21 +42,21 @@ class DailyActivitiesPreviewCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _SectionHeader(label: "Today's Activities", trailing: ''),
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
         Row(
           children: [
-            const Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 18),
-            const SizedBox(width: 8),
+            Icon(Icons.error_outline, color: const Color(0xFFEF4444), size: 18.sp),
+            SizedBox(width: 8.w),
             Expanded(
               child: Text(
                 message,
                 style: GoogleFonts.poppins(
-                    fontSize: 13, color: const Color(0xFF6B7280)),
+                    fontSize: 13.sp, color: const Color(0xFF6B7280)),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
@@ -66,7 +67,7 @@ class DailyActivitiesPreviewCard extends StatelessWidget {
             child: Text(
               'Retry',
               style: GoogleFonts.poppins(
-                fontSize: 13,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w600,
                 color: AppTheme.primaryColor,
               ),
@@ -82,11 +83,11 @@ class DailyActivitiesPreviewCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _SectionHeader(label: "Today's Activities", trailing: ''),
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
         Text(
           'No activities scheduled today.',
           style: GoogleFonts.poppins(
-              fontSize: 13, color: const Color(0xFF9CA3AF)),
+              fontSize: 13.sp, color: const Color(0xFF9CA3AF)),
         ),
       ],
     );
@@ -113,47 +114,47 @@ class DailyActivitiesPreviewCard extends StatelessWidget {
           trailing: '$completed/$total',
           onTrailingTap: onSeeAll,
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Text(
           completed == total
               ? 'All done for today!'
               : '${total - completed} ${total - completed == 1 ? 'task' : 'tasks'} remaining',
           style: GoogleFonts.poppins(
-              fontSize: 12, color: const Color(0xFF9CA3AF)),
+              fontSize: 12.sp, color: const Color(0xFF9CA3AF)),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           child: LinearProgressIndicator(
             value: progress,
             backgroundColor: const Color(0xFFF3F4F6),
             valueColor:
                 const AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
-            minHeight: 6,
+            minHeight: 6.h,
           ),
         ),
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
         ...preview.map((task) => _TaskCard(task: task)),
         if (remaining > 0)
           GestureDetector(
             onTap: onSeeAll,
             child: Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: EdgeInsets.only(top: 4.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     '+ $remaining more ${remaining == 1 ? 'task' : 'tasks'}',
                     style: GoogleFonts.poppins(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
                       color: AppTheme.primaryColor,
                     ),
                   ),
-                  const SizedBox(width: 3),
-                  const Icon(
+                  SizedBox(width: 3.w),
+                  Icon(
                     Icons.arrow_forward_ios_rounded,
-                    size: 11,
+                    size: 11.sp,
                     color: AppTheme.primaryColor,
                   ),
                 ],
@@ -172,15 +173,15 @@ class _LoadingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionHeader(label: "Today's Activities", trailing: ''),
-        SizedBox(height: 14),
+        const _SectionHeader(label: "Today's Activities", trailing: ''),
+        SizedBox(height: 14.h),
         Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 24),
-            child: CircularProgressIndicator(strokeWidth: 2.5),
+            padding: EdgeInsets.symmetric(vertical: 24.h),
+            child: const CircularProgressIndicator(strokeWidth: 2.5),
           ),
         ),
       ],
@@ -209,7 +210,7 @@ class _SectionHeader extends StatelessWidget {
         Text(
           label,
           style: GoogleFonts.poppins(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
             color: const Color(0xFF1F2937),
           ),
@@ -222,15 +223,15 @@ class _SectionHeader extends StatelessWidget {
                 Text(
                   trailing,
                   style: GoogleFonts.poppins(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.primaryColor,
                   ),
                 ),
-                const SizedBox(width: 3),
-                const Icon(
+                SizedBox(width: 3.w),
+                Icon(
                   Icons.arrow_forward_ios_rounded,
-                  size: 12,
+                  size: 12.sp,
                   color: AppTheme.primaryColor,
                 ),
               ],
@@ -248,23 +249,23 @@ class _TaskCard extends StatelessWidget {
   const _TaskCard({required this.task});
 
   static final _titleStyle = GoogleFonts.poppins(
-    fontSize: 15,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w600,
     color: const Color(0xFF1F2937),
   );
   static final _titleDoneStyle = GoogleFonts.poppins(
-    fontSize: 15,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w600,
     color: const Color(0xFF9CA3AF),
     decoration: TextDecoration.lineThrough,
     decorationColor: const Color(0xFF9CA3AF),
   );
   static final _subStyle = GoogleFonts.poppins(
-    fontSize: 12,
+    fontSize: 12.sp,
     color: const Color(0xFF6B7280),
   );
   static final _overdueSub = GoogleFonts.poppins(
-    fontSize: 12,
+    fontSize: 12.sp,
     color: const Color(0xFFEF4444),
   );
 
@@ -274,15 +275,15 @@ class _TaskCard extends StatelessWidget {
     final bool overdue = task.isOverdue;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      margin: EdgeInsets.only(bottom: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: overdue && !done
             ? const Color(0xFFFFF1F2)
             : const Color(0xFFF3F4F6),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: overdue && !done
-            ? Border.all(color: const Color(0xFFFECACA), width: 1)
+            ? Border.all(color: const Color(0xFFFECACA), width: 1.w)
             : null,
       ),
       child: Row(
@@ -290,8 +291,8 @@ class _TaskCard extends StatelessWidget {
           // Completion indicator
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 24,
-            height: 24,
+            width: 24.w,
+            height: 24.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: done ? AppTheme.primaryColor : Colors.transparent,
@@ -301,15 +302,15 @@ class _TaskCard extends StatelessWidget {
                     : overdue
                         ? const Color(0xFFEF4444)
                         : const Color(0xFFD1D5DB),
-                width: 1.5,
+                width: 1.5.w,
               ),
             ),
             child: done
-                ? const Icon(Icons.check_rounded,
-                    size: 14, color: Colors.white)
+                ? Icon(Icons.check_rounded,
+                    size: 14.sp, color: Colors.white)
                 : null,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
 
           // Title + subtitle
           Expanded(
@@ -322,27 +323,27 @@ class _TaskCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: done ? _titleDoneStyle : _titleStyle,
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3.h),
                 Row(
                   children: [
                     if (task.isGameTask) ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 1),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.w, vertical: 1.h),
                         decoration: BoxDecoration(
                           color: AppTheme.primaryColor.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: Text(
                           task.gameDisplayName,
                           style: GoogleFonts.poppins(
-                            fontSize: 10,
+                            fontSize: 10.sp,
                             fontWeight: FontWeight.w600,
                             color: AppTheme.primaryColor,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6.w),
                     ],
                     Text(
                       task.timeLabel,
@@ -356,10 +357,10 @@ class _TaskCard extends StatelessWidget {
 
           // Arrow (only for pending tasks)
           if (!done) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             Icon(
               Icons.arrow_forward_ios_rounded,
-              size: 13,
+              size: 13.sp,
               color: overdue
                   ? const Color(0xFFEF4444)
                   : const Color(0xFFD1D5DB),

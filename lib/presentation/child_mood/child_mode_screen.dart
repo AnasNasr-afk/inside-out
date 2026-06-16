@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
@@ -109,11 +110,11 @@ class _ChildModeScreenState extends State<ChildModeScreen>
 
                 // ── Floating violet circle (top-right) ─────────────────
                 Positioned(
-                  top: -40 + bob1,
-                  right: -40,
+                  top: -40.h + bob1,
+                  right: -40.w,
                   child: Container(
-                    width: 170,
-                    height: 170,
+                    width: 170.w,
+                    height: 170.h,
                     decoration: BoxDecoration(
                       color: const Color(0x1A7C5CFF),
                       shape: BoxShape.circle,
@@ -123,11 +124,11 @@ class _ChildModeScreenState extends State<ChildModeScreen>
 
                 // ── Floating mint circle (bottom-left) ─────────────────
                 Positioned(
-                  bottom: 40 + bob2,
-                  left: -30,
+                  bottom: 40.h + bob2,
+                  left: -30.w,
                   child: Container(
-                    width: 120,
-                    height: 120,
+                    width: 120.w,
+                    height: 120.h,
                     decoration: BoxDecoration(
                       color: const Color(0x1F14D9C4),
                       shape: BoxShape.circle,
@@ -146,7 +147,7 @@ class _ChildModeScreenState extends State<ChildModeScreen>
                       ),
                       Expanded(
                         child: SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
+                          padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 40.h),
                           child: ChildModeBody(
                             onTileTap: () => ChildModeSounds.instance.playTap(),
                           ),
@@ -180,34 +181,34 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+      padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 8.h),
       child: Row(
         children: [
           // Back chip
           GestureDetector(
             onTap: onBack,
             child: Container(
-              width: 40,
-              height: 40,
+              width: 40.w,
+              height: 40.h,
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.70),
-                borderRadius: BorderRadius.circular(13),
+                borderRadius: BorderRadius.circular(13.r),
                 boxShadow: [
                   BoxShadow(
                     color: const Color(0xFF211E40).withValues(alpha: 0.06),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    blurRadius: 12.r,
+                    offset: Offset(0, 4.h),
                   ),
                 ],
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.chevron_left_rounded,
-                size: 24,
-                color: Color(0xFF211E40),
+                size: 24.sp,
+                color: const Color(0xFF211E40),
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
           // Title
           Expanded(
             child: Column(
@@ -217,7 +218,7 @@ class _Header extends StatelessWidget {
                 Text(
                   "Poly's World",
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.3,
                     color: const Color(0xFF211E40),
@@ -226,7 +227,7 @@ class _Header extends StatelessWidget {
                 Text(
                   'Hi $childName!',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF7C5CFF),
                   ),
@@ -236,27 +237,27 @@ class _Header extends StatelessWidget {
           ),
           // Coin counter pill
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(999.r),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF211E40).withValues(alpha: 0.08),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
+                  blurRadius: 16.r,
+                  offset: Offset(0, 6.h),
                 ),
               ],
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.star_rounded, size: 17, color: Color(0xFFFFC93C)),
-                const SizedBox(width: 6),
+                Icon(Icons.star_rounded, size: 17.sp, color: const Color(0xFFFFC93C)),
+                SizedBox(width: 6.w),
                 Text(
                   '$coins',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w800,
                     color: const Color(0xFF211E40),
                     fontFeatures: const [FontFeature.tabularFigures()],
@@ -326,10 +327,10 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 28),
+      insetPadding: EdgeInsets.symmetric(horizontal: 28.w),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(28.r),
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -338,22 +339,22 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
           boxShadow: [
             BoxShadow(
               color: _violet.withValues(alpha: 0.18),
-              blurRadius: 40,
-              offset: const Offset(0, 16),
+              blurRadius: 40.r,
+              offset: Offset(0, 16.h),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(28.r),
           child: Stack(
             children: [
               // Decorative circles — mirrors the screen background
               Positioned(
-                top: -30,
-                right: -30,
+                top: -30.h,
+                right: -30.w,
                 child: Container(
-                  width: 110,
-                  height: 110,
+                  width: 110.w,
+                  height: 110.h,
                   decoration: const BoxDecoration(
                     color: Color(0x1A7C5CFF),
                     shape: BoxShape.circle,
@@ -361,11 +362,11 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                 ),
               ),
               Positioned(
-                bottom: -24,
-                left: -24,
+                bottom: -24.h,
+                left: -24.w,
                 child: Container(
-                  width: 80,
-                  height: 80,
+                  width: 80.w,
+                  height: 80.h,
                   decoration: const BoxDecoration(
                     color: Color(0x1F14D9C4),
                     shape: BoxShape.circle,
@@ -374,14 +375,14 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
               ),
               // Content
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 36, 24, 28),
+                padding: EdgeInsets.fromLTRB(24.w, 36.h, 24.w, 28.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Lock icon — violet gradient circle
                     Container(
-                      width: 68,
-                      height: 68,
+                      width: 68.w,
+                      height: 68.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: const LinearGradient(
@@ -392,50 +393,50 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                         boxShadow: [
                           BoxShadow(
                             color: _violet.withValues(alpha: 0.35),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
+                            blurRadius: 20.r,
+                            offset: Offset(0, 8.h),
                           ),
                         ],
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.lock_rounded,
-                        size: 30,
+                        size: 30.sp,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     // Title
                     Text(
                       'Parent Exit',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
                         letterSpacing: -0.3,
                         color: _ink,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Text(
                       'Enter your password to leave child mode',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
                         color: _ink.withValues(alpha: 0.55),
                         height: 1.4,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                     // Password field — white card style
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
                             color: _ink.withValues(alpha: 0.07),
-                            blurRadius: 16,
-                            offset: const Offset(0, 4),
+                            blurRadius: 16.r,
+                            offset: Offset(0, 4.h),
                           ),
                         ],
                       ),
@@ -446,7 +447,7 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                         textAlign: TextAlign.center,
                         autofocus: true,
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 6,
                           color: _ink,
@@ -454,36 +455,36 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                         decoration: InputDecoration(
                           hintText: 'Enter password',
                           hintStyle: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0,
                             color: _ink.withValues(alpha: 0.30),
                           ),
                           errorText: _errorText,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 16.h),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                                color: _violet, width: 1.5),
+                            borderRadius: BorderRadius.circular(16.r),
+                            borderSide: BorderSide(
+                                color: _violet, width: 1.5.w),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             borderSide: const BorderSide(
                                 color: Color(0xFFFF5B72)),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                                color: Color(0xFFFF5B72), width: 1.5),
+                            borderRadius: BorderRadius.circular(16.r),
+                            borderSide: BorderSide(
+                                color: const Color(0xFFFF5B72), width: 1.5.w),
                           ),
                           filled: true,
                           fillColor: Colors.white,
@@ -491,15 +492,15 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                         onSubmitted: (_) => _isLoading ? null : _verify(),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     // Confirm button — violet gradient
                     GestureDetector(
                       onTap: _isLoading ? null : _verify,
                       child: Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        padding: EdgeInsets.symmetric(vertical: 15.h),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           gradient: _isLoading
                               ? null
                               : const LinearGradient(
@@ -511,24 +512,24 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                                   ],
                                 ),
                           color: _isLoading
-                              ? Color(0xFFD4CAFF)
+                              ? const Color(0xFFD4CAFF)
                               : null,
                           boxShadow: _isLoading
                               ? null
                               : [
                                   BoxShadow(
                                     color: _violet.withValues(alpha: 0.40),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 8),
+                                    blurRadius: 16.r,
+                                    offset: Offset(0, 8.h),
                                   ),
                                 ],
                         ),
                         child: Center(
                           child: _isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
+                              ? SizedBox(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  child: const CircularProgressIndicator(
                                     color: Colors.white,
                                     strokeWidth: 2.5,
                                   ),
@@ -536,7 +537,7 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                               : Text(
                                   'Confirm',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 15,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                   ),
@@ -544,14 +545,14 @@ class _ExitPasswordDialogState extends State<_ExitPasswordDialog> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     // Cancel
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
                         'Cancel',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: _ink.withValues(alpha: 0.40),
                         ),

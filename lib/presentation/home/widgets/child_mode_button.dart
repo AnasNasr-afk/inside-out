@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/theme/app_tokens.dart';
@@ -29,33 +30,33 @@ class ChildModeButton extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: T.card,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: T.cardShadow,
         ),
         child: Row(
           children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
                     color: T.primary.withValues(alpha: 0.45),
-                    blurRadius: 20,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 4),
+                    blurRadius: 20.r,
+                    spreadRadius: 2.r,
+                    offset: Offset(0, 4.h),
                   ),
                 ],
               ),
               child: Image.asset(
                 'assets/illustrations/childModeIcon.png',
-                width: 52,
-                height: 52,
+                width: 52.w,
+                height: 52.h,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,41 +64,41 @@ class ChildModeButton extends StatelessWidget {
                   Text(
                     'Child Mode',
                     style: T.cardTitle().copyWith(
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2.h),
                   Text(
                     'A calmer, simpler space for kids',
-                    style: T.caption().copyWith(color: T.muted, fontSize: 10),
+                    style: T.caption().copyWith(color: T.muted, fontSize: 10.sp),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Container(
-              width: 46,
-              height: 27,
+              width: 46.w,
+              height: 27.h,
               decoration: BoxDecoration(
                 color: const Color(0xFFD1D1D6),
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: BorderRadius.circular(999.r),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(3),
+                padding: EdgeInsets.all(3.r),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    width: 21,
-                    height: 21,
-                    decoration: const BoxDecoration(
+                    width: 21.w,
+                    height: 21.h,
+                    decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Color(0x33000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 1),
+                          color: const Color(0x33000000),
+                          blurRadius: 4.r,
+                          offset: Offset(0, 1.h),
                         ),
                       ],
                     ),

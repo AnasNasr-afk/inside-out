@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/models/task_model.dart';
@@ -69,7 +70,7 @@ class TaskCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: T.card,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: T.cardShadow,
         ),
         child: IntrinsicHeight(
@@ -78,12 +79,12 @@ class TaskCard extends StatelessWidget {
             children: [
               // ── Left accent bar ──────────────────────────────────────────
               Container(
-                width: 5,
+                width: 5.w,
                 decoration: BoxDecoration(
                   color: _accentColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.r),
+                    bottomLeft: Radius.circular(20.r),
                   ),
                 ),
               ),
@@ -91,12 +92,12 @@ class TaskCard extends StatelessWidget {
               // ── Content ──────────────────────────────────────────────────
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
                   child: Row(
                     children: [
                       // Icon tile
                       _IconTile(completed: task.isCompleted, color: _accentColor),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
 
                       // Title + meta
                       Expanded(
@@ -118,7 +119,7 @@ class TaskCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 5),
+                            SizedBox(height: 5.h),
                             Text(
                               _metaText,
                               style: T.caption().copyWith(color: _metaColor),
@@ -126,15 +127,15 @@ class TaskCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10.w),
 
                       // Badge
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 5.h),
                         decoration: BoxDecoration(
                           color: _badgeBg,
-                          borderRadius: BorderRadius.circular(999),
+                          borderRadius: BorderRadius.circular(999.r),
                         ),
                         child: Text(
                           _badgeLabel,
@@ -162,20 +163,20 @@ class _IconTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (completed) {
       return Container(
-        width: 40,
-        height: 40,
+        width: 40.w,
+        height: 40.h,
         decoration: BoxDecoration(
           color: T.mint,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
-        child: const Icon(Icons.check_rounded, color: Colors.white, size: 22),
+        child: Icon(Icons.check_rounded, color: Colors.white, size: 22.sp),
       );
     }
 
     // Dashed border tile for pending / overdue
     return SizedBox(
-      width: 40,
-      height: 40,
+      width: 40.w,
+      height: 40.h,
       child: CustomPaint(
         painter: _DashedBorderPainter(color: color),
       ),
@@ -191,16 +192,16 @@ class _DashedBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 1.8
+      ..strokeWidth = 1.8.w
       ..style = PaintingStyle.stroke;
 
-    const dashLen = 4.0;
-    const gap = 3.0;
-    const r = 12.0;
-    const pad = 1.0;
+    final dashLen = 4.0.r;
+    final gap = 3.0.r;
+    final r = 12.0.r;
+    final pad = 1.0.r;
 
     final rect = RRect.fromLTRBR(
-      pad, pad, size.width - pad, size.height - pad, const Radius.circular(r));
+      pad, pad, size.width - pad, size.height - pad, Radius.circular(r));
 
     final path = Path()..addRRect(rect);
     final metric = path.computeMetrics().first;

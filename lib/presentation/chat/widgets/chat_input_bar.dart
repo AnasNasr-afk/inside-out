@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'chat_colors.dart';
 
@@ -16,24 +17,24 @@ class ChatInputBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.viewPaddingOf(context).bottom;
     return Container(
-      padding: EdgeInsets.fromLTRB(16, 10, 16, bottomInset > 0 ? bottomInset : 20),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, bottomInset > 0 ? bottomInset : 20.h),
+      decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: chatInputBorder, width: 0.5)),
+        border: Border(top: BorderSide(color: chatInputBorder, width: 0.5.w)),
       ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: controller,
-              style: GoogleFonts.poppins(fontSize: 14, color: chatTextDark),
+              style: GoogleFonts.poppins(fontSize: 14.sp, color: chatTextDark),
               decoration: InputDecoration(
                 hintText: 'Type your message here...',
                 hintStyle:
-                    GoogleFonts.poppins(fontSize: 14, color: chatTextLight),
+                    GoogleFonts.poppins(fontSize: 14.sp, color: chatTextLight),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                contentPadding: EdgeInsets.symmetric(vertical: 8.h),
               ),
               onSubmitted: (_) => onSend(),
               textInputAction: TextInputAction.send,
@@ -41,18 +42,18 @@ class ChatInputBar extends StatelessWidget {
               minLines: 1,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           GestureDetector(
             onTap: onSend,
             child: Container(
-              width: 42,
-              height: 42,
+              width: 42.w,
+              height: 42.h,
               decoration: const BoxDecoration(
                 color: chatPrimary,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.send_rounded,
-                  color: Colors.white, size: 18),
+              child: Icon(Icons.send_rounded,
+                  color: Colors.white, size: 18.sp),
             ),
           ),
         ],

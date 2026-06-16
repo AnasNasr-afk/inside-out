@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_listener.dart';
 import 'package:patient/core/models/task_model.dart';
@@ -52,25 +53,25 @@ class HomeContent extends StatelessWidget {
                 onAvatarTap: onAvatarTap,
                 onChatTap: onChatTap,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.fromLTRB(
-                    20, 0, 20,
-                    MediaQuery.of(context).padding.bottom + 90,
+                    20.w, 0, 20.w,
+                    MediaQuery.of(context).padding.bottom + 90.h,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       MoodCheckInCard(childName: displayChild),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       const ChildModeButton(),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       _HomeSectionHeader(
                         label: 'Upcoming tasks',
                         onSeeAll: onSeeAllTasks,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       _HomeTasksList(tasks: tasks),
                     ],
                   ),
@@ -103,44 +104,44 @@ class _HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
       child: Row(
         children: [
           // Avatar — taps to Profile
           GestureDetector(
             onTap: onAvatarTap,
             child: Container(
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.h,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [T.primary, T.mint],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Center(
                 child: Text(
                   parentInitial,
                   style: T.sectionHeader()
-                      .copyWith(color: Colors.white, fontSize: 18),
+                      .copyWith(color: Colors.white, fontSize: 18.sp),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 greeting,
-                style: T.caption().copyWith(color: T.muted, fontSize: 12),
+                style: T.caption().copyWith(color: T.muted, fontSize: 12.sp),
               ),
               Text(
                 displayName,
-                style: T.screenTitle().copyWith(fontSize: 22, letterSpacing: -0.4),
+                style: T.screenTitle().copyWith(fontSize: 22.sp, letterSpacing: -0.4),
               ),
             ],
           ),
@@ -149,8 +150,8 @@ class _HomeHeader extends StatelessWidget {
           GestureDetector(
             onTap: onChatTap,
             child: Container(
-              width: 40,
-              height: 40,
+              width: 40.w,
+              height: 40.h,
               decoration: const BoxDecoration(
                 color: T.card,
                 shape: BoxShape.circle,
@@ -158,8 +159,8 @@ class _HomeHeader extends StatelessWidget {
               ),
               child: Center(
                 child: Assets.icons.icChat.svg(
-                  width: 18,
-                  height: 18,
+                  width: 18.w,
+                  height: 18.h,
                   colorFilter:
                       const ColorFilter.mode(T.ink, BlendMode.srcIn),
                 ),
@@ -191,7 +192,7 @@ class _HomeSectionHeader extends StatelessWidget {
             'See all',
             style: T.caption().copyWith(
               color: T.primary,
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -231,11 +232,11 @@ class _HomeTaskRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      margin: EdgeInsets.only(bottom: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
         color: T.card,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: T.cardShadow,
       ),
       child: Row(
@@ -256,11 +257,11 @@ class _HomeTaskRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3.h),
                 Text(
                   task.timeLabel,
                   style: T.caption().copyWith(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: task.isCompleted
                         ? T.mintDeep
                         : task.isOverdue
@@ -271,30 +272,30 @@ class _HomeTaskRow extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           // Circle right
           if (task.isCompleted)
             Container(
-              width: 30,
-              height: 30,
+              width: 30.w,
+              height: 30.h,
               decoration: const BoxDecoration(
                 color: T.mint,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.check_rounded,
-                  size: 16, color: Colors.white),
+              child: Icon(Icons.check_rounded,
+                  size: 16.sp, color: Colors.white),
             )
           else
             Container(
-              width: 30,
-              height: 30,
+              width: 30.w,
+              height: 30.h,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: task.isOverdue
                       ? T.coral.withValues(alpha: 0.5)
                       : const Color(0xFFCCCCCC),
-                  width: 1.5,
+                  width: 1.5.w,
                 ),
               ),
             ),

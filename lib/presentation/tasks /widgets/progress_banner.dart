@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 class ProgressBanner extends StatelessWidget {
@@ -17,11 +18,11 @@ class ProgressBanner extends StatelessWidget {
     final pctInt = (percent * 100).round();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24.r),
           boxShadow: T.primaryCta,
           image: const DecorationImage(
             image: AssetImage('assets/illustrations/tasksBackgroud.png'),
@@ -38,32 +39,32 @@ class ProgressBanner extends StatelessWidget {
                     'Weekly Progress',
                     style: T.caption().copyWith(
                       color: Colors.white.withValues(alpha: 0.75),
-                      fontSize: 13,
+                      fontSize: 13.sp,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5.h),
                   Text(
                     '$completedTasks of $totalTasks tasks completed',
                     style: T.sectionHeader().copyWith(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       letterSpacing: -0.2,
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14.h),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(999.r),
                     child: LinearProgressIndicator(
                       value: percent,
                       backgroundColor: Colors.white.withValues(alpha: 0.22),
                       valueColor: const AlwaysStoppedAnimation(Colors.white),
-                      minHeight: 7,
+                      minHeight: 7.h,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 20),
+            SizedBox(width: 20.w),
             Text(
               '$pctInt%',
               style: T.bigNumeral().copyWith(color: Colors.white),

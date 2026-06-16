@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/gen/assets.gen.dart';
 
@@ -16,20 +17,20 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 64,
+      height: 64.h,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(28.r),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF211E40).withValues(alpha: 0.10),
-            blurRadius: 28,
-            offset: const Offset(0, 8),
+            blurRadius: 28.r,
+            offset: Offset(0, 8.h),
           ),
           BoxShadow(
             color: const Color(0xFF7C5CFF).withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
+            blurRadius: 12.r,
+            offset: Offset(0, 2.h),
           ),
         ],
       ),
@@ -71,19 +72,19 @@ class _Item extends StatelessWidget {
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeInOutCubic,
         padding: EdgeInsets.symmetric(
-          horizontal: active ? 16.0 : 13.0,
-          vertical: 10,
+          horizontal: active ? 16.0.w : 13.0.w,
+          vertical: 10.h,
         ),
         decoration: BoxDecoration(
           color: active ? _violet : Colors.transparent,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(999.r),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             icon.svg(
-              width: 22.0,
-              height: 22.0,
+              width: 22.0.w,
+              height: 22.0.h,
               colorFilter: ColorFilter.mode(
                 active ? Colors.white : _grey,
                 BlendMode.srcIn,
@@ -96,11 +97,11 @@ class _Item extends StatelessWidget {
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(width: 7),
+                        SizedBox(width: 7.w),
                         Text(
                           label,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),

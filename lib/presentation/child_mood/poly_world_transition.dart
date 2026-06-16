@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'child_mode_screen.dart';
@@ -175,7 +176,7 @@ class _TransitionViewState extends State<_TransitionView>
     );
 
     // Title: 670→1270 ms  translateY 30→0 + opacity
-    _titleSlide = Tween<double>(begin: 30.0, end: 0.0).animate(
+    _titleSlide = Tween<double>(begin: 30.0.h, end: 0.0).animate(
       CurvedAnimation(
         parent: _main,
         curve: const Interval(670 / 3200, 1270 / 3200, curve: Curves.easeOut),
@@ -282,7 +283,7 @@ class _TransitionViewState extends State<_TransitionView>
         final mainT = _main.value;
         final shakeT = ((mainT - 1500 / 3200) / (420 / 3200)).clamp(0.0, 1.0);
         final shakeX = shakeT < 1.0
-            ? math.sin(shakeT * math.pi * 8) * 5.0 * (1.0 - shakeT)
+            ? math.sin(shakeT * math.pi * 8) * 5.0.w * (1.0 - shakeT)
             : 0.0;
 
         return Opacity(
@@ -359,13 +360,13 @@ class _TransitionViewState extends State<_TransitionView>
 
   Widget _buildGodRays(Size size) {
     return Positioned(
-      left: size.width / 2 - 180,
-      top: size.height * 0.22 - 180,
+      left: size.width / 2 - 180.w,
+      top: size.height * 0.22 - 180.h,
       child: Transform.rotate(
         angle: _rays.value * 2 * math.pi,
         child: SizedBox(
-          width: 360,
-          height: 360,
+          width: 360.w,
+          height: 360.h,
           child: CustomPaint(painter: _RaysPainter()),
         ),
       ),
@@ -382,13 +383,13 @@ class _TransitionViewState extends State<_TransitionView>
         child: Transform.scale(
           scale: scale,
           child: Container(
-            width: 150,
-            height: 150,
+            width: 150.w,
+            height: 150.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.white.withValues(alpha: opacity),
-                width: 2,
+                width: 2.w,
               ),
             ),
           ),
@@ -406,13 +407,13 @@ class _TransitionViewState extends State<_TransitionView>
         child: Transform.scale(
           scale: scale,
           child: Container(
-            width: 150,
-            height: 150,
+            width: 150.w,
+            height: 150.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.white.withValues(alpha: opacity),
-                width: 5,
+                width: 5.w,
               ),
             ),
           ),
@@ -434,10 +435,10 @@ class _TransitionViewState extends State<_TransitionView>
             child: Transform.scale(
               scale: _mascotScale.value,
               child: Transform.translate(
-                offset: Offset(0, math.sin(_bob.value * 2 * math.pi) * -12),
+                offset: Offset(0, math.sin(_bob.value * 2 * math.pi) * -12.h),
                 child: Container(
-                  width: 150,
-                  height: 150,
+                  width: 150.w,
+                  height: 150.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: const RadialGradient(
@@ -450,24 +451,24 @@ class _TransitionViewState extends State<_TransitionView>
                       ],
                       stops: [0.0, 0.60, 1.0],
                     ),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: Color(0x4D14786E),
-                        blurRadius: 44,
-                        offset: Offset(0, 22),
+                        color: const Color(0x4D14786E),
+                        blurRadius: 44.r,
+                        offset: Offset(0, 22.h),
                       ),
                     ],
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.sentiment_satisfied_alt_rounded,
-                    size: 76,
-                    color: Color(0xFF0E8F82),
+                    size: 76.sp,
+                    color: const Color(0xFF0E8F82),
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           // Title "POLY'S WORLD" — gold gradient + star decorators
           Opacity(
             opacity: _titleOpacity.value,
@@ -479,10 +480,10 @@ class _TransitionViewState extends State<_TransitionView>
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text('✦',
+                      Text('✦',
                           style: TextStyle(
-                              fontSize: 18, color: Color(0xFFFFC93C))),
-                      const SizedBox(width: 10),
+                              fontSize: 18.sp, color: const Color(0xFFFFC93C))),
+                      SizedBox(width: 10.w),
                       ShaderMask(
                         shaderCallback: (bounds) =>
                             const LinearGradient(
@@ -498,38 +499,38 @@ class _TransitionViewState extends State<_TransitionView>
                         child: Text(
                           "POLY'S WORLD",
                           style: GoogleFonts.nunito(
-                            fontSize: 36,
+                            fontSize: 36.sp,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
                             color: Colors.white,
-                            shadows: const [
+                            shadows: [
                               Shadow(
-                                color: Color(0x80280A6E),
-                                blurRadius: 20,
-                                offset: Offset(0, 6),
+                                color: const Color(0x80280A6E),
+                                blurRadius: 20.r,
+                                offset: Offset(0, 6.h),
                               ),
                               Shadow(
-                                color: Color(0x40FFD740),
-                                blurRadius: 30,
-                                offset: Offset(0, 0),
+                                color: const Color(0x40FFD740),
+                                blurRadius: 30.r,
+                                offset: const Offset(0, 0),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      const Text('✦',
+                      SizedBox(width: 10.w),
+                      Text('✦',
                           style: TextStyle(
-                              fontSize: 18, color: Color(0xFFFFC93C))),
+                              fontSize: 18.sp, color: const Color(0xFFFFC93C))),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                   // Curved ribbon underline
                   Container(
-                    width: 180,
-                    height: 3,
+                    width: 180.w,
+                    height: 3.h,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(999),
+                      borderRadius: BorderRadius.circular(999.r),
                       gradient: const LinearGradient(
                         colors: [
                           Colors.transparent,
@@ -564,28 +565,28 @@ class _TransitionViewState extends State<_TransitionView>
                 scale: _badgeScale.value,
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 9.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFC93C),
-                    borderRadius: BorderRadius.circular(999),
-                    boxShadow: const [
+                    borderRadius: BorderRadius.circular(999.r),
+                    boxShadow: [
                       BoxShadow(
-                        color: Color(0x80FFAA14),
-                        blurRadius: 24,
-                        offset: Offset(0, 10),
+                        color: const Color(0x80FFAA14),
+                        blurRadius: 24.r,
+                        offset: Offset(0, 10.h),
                       ),
                     ],
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.star_rounded,
-                          size: 17, color: Color(0xFF5A3A00)),
-                      const SizedBox(width: 8),
+                      Icon(Icons.star_rounded,
+                          size: 17.sp, color: const Color(0xFF5A3A00)),
+                      SizedBox(width: 8.w),
                       Text(
                         'PLAYTIME!',
                         style: GoogleFonts.nunito(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.0,
                           color: const Color(0xFF5A3A00),
@@ -597,14 +598,14 @@ class _TransitionViewState extends State<_TransitionView>
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           // Subtitle
           Opacity(
             opacity: _subtitleOpacity.value,
             child: Text(
               'Ready to play, ${widget.childName}?',
               style: GoogleFonts.nunito(
-                fontSize: 17,
+                fontSize: 17.sp,
                 fontWeight: FontWeight.w700,
                 color: Colors.white.withValues(alpha: 0.92),
               ),
@@ -697,7 +698,7 @@ class _Particle {
   _Particle._init(double angle, math.Random rng)
       : cosA    = math.cos(angle),
         sinA    = math.sin(angle),
-        maxDist = 60 + rng.nextDouble() * 110,
+        maxDist = 60.r + rng.nextDouble() * 110.r,
         color   = _palette[rng.nextInt(_palette.length)];
 }
 
@@ -712,8 +713,8 @@ class _Confetti {
   _Confetti(math.Random rng)
       : x = rng.nextDouble(),
         rotations = 2 + rng.nextDouble() * 5,
-        w = 6 + rng.nextDouble() * 6,
-        h = 8 + rng.nextDouble() * 8,
+        w = 6.w + rng.nextDouble() * 6.w,
+        h = 8.h + rng.nextDouble() * 8.h,
         round = rng.nextBool(),
         color = _palette[rng.nextInt(_palette.length)];
 }
@@ -748,7 +749,7 @@ class _ParticlesPainter extends CustomPainter {
       for (final s in stars) {
         final dist = s.maxDist * p;
         paint.color = s.color.withValues(alpha: opacity);
-        canvas.drawCircle(Offset(cx + dist * s.cosA, cy + dist * s.sinA), 5, paint);
+        canvas.drawCircle(Offset(cx + dist * s.cosA, cy + dist * s.sinA), 5.r, paint);
       }
     }
 
@@ -756,7 +757,7 @@ class _ParticlesPainter extends CustomPainter {
       final p = ((mainT - 1500 / 3200) / (1700 / 3200)).clamp(0.0, 1.0);
       final opacity = (p < 0.12 ? p / 0.12 : 0.95).clamp(0.0, 1.0);
       for (final c in confetti) {
-        final y = -30.0 + p * (size.height + 100);
+        final y = -30.0.h + p * (size.height + 100.h);
         final rotation = p * c.rotations * 2 * math.pi;
         paint.color = c.color.withValues(alpha: opacity);
         canvas.save();
@@ -767,7 +768,7 @@ class _ParticlesPainter extends CustomPainter {
         if (c.round) {
           canvas.drawOval(rect, paint);
         } else {
-          canvas.drawRRect(RRect.fromRectXY(rect, 2, 2), paint);
+          canvas.drawRRect(RRect.fromRectXY(rect, 2.r, 2.r), paint);
         }
         canvas.restore();
       }
