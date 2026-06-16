@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HelpFaqScreen extends StatefulWidget {
   const HelpFaqScreen({super.key});
@@ -54,25 +55,25 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
         centerTitle: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             decoration: BoxDecoration(
               color: const Color(0xFFF0F9FF),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14.r),
               border: Border.all(color: const Color(0xFFBAE6FD)),
             ),
             child: Row(
               children: [
-                const Icon(Icons.help_outline_rounded,
-                    color: Color(0xFF0369A1), size: 22),
-                const SizedBox(width: 12),
+                Icon(Icons.help_outline_rounded,
+                    color: Color(0xFF0369A1), size: 22.sp),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Text(
                     'Tap a question to expand the answer.',
                     style: GoogleFonts.poppins(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       color: const Color(0xFF0369A1),
                     ),
                   ),
@@ -80,7 +81,7 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           ...List.generate(_faqs.length, (i) {
             final faq = _faqs[i];
             final isOpen = _openIndex == i;
@@ -89,22 +90,22 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
                 InkWell(
                   onTap: () =>
                       setState(() => _openIndex = isOpen ? null : i),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.r),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(vertical: 16.h),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             faq.q,
                             style: GoogleFonts.poppins(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xFF1F2937),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         AnimatedRotation(
                           turns: isOpen ? 0.5 : 0,
                           duration: const Duration(milliseconds: 200),
@@ -120,13 +121,13 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
                 AnimatedCrossFade(
                   firstChild: const SizedBox.shrink(),
                   secondChild: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(bottom: 16.h),
                     child: Text(
                       faq.a,
                       style: GoogleFonts.poppins(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         color: const Color(0xFF6B7280),
-                        height: 1.6,
+                        height: 1.6.h,
                       ),
                     ),
                   ),
@@ -135,7 +136,7 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
                       : CrossFadeState.showFirst,
                   duration: const Duration(milliseconds: 200),
                 ),
-                const Divider(height: 1, color: Color(0xFFF3F4F6)),
+                Divider(height: 1.h, color: Color(0xFFF3F4F6)),
               ],
             );
           }),

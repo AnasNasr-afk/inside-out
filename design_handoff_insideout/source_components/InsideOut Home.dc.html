@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  .io-scroll::-webkit-scrollbar{width:0;height:0;}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#ECEAF4;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#211E40;padding:36px 28px 80px;">
+  <div style="max-width:1180px;margin:0 auto;">
+
+    <!-- NOTES / DESIGN SYSTEM -->
+    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:34px;">
+      <span style="font-family:ui-monospace,'SF Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1.5px;color:#7C5CFF;">STUDY → SYSTEM</span>
+      <h1 style="margin:0;font-size:32px;font-weight:800;letter-spacing:-.8px;max-width:680px;line-height:1.1;">InsideOut home, rebuilt in your reference's visual language</h1>
+      <p style="margin:0;max-width:660px;font-size:14.5px;line-height:1.5;color:#5C5980;font-weight:500;">I lifted the design DNA from the screenshot — violet brand, mint primary action, deep-navy hero cards, coral accent, gold timers, a soft floating nav with a raised center button — and reapplied it to your three home topics and 4-tab nav. English / LTR (your strings were English); it flips to RTL with one <span style="font-family:ui-monospace,monospace;font-size:13px;">dir="rtl"</span>. Every block on the right is its own reusable <span style="font-family:ui-monospace,monospace;font-size:13px;">IO&nbsp;*.dc.html</span> component.</p>
+
+      <!-- palette + type strip -->
+      <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:center;margin-top:6px;background:#fff;border:1px solid #E3DFF0;border-radius:18px;padding:16px 20px;">
+        <div style="display:flex;gap:12px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><span style="width:40px;height:40px;border-radius:11px;background:#7C5CFF;"></span><span style="font-family:ui-monospace,monospace;font-size:10px;color:#8B89A6;">violet</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><span style="width:40px;height:40px;border-radius:11px;background:#14D9C4;"></span><span style="font-family:ui-monospace,monospace;font-size:10px;color:#8B89A6;">mint</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><span style="width:40px;height:40px;border-radius:11px;background:#232048;"></span><span style="font-family:ui-monospace,monospace;font-size:10px;color:#8B89A6;">navy</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><span style="width:40px;height:40px;border-radius:11px;background:#FF5B72;"></span><span style="font-family:ui-monospace,monospace;font-size:10px;color:#8B89A6;">coral</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><span style="width:40px;height:40px;border-radius:11px;background:#FFC93C;"></span><span style="font-family:ui-monospace,monospace;font-size:10px;color:#8B89A6;">gold</span></div>
+        </div>
+        <div style="width:1px;height:46px;background:#E3DFF0;"></div>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <span style="font-size:22px;font-weight:800;letter-spacing:-.4px;">Plus Jakarta Sans</span>
+          <span style="font-size:12px;color:#8B89A6;font-weight:600;">Aa · 800 / 700 / 600 / 500 — rounded geometric</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPLIT: screen + library -->
+    <div style="display:grid;grid-template-columns:412px 1fr;gap:38px;align-items:start;">
+
+      <!-- ===== FULL SCREEN ===== -->
+      <div style="position:sticky;top:24px;display:flex;flex-direction:column;gap:14px;">
+        <span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#7C5CFF;">FULL SCREEN — InsideOut Home.dc.html</span>
+        <div style="width:392px;height:812px;position:relative;background:#FBFAFF;border-radius:44px;overflow:hidden;box-shadow:0 34px 80px rgba(35,32,72,.26);border:1px solid #fff;">
+          <!-- status bar -->
+          <div style="position:absolute;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:space-between;padding:16px 28px 0;z-index:7;">
+            <span style="font-size:14px;font-weight:800;color:#211E40;">9:41</span>
+            <div style="display:flex;align-items:center;gap:6px;color:#211E40;">
+              <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".35"/></svg>
+              <svg width="17" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.5 16.4a6 6 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              <div style="display:flex;align-items:center;gap:2px;"><span style="width:22px;height:11px;border:1.6px solid #211E40;border-radius:3px;display:inline-flex;align-items:center;padding:1px;"><span style="width:14px;height:7px;background:#211E40;border-radius:1px;"></span></span><span style="width:2px;height:5px;background:#211E40;border-radius:0 1px 1px 0;"></span></div>
+            </div>
+          </div>
+
+          <!-- scroll content -->
+          <div class="io-scroll" style="position:absolute;top:48px;left:0;right:0;bottom:0;overflow-y:auto;padding:8px 16px 138px;display:flex;flex-direction:column;gap:14px;">
+            <dc-import name="IO Header" user="Lina" greeting="Good morning" hint-size="100%,58px"></dc-import>
+            <dc-import name="IO Banner" title="Welcome back, Lina" subtitle="Log your mood before the day resets to keep your 5-day streak alive" seconds="120" hint-size="100%,118px"></dc-import>
+            <dc-import name="IO MoodCard" streak="5" count="1,204" hint-size="100%,372px"></dc-import>
+            <dc-import name="IO ChildModeCard" hint-size="100%,84px"></dc-import>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding:0 2px;">
+              <span style="font-size:17px;font-weight:800;letter-spacing:-.3px;color:#211E40;">Upcoming tasks</span>
+              <span style="font-size:13px;font-weight:700;color:#7C5CFF;cursor:pointer;">See all</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <dc-import name="IO TaskCard" title="Evening reflection" subtitle="Today · 8:30 PM" accent="#14D9C4" icon="moon" trailing="time" time-label="in 12 min" hint-size="100%,70px"></dc-import>
+              <dc-import name="IO TaskCard" title="Family gratitude" subtitle="Not scheduled yet" accent="#7C5CFF" icon="heart" trailing="remind" hint-size="100%,70px"></dc-import>
+              <dc-import name="IO TaskCard" title="Breathing exercise" subtitle="Done · 7:10 AM" accent="#FFC93C" icon="wind" trailing="done" hint-size="100%,70px"></dc-import>
+            </div>
+          </div>
+
+          <!-- fade + nav -->
+          <div style="position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(to top,#FBFAFF 38%,rgba(251,250,255,0));pointer-events:none;z-index:5;"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:26px 16px 16px;z-index:6;">
+            <dc-import name="IO BottomNav" hint-size="100%,80px"></dc-import>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== COMPONENT LIBRARY ===== -->
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#7C5CFF;">COMPONENT LIBRARY — lift any block on its own</span>
+
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;"><span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#211E40;background:#fff;border:1px solid #E2DDF5;padding:4px 9px;border-radius:7px;">IO Header</span><span style="font-size:12.5px;color:#8B89A6;">Avatar, greeting &amp; action chips</span></div>
+          <div style="background:#fff;border:1px solid #E7E4F2;border-radius:20px;padding:14px 16px;max-width:392px;"><dc-import name="IO Header" user="Lina" greeting="Good morning" hint-size="100%,58px"></dc-import></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;"><span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#211E40;background:#fff;border:1px solid #E2DDF5;padding:4px 9px;border-radius:7px;">IO Banner</span><span style="font-size:12.5px;color:#8B89A6;">Nudge banner with live countdown</span></div>
+          <div style="background:#fff;border:1px solid #E7E4F2;border-radius:20px;padding:16px;max-width:392px;"><dc-import name="IO Banner" title="Welcome back, Lina" subtitle="Log your mood before the day resets to keep your 5-day streak alive" seconds="120" hint-size="100%,118px"></dc-import></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;"><span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#211E40;background:#fff;border:1px solid #E2DDF5;padding:4px 9px;border-radius:7px;">IO MoodCard</span><span style="font-size:12.5px;color:#8B89A6;">Hero daily check-in · tap a mood, log it</span></div>
+          <div style="background:#fff;border:1px solid #E7E4F2;border-radius:20px;padding:16px;max-width:392px;"><dc-import name="IO MoodCard" streak="5" count="1,204" hint-size="100%,372px"></dc-import></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;"><span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#211E40;background:#fff;border:1px solid #E2DDF5;padding:4px 9px;border-radius:7px;">IO ChildModeCard</span><span style="font-size:12.5px;color:#8B89A6;">Toggle into a kid-safe space</span></div>
+          <div style="background:#fff;border:1px solid #E7E4F2;border-radius:20px;padding:16px;max-width:392px;"><dc-import name="IO ChildModeCard" hint-size="100%,84px"></dc-import></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;"><span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#211E40;background:#fff;border:1px solid #E2DDF5;padding:4px 9px;border-radius:7px;">IO TaskCard</span><span style="font-size:12.5px;color:#8B89A6;">3 trailing states: time · remind · done</span></div>
+          <div style="background:#fff;border:1px solid #E7E4F2;border-radius:20px;padding:16px;max-width:392px;display:flex;flex-direction:column;gap:10px;">
+            <dc-import name="IO TaskCard" title="Evening reflection" subtitle="Today · 8:30 PM" accent="#14D9C4" icon="moon" trailing="time" time-label="in 12 min" hint-size="100%,70px"></dc-import>
+            <dc-import name="IO TaskCard" title="Family gratitude" subtitle="Not scheduled yet" accent="#7C5CFF" icon="heart" trailing="remind" hint-size="100%,70px"></dc-import>
+            <dc-import name="IO TaskCard" title="Breathing exercise" subtitle="Done · 7:10 AM" accent="#FFC93C" icon="wind" trailing="done" hint-size="100%,70px"></dc-import>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;"><span style="font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:#211E40;background:#fff;border:1px solid #E2DDF5;padding:4px 9px;border-radius:7px;">IO BottomNav</span><span style="font-size:12.5px;color:#8B89A6;">4 tabs + raised check-in · tap to switch</span></div>
+          <div style="background:#F4F2FB;border:1px solid #E7E4F2;border-radius:20px;padding:30px 16px 16px;max-width:392px;"><dc-import name="IO BottomNav" hint-size="100%,80px"></dc-import></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#7C5CFF"/><circle cx="50" cy="42" r="16" fill="#14D9C4"/><text x="50" y="80" font-family="sans-serif" font-size="17" font-weight="800" fill="#ffffff" text-anchor="middle">IO</text></svg></template></x-dc>
+</body>
+</html>

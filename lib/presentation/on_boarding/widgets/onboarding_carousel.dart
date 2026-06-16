@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'onboarding_item.dart';
 import 'onboarding_indicator.dart';
 import 'onboarding_content.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingCarousel extends StatefulWidget {
   const OnboardingCarousel({super.key});
@@ -55,9 +56,9 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
         ),
 
         Positioned(
-          bottom: 170,
-          left: 0,
-          right: 0,
+          bottom: 140.h,
+          left: 0.w,
+          right: 0.w,
           child: OnboardingIndicator(
             count: contents.length,
             currentIndex: currentPage,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:patient/core/theme/theme.dart';
@@ -306,13 +307,13 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
           children: [
             const TextToSpeechCloud(child: AnimationScreen()),
             Positioned(
-              top: MediaQuery.of(context).padding.top + 8,
-              right: 12,
+              top: MediaQuery.of(context).padding.top + 8.h,
+              right: 12.w,
               child: const FlagSwitch(),
             ),
             Positioned(
-              top: MediaQuery.of(context).padding.top + 8,
-              left: 8,
+              top: MediaQuery.of(context).padding.top + 8.h,
+              left: 8.w,
               child: Material(
                 color: Colors.black.withValues(alpha: 0.35),
                 shape: const CircleBorder(),
@@ -324,19 +325,19 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
               ),
             ),
             Positioned(
-              bottom: 16,
-              left: 16,
+              bottom: 16.h,
+              left: 16.w,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
                   _version,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -349,7 +350,7 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16.h),
                   child: _buildBottomArea(session),
                 ),
               ),
@@ -373,7 +374,7 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
               alignment: Alignment.bottomCenter,
               child: STTWidget(),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14.h),
             _SessionButton(
               label: isFreeForm ? 'End chat' : 'Done',
               onTap: () => _handleDone(session),
@@ -400,22 +401,22 @@ class _AiBearScreenState extends ConsumerState<AiBearScreen> {
       {required IconData icon, required Color color}) {
     return Center(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.28),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: color.withValues(alpha: 0.7), width: 1.5),
+          borderRadius: BorderRadius.circular(30.r),
+          border: Border.all(color: color.withValues(alpha: 0.7), width: 1.5.w),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 18),
-            const SizedBox(width: 8),
+            Icon(icon, color: color, size: 18.sp),
+            SizedBox(width: 8.w),
             Text(
               text,
               style: GoogleFonts.poppins(
                 color: Colors.white,
-                fontSize: 15,
+                fontSize: 15.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -438,24 +439,24 @@ class _SessionButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(30.r),
           border: Border.all(
-              color: Colors.white.withValues(alpha: 0.5), width: 1.5),
+              color: Colors.white.withValues(alpha: 0.5), width: 1.5.w),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle_outline_rounded,
-                color: Colors.white, size: 18),
-            const SizedBox(width: 8),
+            Icon(Icons.check_circle_outline_rounded,
+                color: Colors.white, size: 18.sp),
+            SizedBox(width: 8.w),
             Text(
               label,
               style: GoogleFonts.poppins(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),

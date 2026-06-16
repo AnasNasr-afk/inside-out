@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}</style>
+</helmet>
+<div style="display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #EEEDF6;border-radius:18px;padding:12px 13px;font-family:'Plus Jakarta Sans',system-ui,sans-serif;box-shadow:0 5px 16px rgba(33,30,64,.05);">
+  <div style="{{ tileStyle }}">
+    <sc-if value="{{ isMoon }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></sc-if>
+    <sc-if value="{{ isHeart }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></svg></sc-if>
+    <sc-if value="{{ isWind }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></svg></sc-if>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;">
+    <span style="font-size:14.5px;font-weight:700;color:#211E40;letter-spacing:-.2px;">{{ title }}</span>
+    <span style="font-size:12px;color:#8B89A6;font-weight:500;">{{ subtitle }}</span>
+  </div>
+  <sc-if value="{{ isTime }}" hint-placeholder-val="{{ true }}">
+    <span style="flex:none;display:inline-flex;align-items:center;gap:5px;background:#FFF3D4;color:#A9750E;padding:6px 10px;border-radius:999px;font-size:11.5px;font-weight:800;white-space:nowrap;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{{ timeLabel }}
+    </span>
+  </sc-if>
+  <sc-if value="{{ isRemind }}" hint-placeholder-val="{{ false }}">
+    <button style="flex:none;display:inline-flex;align-items:center;gap:6px;background:#F1ECFF;color:#7C5CFF;border:none;padding:8px 12px;border-radius:11px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Remind me
+    </button>
+  </sc-if>
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+    <span style="flex:none;width:34px;height:34px;border-radius:50%;background:#14D9C4;display:flex;align-items:center;justify-content:center;color:#06342F;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </span>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:72},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Evening reflection&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;subtitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Today · 8:30 PM&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#14D9C4&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;icon&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;moon&quot;,&quot;heart&quot;,&quot;wind&quot;],&quot;default&quot;:&quot;moon&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;trailing&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;time&quot;,&quot;remind&quot;,&quot;done&quot;],&quot;default&quot;:&quot;time&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;timeLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;in 12 min&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#14D9C4';
+    const icon = this.props.icon ?? 'moon';
+    const trailing = this.props.trailing ?? 'time';
+    return {
+      title: this.props.title ?? 'Untitled task',
+      subtitle: this.props.subtitle ?? '',
+      timeLabel: this.props.timeLabel ?? 'soon',
+      tileStyle: { flex: 'none', width: '46px', height: '46px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: accent + '1f', color: accent },
+      isMoon: icon === 'moon', isHeart: icon === 'heart', isWind: icon === 'wind',
+      isTime: trailing === 'time', isRemind: trailing === 'remind', isDone: trailing === 'done'
+    };
+  }
+}
+</script>
+</body>
+</html>

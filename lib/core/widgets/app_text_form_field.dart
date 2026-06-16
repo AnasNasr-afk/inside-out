@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:patient/core/theme/theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextFormField extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
@@ -19,9 +19,9 @@ class AppTextFormField extends StatelessWidget {
 
   // ── Design tokens from screenshot ──────────────────────
   static const _hintColor       = Color(0xFF83859C);
-  static const _borderColor     = Color(0xFFC7C8D2);
+  static const _borderColor     = Color(0xFFE3E1EF); // soft idle border
   static const _labelColor      = Color(0xFF545563);
-  static const _focusedBorder   = Color(0xFF6366F1); // primary purple — predicted
+  static const _focusedBorder   = Color(0xFF7C5CFF); // brand purple
   static const _errorColor      = Color(0xFFE53935); // standard red — predicted
   static const _fillColor       = Color(0xFFFFFFFF); // pure white from screenshot
   static const _inputTextColor  = Color(0xFF1F2033); // near black — predicted from label family
@@ -53,14 +53,14 @@ class AppTextFormField extends StatelessWidget {
         // ── Label above the field ───────────────────────
         Text(
           labelText,
-          style: const TextStyle(
-            fontSize: 15,
+          style: TextStyle(
+            fontSize: 15.sp,
             fontWeight: FontWeight.w600,
             color: _labelColor,
-            letterSpacing: 0.1,
+            letterSpacing: 0.1.sp,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
 
         // ── Input field ─────────────────────────────────
         TextFormField(
@@ -68,8 +68,8 @@ class AppTextFormField extends StatelessWidget {
           controller: controller,
           obscureText: isObscureText ?? false,
           style: inputTextStyle ??
-              const TextStyle(
-                fontSize: 16,
+              TextStyle(
+                fontSize: 16.sp,
                 color: _inputTextColor,
                 fontWeight: FontWeight.w400,
               ),
@@ -78,8 +78,8 @@ class AppTextFormField extends StatelessWidget {
             suffixIcon: suffixIcon,
             hintText: hintText,
             hintStyle: hintStyle ??
-                const TextStyle(
-                  fontSize: 16,
+                TextStyle(
+                  fontSize: 16.sp,
                   color: _hintColor,
                   fontWeight: FontWeight.w400,
                 ),
@@ -91,9 +91,9 @@ class AppTextFormField extends StatelessWidget {
             // ── Padding — tall like screenshot ──────────
             isDense: false,
             contentPadding: contentPadding ??
-                const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 18,
+                EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 18.h,
                 ),
 
             // ── Fill ────────────────────────────────────
@@ -103,40 +103,40 @@ class AppTextFormField extends StatelessWidget {
             // ── Borders ─────────────────────────────────
             enabledBorder: enabledBorder ??
                 OutlineInputBorder(
-                  borderSide: const BorderSide(
+                  borderSide: BorderSide(
                     color: _borderColor,
-                    width: 1.2,
+                    width: 1.2.w,
                   ),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
             focusedBorder: focusedBorder ??
                 OutlineInputBorder(
-                  borderSide: const BorderSide(
+                  borderSide: BorderSide(
                     color: _focusedBorder,
-                    width: 1.5,
+                    width: 1.5.w,
                   ),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide: BorderSide(
                 color: _errorColor,
-                width: 1.2,
+                width: 1.2.w,
               ),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14.r),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide: BorderSide(
                 color: _errorColor,
-                width: 1.5,
+                width: 1.5.w,
               ),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14.r),
             ),
             disabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide: BorderSide(
                 color: _disabledBorder,
-                width: 1,
+                width: 1.w,
               ),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14.r),
             ),
           ),
           validator: (value) => validator(value),

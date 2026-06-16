@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'onboarding_content.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingItem extends StatelessWidget {
   final OnboardingContent content;
@@ -12,24 +13,24 @@ class OnboardingItem extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        content.image.svg(height: 200),
-        const SizedBox(height: 35),
+        content.image.svg(height: 200.h),
+        SizedBox(height: 35.h),
         Text(
           content.title,
           style: GoogleFonts.poppins(
-            fontSize: 18,
+            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
             color: Colors.blueAccent,
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5.h),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Text(
             content.description,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: 16.sp,
               fontWeight: FontWeight.w700,
             ),
           ),

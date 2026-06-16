@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient/core/theme/app_tokens.dart';
 
 import '../../../core/helpers/check_in_helper.dart';
 
@@ -12,309 +13,284 @@ class MoodCheckInCard extends StatefulWidget {
   });
 
   @override
-  State<MoodCheckInCard> createState() =>
-      _MoodCheckInCardState();
+  State<MoodCheckInCard> createState() => _MoodCheckInCardState();
 }
 
-class _MoodCheckInCardState
-    extends State<MoodCheckInCard> {
-  int? _selectedMoodIndex;
+class _MoodCheckInCardState extends State<MoodCheckInCard>
+    with SingleTickerProviderStateMixin {
+  int? _selectedIndex;
+  int? _prevIndex;
 
-  bool _submitted = false;
+  // Scale-pulse controller — triggers on every mood tap
+  late final AnimationController _pulseCtrl;
+  late final Animation<double> _scaleAnim;
 
-  final List<_MoodOption> _moods = const [
-    _MoodOption(
-      emoji: '😄',
-      label: 'Great',
-    ),
-    _MoodOption(
-      emoji: '🙂',
-      label: 'Good',
-    ),
-    _MoodOption(
-      emoji: '😐',
-      label: 'Okay',
-    ),
-    _MoodOption(
-      emoji: '😔',
-      label: 'Low',
-    ),
-    _MoodOption(
-      emoji: '😤',
-      label: 'Frustrated',
-    ),
+  static const _moods = [
+    (label: 'Great', bright: Color(0xFF14D9C4), dark: Color(0xFF0D2A26), icon: Icons.sentiment_very_satisfied_rounded),
+    (label: 'Good',  bright: Color(0xFF5BD17A), dark: Color(0xFF0D2618), icon: Icons.sentiment_satisfied_alt_rounded),
+    (label: 'Okay',  bright: Color(0xFFFFC93C), dark: Color(0xFF2A1E08), icon: Icons.sentiment_neutral_rounded),
+    (label: 'Low',   bright: Color(0xFFFF8C42), dark: Color(0xFF2A1408), icon: Icons.sentiment_dissatisfied_rounded),
+    (label: 'Rough', bright: Color(0xFFFF5B72), dark: Color(0xFF2A0E14), icon: Icons.sentiment_very_dissatisfied_rounded),
+  ];
+
+  static const _circleGradients = [
+    [Color(0xFF17E2CD), Color(0xFF0FBDAD)], // Great - teal
+    [Color(0xFF5BD17A), Color(0xFF3DB85E)], // Good  - green
+    [Color(0xFFFFC93C), Color(0xFFE5A800)], // Okay  - gold
+    [Color(0xFFFF8C42), Color(0xFFE56D20)], // Low   - orange
+    [Color(0xFFFF5B72), Color(0xFFE03550)], // Rough - coral
   ];
 
   @override
   void initState() {
     super.initState();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 380),
+    );
+    _scaleAnim = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 1.0, end: 1.12)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 40,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.12, end: 1.0)
+            .chain(CurveTween(curve: Curves.elasticOut)),
+        weight: 60,
+      ),
+    ]).animate(_pulseCtrl);
 
-    // ── Restore today's check-in ────────────────────
-    _submitted = CheckInHelper.hasCheckedInToday();
-
-    final savedMood =
-    CheckInHelper.getTodayMood();
-
-    if (savedMood != null && savedMood > 0) {
-      _selectedMoodIndex = savedMood - 1;
-    }
+    final saved = CheckInHelper.getTodayMood();
+    if (saved != null && saved > 0) _selectedIndex = saved - 1;
   }
 
-  Future<void> _onMoodSelected(int index) async {
-    // Prevent multiple submissions per day
-    if (_submitted) return;
+  @override
+  void dispose() {
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
 
-    // Save locally
-    await CheckInHelper.saveCheckIn(index + 1);
-
+  Future<void> _select(int i) async {
     setState(() {
-      _selectedMoodIndex = index;
+      _prevIndex = _selectedIndex;
+      _selectedIndex = i;
     });
-
-    Future.delayed(
-      const Duration(milliseconds: 500),
-          () {
-        if (mounted) {
-          setState(() {
-            _submitted = true;
-          });
-        }
-      },
-    );
+    _pulseCtrl.forward(from: 0);
+    await CheckInHelper.saveCheckIn(i + 1);
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 350),
-      transitionBuilder:
-          (child, animation) =>
-          FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-      child: _submitted
-          ? _buildConfirmed()
-          : _buildCheckIn(),
-    );
-  }
-
-  // ── Pre-submission ───────────────────────────────
-  Widget _buildCheckIn() {
-    return Container(
-      key: const ValueKey('checkin'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 18,
-      ),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF6366F1),
-            Color(0xFF818CF8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius:
-        BorderRadius.circular(22),
-      ),
-      child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.r),
+      child: Stack(
         children: [
-          // ── Top row ─────────────────────────
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  'How is ${widget.childName} feeling today?',
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight:
-                    FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 8),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white12,
-                  borderRadius:
-                  BorderRadius.circular(
-                    20,
-                  ),
-                ),
-                child: Text(
-                  _formattedDate(),
-                  style:
-                  GoogleFonts.poppins(
-                    fontSize: 11,
-                    color:
-                    Colors.white70,
-                    fontWeight:
-                    FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
+          Image.asset(
+            'assets/illustrations/Background+Shadow.png',
+            width: double.infinity,
+            fit: BoxFit.fitWidth,
           ),
 
-          const SizedBox(height: 14),
-
-          // ── Emoji row ───────────────────────
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
-            children: List.generate(
-              _moods.length,
-                  (i) {
-                final isSelected =
-                    _selectedMoodIndex == i;
-
-                return GestureDetector(
-                  onTap: () =>
-                      _onMoodSelected(i),
-                  child: AnimatedContainer(
-                    duration:
-                    const Duration(
-                      milliseconds: 180,
-                    ),
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Colors.white
-                          : Colors.white12,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isSelected
-                            ? Colors.white
-                            : Colors.white24,
-                        width: 1.5,
-                      ),
-                      boxShadow: isSelected
-                          ? [
-                        BoxShadow(
-                          color: Colors.black
-                              .withValues(
-                            alpha: 0.12,
-                          ),
-                          blurRadius: 6,
-                          offset:
-                          const Offset(
-                            0,
-                            2,
-                          ),
-                        )
-                      ]
-                          : [],
-                    ),
-                    child: Center(
-                      child: Text(
-                        _moods[i].emoji,
-                        style: TextStyle(
-                          fontSize:
-                          isSelected
-                              ? 24
-                              : 22,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Post-submission ──────────────────────────────
-  Widget _buildConfirmed() {
-    final mood = _moods[_selectedMoodIndex!];
-
-    return Container(
-      key: const ValueKey('confirmed'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 18,
-      ),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF6366F1),
-            Color(0xFF818CF8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius:
-        BorderRadius.circular(22),
-      ),
-      child: Row(
-        children: [
-          // Emoji circle
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: Colors.white12,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white30,
-                width: 1.5,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                mood.emoji,
-                style: const TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 14),
-
-          Expanded(
+          // ── Content ─────────────────────────────────────────────────
+          Padding(
+            padding: EdgeInsets.fromLTRB(15.w, 15.h, 15.w, 15.h),
             child: Column(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Mood logged ✓',
-                  style:
-                  GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight:
-                    FontWeight.w700,
-                    color:
-                    Colors.white,
-                  ),
+                Row(
+                  children: [
+                    // Daily check-in
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(999.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 7.w,
+                            height: 7.h,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF17E2CD),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            'Daily check-in',
+                            style: T.caption().copyWith(
+                              color: Colors.white,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // 5-day streak
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        color: T.gold.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(999.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.local_fire_department_rounded,
+                            size: 12.sp,
+                            color: T.gold,
+                          ),
+                          SizedBox(width: 4.w),
+                          Text(
+                            '5-day streak',
+                            style: T.caption().copyWith(
+                              color: T.gold,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.h),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TweenAnimationBuilder<double>(
+                      key: ValueKey(_selectedIndex),
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeInOut,
+                      builder: (context, t, _) {
+                        final from = _circleGradients[_prevIndex ?? _selectedIndex ?? 0];
+                        final to   = _circleGradients[_selectedIndex ?? 0];
+                        final fromShadow = _moods[_prevIndex ?? _selectedIndex ?? 0].bright;
+                        final toShadow   = _moods[_selectedIndex ?? 0].bright;
+
+                        final c1 = Color.lerp(from[0], to[0], t)!;
+                        final c2 = Color.lerp(from[1], to[1], t)!;
+                        final shadow = Color.lerp(fromShadow, toShadow, t)!;
+
+                        return AnimatedBuilder(
+                          animation: _scaleAnim,
+                          builder: (context, child) => Transform.scale(
+                            scale: _scaleAnim.value,
+                            child: child,
+                          ),
+                          child: Container(
+                            width: 70.w,
+                            height: 70.h,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [c1, c2],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: shadow.withValues(alpha: 0.45),
+                                  blurRadius: 16.r,
+                                  offset: Offset(0, 4.h),
+                                ),
+                              ],
+                            ),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 250),
+                              transitionBuilder: (child, anim) => ScaleTransition(
+                                scale: anim,
+                                child: FadeTransition(opacity: anim, child: child),
+                              ),
+                              child: Icon(
+                                _moods[_selectedIndex ?? 0].icon,
+                                key: ValueKey(_selectedIndex),
+                                size: 40.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    SizedBox(width: 16.w),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'How is ${widget.childName}\nfeeling today?',
+                            style: T.screenTitle().copyWith(
+                              color: Colors.white,
+                              fontSize: 22.sp,
+                              height: 1.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
 
-                const SizedBox(height: 3),
+                SizedBox(height: 30.h),
 
-                Text(
-                  '${widget.childName} is feeling ${mood.label} today',
-                  style:
-                  GoogleFonts.poppins(
-                    fontSize: 12,
-                    color:
-                    Colors.white70,
-                  ),
+                // ── Mood dots ──────────────────────────────────────────
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(_moods.length, (i) {
+                    final m = _moods[i];
+                    final selected = _selectedIndex == i;
+
+                    return GestureDetector(
+                      onTap: () => _select(i),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 180),
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                              color: selected ? m.bright : m.dark,
+                              shape: BoxShape.circle,
+                            ),
+                            child: selected
+                                ? Center(
+                                    child: Icon(
+                                      Icons.check_rounded,
+                                      size: 20.sp,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          SizedBox(height: 5.h),
+                          Text(
+                            m.label,
+                            style: T.caption().copyWith(
+                              fontSize: 12.sp,
+                              color: selected
+                                  ? Colors.white
+                                  : Colors.white.withValues(alpha: 0.45),
+                              fontWeight: selected
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),
@@ -323,35 +299,4 @@ class _MoodCheckInCardState
       ),
     );
   }
-
-  String _formattedDate() {
-    final now = DateTime.now();
-
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-
-    return '${months[now.month - 1]} ${now.day}';
-  }
-}
-
-class _MoodOption {
-  final String emoji;
-  final String label;
-
-  const _MoodOption({
-    required this.emoji,
-    required this.label,
-  });
 }

@@ -1,51 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/cubits/task_cubit/task_cubit.dart';
-import '../../../core/helpers/shared_pref.dart';
-import '../../../core/helpers/shared_pref_keys.dart';
-import '../../../core/models/task_model.dart';
-import '../../../core/routing/routes.dart';
-import '../../../core/theme/theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient/core/helpers/shared_pref.dart';
+import 'package:patient/core/helpers/shared_pref_keys.dart';
+import 'package:patient/core/models/task_model.dart';
+import 'package:patient/core/routing/routes.dart';
+import 'package:patient/core/theme/app_tokens.dart';
+import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task});
   final TaskModel task;
 
-  String get _statusLabel {
+  // ── Derived state ─────────────────────────────────────────────────────────
+
+  Color get _accentColor {
+    if (task.isCompleted) return T.mint;
+    if (task.isOverdue) return T.coral;
+    return T.primary;
+  }
+
+  Color get _badgeBg {
+    if (task.isCompleted) return T.mintTint;
+    if (task.isOverdue) return T.coralTint;
+    return T.goldTint;
+  }
+
+  Color get _badgeText {
+    if (task.isCompleted) return T.mintDeep;
+    if (task.isOverdue) return T.coral;
+    return T.goldText;
+  }
+
+  String get _badgeLabel {
     if (task.isCompleted) return 'Completed';
     if (task.isOverdue) return 'Overdue';
     return 'Pending';
   }
 
-  Color get _statusColor {
-    if (task.isCompleted) return const Color(0xFF059669);
-    if (task.isOverdue) return const Color(0xFFDC2626);
-    return AppTheme.orange;
+  String get _metaText {
+    if (task.isCompleted) {
+      return task.completedAt != null
+          ? 'Completed · ${task.formattedDueDate}'
+          : 'Completed';
+    }
+    if (task.isOverdue) return 'Overdue · ${task.formattedDueDate}';
+    return 'Due · ${task.timeLabel.replaceFirst('Due ', '')}';
   }
 
-  Color get _statusBg {
-    if (task.isCompleted) return const Color(0xFFD1FAE5);
-    if (task.isOverdue) return const Color(0xFFFFE4E4);
-    return const Color(0xFFFEF3C7);
-  }
-
-  Color get _timeLabelColor {
-    if (task.isCompleted) return const Color(0xFF059669);
-    if (task.isOverdue) return const Color(0xFFDC2626);
-    return const Color(0xFF6B7280);
-  }
-
-  IconData get _timeLabelIcon {
-    if (task.isCompleted) return Icons.check_circle_outline_rounded;
-    if (task.isOverdue) return Icons.warning_amber_rounded;
-    return Icons.calendar_today_rounded;
+  Color get _metaColor {
+    if (task.isCompleted) return T.mintDeep;
+    if (task.isOverdue) return T.coral;
+    return T.muted;
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return GestureDetector(
       onTap: () async {
         final result = await Navigator.pushNamed(
@@ -55,104 +64,155 @@ class TaskCard extends StatelessWidget {
         );
         if (result == true && context.mounted) {
           final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
-          if (childId != 0) {
-            TaskCubit.get(context).getTasks(childId);
-          }
+          if (childId != 0) TaskCubit.get(context).getTasks(childId);
         }
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+      child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: task.isCompleted
-                ? const Color(0xFF10B981).withValues(alpha: 0.3)
-                : const Color(0xFF6B7280).withValues(alpha: 0.1),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          color: T.card,
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: T.cardShadow,
         ),
-        child: Column(
-          children: [
-            // ── Top row ────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      task.title,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        decoration: task.isCompleted ? TextDecoration.lineThrough : null,
-                        color: task.isCompleted
-                            ? const Color(0xFF9CA3AF)
-                            : const Color(0xFF1F2937),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: _statusBg,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      _statusLabel,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: _statusColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const Divider(height: 1, color: Color(0xFFF3F4F6)),
-
-            // ── Bottom meta row ─────────────────────────
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  Icon(
-                    _timeLabelIcon,
-                    size: 13,
-                    color: _timeLabelColor,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    task.timeLabel,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontSize: 12,
-                      color: _timeLabelColor,
-                      fontWeight: task.isOverdue ? FontWeight.w700 : FontWeight.normal,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            if (task.isCompleted)
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // ── Left accent bar ──────────────────────────────────────────
               Container(
-                height: 4,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF10B981),
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                width: 5.w,
+                decoration: BoxDecoration(
+                  color: _accentColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.r),
+                    bottomLeft: Radius.circular(20.r),
+                  ),
                 ),
               ),
-          ],
+
+              // ── Content ──────────────────────────────────────────────────
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+                  child: Row(
+                    children: [
+                      // Icon tile
+                      _IconTile(completed: task.isCompleted, color: _accentColor),
+                      SizedBox(width: 12.w),
+
+                      // Title + meta
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              task.title,
+                              style: T.cardTitle().copyWith(
+                                decoration: task.isCompleted
+                                    ? TextDecoration.lineThrough
+                                    : null,
+                                decorationColor: const Color(0xFF9A98B6),
+                                color: task.isCompleted
+                                    ? const Color(0xFF9A98B6)
+                                    : T.ink,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 5.h),
+                            Text(
+                              _metaText,
+                              style: T.caption().copyWith(color: _metaColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+
+                      // Badge
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 5.h),
+                        decoration: BoxDecoration(
+                          color: _badgeBg,
+                          borderRadius: BorderRadius.circular(999.r),
+                        ),
+                        child: Text(
+                          _badgeLabel,
+                          style: T.badge().copyWith(color: _badgeText),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _IconTile extends StatelessWidget {
+  const _IconTile({required this.completed, required this.color});
+  final bool completed;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    if (completed) {
+      return Container(
+        width: 40.w,
+        height: 40.h,
+        decoration: BoxDecoration(
+          color: T.mint,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Icon(Icons.check_rounded, color: Colors.white, size: 22.sp),
+      );
+    }
+
+    // Dashed border tile for pending / overdue
+    return SizedBox(
+      width: 40.w,
+      height: 40.h,
+      child: CustomPaint(
+        painter: _DashedBorderPainter(color: color),
+      ),
+    );
+  }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  const _DashedBorderPainter({required this.color});
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.8.w
+      ..style = PaintingStyle.stroke;
+
+    final dashLen = 4.0.r;
+    final gap = 3.0.r;
+    final r = 12.0.r;
+    final pad = 1.0.r;
+
+    final rect = RRect.fromLTRBR(
+      pad, pad, size.width - pad, size.height - pad, Radius.circular(r));
+
+    final path = Path()..addRRect(rect);
+    final metric = path.computeMetrics().first;
+    double dist = 0;
+    while (dist < metric.length) {
+      final seg = metric.extractPath(dist, dist + dashLen);
+      canvas.drawPath(seg, paint);
+      dist += dashLen + gap;
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedBorderPainter old) => old.color != color;
 }

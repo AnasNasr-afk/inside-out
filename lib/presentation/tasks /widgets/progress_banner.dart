@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient/core/theme/app_tokens.dart';
 
 class ProgressBanner extends StatelessWidget {
   const ProgressBanner({
@@ -13,25 +15,19 @@ class ProgressBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percent = totalTasks > 0 ? completedTasks / totalTasks : 0.0;
+    final pctInt = (percent * 100).round();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF818CF8)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          borderRadius: BorderRadius.circular(24.r),
+          boxShadow: T.primaryCta,
+          image: const DecorationImage(
+            image: AssetImage('assets/illustrations/tasksBackgroud.png'),
+            fit: BoxFit.cover,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.35),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
         ),
         child: Row(
           children: [
@@ -39,42 +35,39 @@ class ProgressBanner extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Weekly Progress',
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
-                  ),
-                  const SizedBox(height: 4),
                   Text(
-                    '$completedTasks of $totalTasks tasks completed',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
+                    'Weekly Progress',
+                    style: T.caption().copyWith(
+                      color: Colors.white.withValues(alpha: 0.75),
+                      fontSize: 14.sp,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 5.h),
+                  Text(
+                    '$completedTasks of $totalTasks tasks completed',
+                    style: T.sectionHeader().copyWith(
+                      color: Colors.white,
+                      fontSize: 25.sp,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                  SizedBox(height: 14.h),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(999.r),
                     child: LinearProgressIndicator(
                       value: percent,
-                      backgroundColor: Colors.white24,
-                      valueColor:
-                      const AlwaysStoppedAnimation(Colors.white),
-                      minHeight: 7,
+                      backgroundColor: Colors.white.withValues(alpha: 0.22),
+                      valueColor: const AlwaysStoppedAnimation(Colors.white),
+                      minHeight: 7.h,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 20.w),
             Text(
-              '${(percent * 100).round()}%',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -1,
-              ),
+              '$pctInt%',
+              style: T.bigNumeral().copyWith(color: Colors.white),
             ),
           ],
         ),

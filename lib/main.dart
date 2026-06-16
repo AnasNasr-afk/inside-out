@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:rive/rive.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
@@ -43,12 +44,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Patient App',
-      theme: AppTheme.lightTheme(),
-      onGenerateRoute: AppRouter().onGenerateRoute,
-      initialRoute: Routes.splashScreen,
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Patient App',
+        theme: AppTheme.lightTheme(),
+        onGenerateRoute: AppRouter().onGenerateRoute,
+        initialRoute: Routes.splashScreen,
+      ),
     );
   }
 }

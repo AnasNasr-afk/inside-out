@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
+import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/tasks%20/widgets/progress_banner.dart';
 import 'package:patient/presentation/tasks%20/widgets/task_card.dart';
 import 'package:patient/presentation/tasks%20/widgets/task_header.dart';
@@ -52,24 +54,27 @@ class _TasksScreenState extends State<TasksScreen> {
   }
 
   List<TaskModel> _filterTasks(List<TaskModel> tasks) {
+    final visible = tasks.where((t) => !t.isHidden && !t.isOverdue).toList();
     switch (_selectedFilter) {
       case 'Pending':
-        return tasks.where((t) => !t.isCompleted).toList();
+        return visible.where((t) => !t.isCompleted).toList();
       case 'Completed':
-        return tasks.where((t) => t.isCompleted).toList();
+        return visible.where((t) => t.isCompleted).toList();
       default:
-        return tasks;
+        return visible;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return ColoredBox(
+      color: T.appBg,
+      child: SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TaskHeader(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           BlocBuilder<TaskCubit, TaskStates>(
             builder: (context, state) {
               final cubit = TaskCubit.get(context);
@@ -79,43 +84,50 @@ class _TasksScreenState extends State<TasksScreen> {
               );
             },
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           _buildFilterChips(),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Expanded(child: _buildTaskList()),
         ],
+      ),
       ),
     );
   }
 
   Widget _buildFilterChips() {
     return SizedBox(
-      height: 36,
+      height: 40.h,
       child: ListView.separated(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         itemCount: _filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => SizedBox(width: 8.w),
         itemBuilder: (context, i) {
           final active = _selectedFilter == _filters[i];
           return GestureDetector(
             onTap: () => setState(() => _selectedFilter = _filters[i]),
             child: AnimatedContainer(
+              alignment: Alignment.center,
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: active ? const Color(0xFF6366F1) : Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                color: active ? T.primary : T.card,
+                borderRadius: BorderRadius.circular(999.r),
+                border: active ? null : Border.all(color: T.border),
                 boxShadow: active
-                    ? [BoxShadow(color: const Color(0xFF6366F1).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]
-                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6)],
+                    ? [BoxShadow(
+                        color: T.primary.withValues(alpha: 0.28),
+                        blurRadius: 8.r,
+                        offset: Offset(0, 4.h),
+                      )]
+                    : null,
               ),
               child: Text(
                 _filters[i],
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: active ? Colors.white : const Color(0xFF6B7280),
+                style: T.badge().copyWith(
+                  fontSize: 14.sp,
+                  color: active ? Colors.white : T.muted,
                 ),
               ),
             ),
@@ -135,6 +147,7 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Text(
           'Could not load tasks.\nPlease log in again.',
           textAlign: TextAlign.center,
+
         ),
       );
     }
@@ -150,11 +163,27 @@ class _TasksScreenState extends State<TasksScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(state.message, textAlign: TextAlign.center),
-                const SizedBox(height: 12),
+                Text(
+                    state.message,
+                    style: T.body().copyWith(
+                      color: T.muted,
+                      fontSize: 18.sp,
+                    ),
+                    textAlign: TextAlign.center),
+                SizedBox(height: 12.h),
                 TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: T.primary,
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999.r),
+                    ),
+                  ),
                   onPressed: _fetchTasks,
-                  child: const Text('Retry'),
+                  child: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white)
+                  ),
                 ),
               ],
             ),
@@ -166,12 +195,13 @@ class _TasksScreenState extends State<TasksScreen> {
           if (filtered.isEmpty) {
             return const Center(child: Text('No tasks found.'));
           }
+          final navBottom = MediaQuery.of(context).padding.bottom + 96.h;
           return RefreshIndicator(
             onRefresh: () async => _fetchTasks(),
             child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, navBottom),
               itemCount: filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) => SizedBox(height: 12.h),
               itemBuilder: (context, index) => TaskCard(task: filtered[index]),
             ),
           );

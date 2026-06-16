@@ -7,6 +7,7 @@ import '../core/helpers/shared_pref_keys.dart';
 import '../core/theme/theme.dart';
 import '../gen/assets.gen.dart';
 import '../core/routing/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -47,12 +48,12 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Assets.logos.lgNeurotrack.svg(width: 100),
-            const SizedBox(height: 20),
+            Assets.logos.lgNeurotrack.svg(width: 100.w),
+            SizedBox(height: 20.h),
             Text(
               "InsideOut",
               style: GoogleFonts.poppins(
-                fontSize: 24,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
                 color: AppTheme.secondaryColor,
               ),

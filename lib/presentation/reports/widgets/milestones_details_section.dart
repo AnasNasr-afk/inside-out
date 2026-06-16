@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patient/core/models/responses/child_report_model.dart';
 import 'package:patient/presentation/reports/widgets/report_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MilestonesDetailsSection extends StatefulWidget {
   const MilestonesDetailsSection({super.key, required this.reports});
@@ -22,7 +23,7 @@ class _MilestoneDetailsSectionState extends State<MilestonesDetailsSection> {
     if (widget.reports.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
+          padding: EdgeInsets.symmetric(vertical: 32.h),
           child: Text(
             'No reports yet',
             style: tt.bodyMedium?.copyWith(color: Colors.grey),
@@ -38,7 +39,7 @@ class _MilestoneDetailsSectionState extends State<MilestonesDetailsSection> {
           'Session Reports',
           style: tt.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         ...List.generate(widget.reports.length, (i) {
           final entry = widget.reports[i];
           return Column(
@@ -51,7 +52,7 @@ class _MilestoneDetailsSectionState extends State<MilestonesDetailsSection> {
                 onTap: () =>
                     setState(() => _openIndex = _openIndex == i ? null : i),
               ),
-              const Divider(color: ReportColors.divider, height: 1),
+              Divider(color: ReportColors.divider, height: 1.h),
             ],
           );
         }),
@@ -83,15 +84,15 @@ class _ReportTile extends StatelessWidget {
       children: [
         InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: EdgeInsets.symmetric(vertical: 16.h),
             child: Row(
               children: [
                 Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.only(right: 12),
+                  width: 8.w,
+                  height: 8.h,
+                  margin: EdgeInsets.only(right: 12.w),
                   decoration: const BoxDecoration(
                     color: ReportColors.completedIcon,
                     shape: BoxShape.circle,
@@ -106,7 +107,7 @@ class _ReportTile extends StatelessWidget {
                         Text(
                           specialist,
                           style: tt.bodyMedium?.copyWith(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: const Color(0xFF6B7280),
                           ),
                         ),
@@ -128,12 +129,12 @@ class _ReportTile extends StatelessWidget {
         AnimatedCrossFade(
           firstChild: const SizedBox.shrink(),
           secondChild: Padding(
-            padding: const EdgeInsets.only(bottom: 16, left: 20),
+            padding: EdgeInsets.only(bottom: 16.h, left: 20.w),
             child: Text(
               content,
               style: tt.bodyMedium?.copyWith(
                 color: const Color(0xFF374151),
-                height: 1.6,
+                height: 1.6.h,
               ),
             ),
           ),

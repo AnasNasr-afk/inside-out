@@ -9,7 +9,7 @@ part 'openai_repository.g.dart';
 class PolyAIRepository {
   final List<Map<String, String>> _history = [];
 
-  static const _model = 'gpt-4o';
+  static const _model = 'gpt-4.1';
   static const _url = 'https://api.openai.com/v1/chat/completions';
 
   static const _systemPrompt = """
@@ -149,6 +149,49 @@ Poly: "You said your hand was hurting before — it sounds like it is still the 
     }
   }
 
+  /// Injects a short memory summary from past sessions so Poly can reference
+  /// what the child struggled with or achieved before. Call after primeWithTaskContext.
+  void primeWithChildMemory(String memory) {
+    if (memory.trim().isEmpty) return;
+    _history.add({
+      'role': 'system',
+      'content':
+          'Memory from past sessions with this child: $memory '
+          'Reference this naturally when relevant — for example, if they '
+          'struggled with something before, acknowledge it warmly. '
+          'Never read the memory out like a list. Weave it in naturally.',
+    });
+  }
+
+  /// Frames the session as a warm reflection chat about a task the child has
+  /// ALREADY completed — not a coaching session. Poly has just asked what was
+  /// hard or what they enjoyed, so this steers every response to react to the
+  /// child's actual words like a real friend, instead of defaulting to a
+  /// generic physical task tip. Call once per session right after clearHistory().
+  void primeWithReflection({
+    required String taskTitle,
+    required String taskDescription,
+  }) {
+    final brief = taskDescription.trim().isEmpty
+        ? ''
+        : ' Here is what they were asked to do: $taskDescription.';
+    _history.add({
+      'role': 'system',
+      'content':
+          'This session is a friendly reflection chat, not a coaching session. '
+          'The child has ALREADY finished this task: "$taskTitle".$brief '
+          'You just asked them what was hard about it or what they liked. '
+          'Listen closely to what they actually say and respond to THAT, '
+          'echoing their own words. React like a real friend who is genuinely '
+          'curious about their day — specific, warm, and real. '
+          'Do NOT give a "try this now" physical tip unless they ask for help '
+          'or mention pain. Do NOT give generic praise like "Great job" on its '
+          'own — always name the specific thing they did or felt. '
+          'Keep it to 2 or 3 short sentences. You may ask one gentle follow-up '
+          'question about what they just shared.',
+    });
+  }
+
   /// Called once per session right after clearHistory().
   /// Injects the specialist's task brief as a supplemental system message so
   /// every response in the session is anchored to the task instructions.
@@ -272,8 +315,10 @@ Output format — copy exactly, fill in brackets, ONE LINE, NO NEWLINES:
           {'role': 'system', 'content': _systemPrompt},
           ..._history,
         ],
-        'max_tokens': 360,
+        'max_tokens': 180,
         'temperature': 0.82,
+        'frequency_penalty': 0.4,
+        'presence_penalty': 0.3,
       }),
     );
 
