@@ -56,7 +56,7 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
         ),
 
         Positioned(
-          bottom: 170.h,
+          bottom: 140.h,
           left: 0.w,
           right: 0.w,
           child: OnboardingIndicator(

@@ -114,6 +114,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
         child: Scaffold(
         backgroundColor: const Color(0xFFFBFAFF),
         appBar: AppBar(
+          centerTitle: false,
           backgroundColor: const Color(0xFFFBFAFF),
           elevation: 0,
           scrolledUnderElevation: 0,
@@ -133,19 +134,16 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             ),
           ),
           // ── Fades in once title scrolls out of view ──
-          title: AnimatedOpacity(
-            opacity: _showAppBarTitle ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 180),
-            child: Text(
-              task.title,
-              overflow: TextOverflow.ellipsis,
+            title: Text(
+            'TASK DETAIL',
+              textAlign: TextAlign.start,
               style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF211E40),
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.2,
+                color: const Color(0xFF8B89A6),
               ),
             ),
-          ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(1.h),
             child: AnimatedOpacity(
@@ -165,15 +163,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ── Overline + hero title ────────────────
-                    Text(
-                      'TASK DETAIL',
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.2,
-                        color: const Color(0xFF8B89A6),
-                      ),
-                    ),
+
                     SizedBox(height: 6.h),
                     Text(
                       task.title,

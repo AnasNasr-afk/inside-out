@@ -108,6 +108,7 @@ class _TasksScreenState extends State<TasksScreen> {
           return GestureDetector(
             onTap: () => setState(() => _selectedFilter = _filters[i]),
             child: AnimatedContainer(
+              alignment: Alignment.center,
               duration: const Duration(milliseconds: 200),
               padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
@@ -125,7 +126,7 @@ class _TasksScreenState extends State<TasksScreen> {
               child: Text(
                 _filters[i],
                 style: T.badge().copyWith(
-                  fontSize: 13.sp,
+                  fontSize: 14.sp,
                   color: active ? Colors.white : T.muted,
                 ),
               ),
@@ -146,6 +147,7 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Text(
           'Could not load tasks.\nPlease log in again.',
           textAlign: TextAlign.center,
+
         ),
       );
     }
@@ -161,11 +163,27 @@ class _TasksScreenState extends State<TasksScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(state.message, textAlign: TextAlign.center),
+                Text(
+                    state.message,
+                    style: T.body().copyWith(
+                      color: T.muted,
+                      fontSize: 18.sp,
+                    ),
+                    textAlign: TextAlign.center),
                 SizedBox(height: 12.h),
                 TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: T.primary,
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999.r),
+                    ),
+                  ),
                   onPressed: _fetchTasks,
-                  child: const Text('Retry'),
+                  child: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white)
+                  ),
                 ),
               ],
             ),

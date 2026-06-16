@@ -261,11 +261,11 @@ class _TaskCard extends StatelessWidget {
     decorationColor: const Color(0xFF9CA3AF),
   );
   static final _subStyle = GoogleFonts.poppins(
-    fontSize: 12.sp,
+    fontSize: 13.sp,
     color: const Color(0xFF6B7280),
   );
   static final _overdueSub = GoogleFonts.poppins(
-    fontSize: 12.sp,
+    fontSize: 13.sp,
     color: const Color(0xFFEF4444),
   );
 

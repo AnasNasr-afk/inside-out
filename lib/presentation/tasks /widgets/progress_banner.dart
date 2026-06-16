@@ -39,7 +39,7 @@ class ProgressBanner extends StatelessWidget {
                     'Weekly Progress',
                     style: T.caption().copyWith(
                       color: Colors.white.withValues(alpha: 0.75),
-                      fontSize: 13.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -47,7 +47,7 @@ class ProgressBanner extends StatelessWidget {
                     '$completedTasks of $totalTasks tasks completed',
                     style: T.sectionHeader().copyWith(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 25.sp,
                       letterSpacing: -0.2,
                     ),
                   ),

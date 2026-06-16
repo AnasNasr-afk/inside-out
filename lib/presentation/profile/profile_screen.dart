@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:patient/core/theme/theme.dart';
+import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/core/models/responses/parent_child_response_model.dart';
+import 'package:patient/presentation/profile/widgets/care_team_card.dart';
+import 'package:patient/presentation/profile/widgets/child_card.dart';
 import 'package:patient/presentation/profile/widgets/menu_item.dart';
 import 'package:patient/presentation/profile/widgets/person_row.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,9 +31,11 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, ParentChildResponseModel? userData) {
+    final navBottom = MediaQuery.of(context).padding.bottom + 96.h;
     return SafeArea(
+      bottom: false,
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+        padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, navBottom),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,59 +48,60 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-
-            // ── Child hero card ───────────────────────────────────────
-            _ChildHeroCard(userData: userData),
-            SizedBox(height: 16.h),
-
-            // ── Care team ─────────────────────────────────────────────
-            Text(
-              'Care Team',
-              style: GoogleFonts.poppins(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF6B7280),
-              ),
-            ),
-            SizedBox(height: 10.h),
+            ChildCard(userData: userData),
+            SizedBox(height: 20.h),
             Row(
               children: [
-                Expanded(child: _CareTeamCard(
-                  icon: Icons.person_rounded,
-                  avatarColor: AppTheme.orange.withValues(alpha: 0.15),
-                  iconColor: AppTheme.orange,
-                  badgeLabel: 'Parent',
-                  badgeColor: AppTheme.orange.withValues(alpha: 0.1),
-                  badgeTextColor: AppTheme.orange,
-                  name: userData?.parentName ?? 'Parent',
-                  detail: userData?.parentEmail ?? '',
-                  initials: getInitials(userData?.parentName ?? ''),
-                )),
+                Expanded(
+                  child: CareTeamCard(
+                    avatarColor: T.coralTint,
+                    iconColor: T.coral,
+                    badgeLabel: 'Parent',
+                    badgeColor: T.coralTint,
+                    badgeTextColor: T.coral,
+                    name: (userData?.parentName.isNotEmpty ?? false)
+                        ? userData!.parentName
+                        : 'Parent',
+                    detail: (userData?.parentEmail.isNotEmpty ?? false)
+                        ? userData!.parentEmail
+                        : 'Email',
+                    initials: getInitials(userData?.parentName ?? ''),
+                  ),
+                ),
                 SizedBox(width: 12.w),
-                Expanded(child: _CareTeamCard(
-                  icon: Icons.medical_services_rounded,
-                  avatarColor: const Color(0xFFE0F2FE),
-                  iconColor: const Color(0xFF0369A1),
-                  badgeLabel: 'Specialist',
-                  badgeColor: const Color(0xFFE0F2FE),
-                  badgeTextColor: const Color(0xFF0369A1),
-                  name: userData?.specialistName.isNotEmpty == true
-                      ? userData!.specialistName
-                      : 'Not assigned',
-                  detail: userData?.specialistEmail ?? '',
-                )),
+                Expanded(
+                  child: CareTeamCard(
+                    iconAsset: 'assets/illustrations/specialistIcon.png',
+                    avatarColor: T.primaryTint,
+                    iconColor: T.primary,
+                    badgeLabel: 'Specialist',
+                    badgeColor: T.primaryTint,
+                    badgeTextColor: T.primary,
+                    name: (userData?.specialistName.isNotEmpty ?? false)
+                        ? userData!.specialistName
+                        : 'Not assigned',
+                    detail: (userData?.specialistEmail.isNotEmpty ?? false)
+                        ? userData!.specialistEmail
+                        : 'Email',
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 16.h),
-
-            // ── Reports button ────────────────────────────────────────
+            SizedBox(height: 20.h),
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, Routes.reportScreen),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
                 decoration: BoxDecoration(
-                  color: ReportColors.salmon,
+                  gradient: const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Color(0xFFFF7E6B),
+                      Color(0xFFFF5B72),
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Row(
@@ -109,7 +114,7 @@ class ProfileScreen extends StatelessWidget {
                             'Session Reports',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 0.3,
                             ),
@@ -119,7 +124,7 @@ class ProfileScreen extends StatelessWidget {
                             'View all therapy session reports',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.sp,
+                              fontSize: 13.sp,
                               height: 1.4,
                             ),
                           ),
@@ -144,30 +149,34 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-
-            // ── Menu items ────────────────────────────────────────────
             MenuItem(
               label: 'Help & FAQ',
+              iconPath: 'assets/illustrations/help&FAQIcon.png',
               onTap: () => Navigator.pushNamed(context, Routes.helpFaqScreen),
             ),
             MenuItem(
               label: 'Terms & Conditions',
-              onTap: () => _launchUrl('https://anasnasr-afk.github.io/inside-out/terms.html'),
+              iconPath: 'assets/illustrations/termsIcon.png',
+              onTap: () => _launchUrl(
+                  'https://anasnasr-afk.github.io/inside-out/terms.html'),
             ),
             MenuItem(
               label: 'Privacy Policy',
-              onTap: () => _launchUrl('https://anasnasr-afk.github.io/inside-out/privacy.html'),
+              iconPath: 'assets/illustrations/privacyIcon.png',
+              onTap: () => _launchUrl(
+                  'https://anasnasr-afk.github.io/inside-out/privacy.html'),
             ),
             MenuItem(
               label: 'About App',
+              iconPath: 'assets/illustrations/aboutAppIcon.png',
               onTap: () => Navigator.pushNamed(context, Routes.aboutAppScreen),
             ),
             MenuItem(
               label: 'Log Out',
+              iconPath: 'assets/illustrations/logoutIcon.png',
               isDestructive: true,
               onTap: () => _showLogoutDialog(context),
             ),
-            SizedBox(height: 16.h),
           ],
         ),
       ),
@@ -177,244 +186,10 @@ class ProfileScreen extends StatelessWidget {
 
 // ── Child hero card ────────────────────────────────────────────────────────────
 
-class _ChildHeroCard extends StatelessWidget {
-  const _ChildHeroCard({required this.userData});
-  final ParentChildResponseModel? userData;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5.w),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12.r,
-            offset: Offset(0, 4.h),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 20.h),
-            child: Row(
-              children: [
-                Container(
-                  width: 64.w,
-                  height: 64.h,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEAF3DE),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.mood_rounded,
-                    color: const Color(0xFF3B6D11),
-                    size: 32.sp,
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        userData?.childName ?? 'Child Name',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF1F2937),
-                        ),
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        '${userData?.age ?? 0} years old',
-                        style: GoogleFonts.poppins(
-                          fontSize: 13.sp,
-                          color: const Color(0xFF6B7280),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEAF3DE),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(
-                    'Child',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF3B6D11),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (userData?.description.isNotEmpty == true)
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                  horizontal: 20.w, vertical: 12.h),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFB),
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(20.r)),
-                border: Border(
-                    top: BorderSide(
-                        color: const Color(0xFFE5E7EB), width: 0.5.w)),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.psychology_outlined,
-                      size: 15.sp, color: const Color(0xFF9CA3AF)),
-                  SizedBox(width: 8.w),
-                  Text(
-                    'Case: ',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12.sp,
-                      color: const Color(0xFF9CA3AF),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      userData?.description ?? '',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF374151),
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
 
 // ── Care team compact card ─────────────────────────────────────────────────────
 
-class _CareTeamCard extends StatelessWidget {
-  const _CareTeamCard({
-    required this.icon,
-    required this.avatarColor,
-    required this.iconColor,
-    required this.badgeLabel,
-    required this.badgeColor,
-    required this.badgeTextColor,
-    required this.name,
-    required this.detail,
-    this.initials,
-  });
 
-  final IconData icon;
-  final Color avatarColor;
-  final Color iconColor;
-  final String badgeLabel;
-  final Color badgeColor;
-  final Color badgeTextColor;
-  final String name;
-  final String detail;
-  final String? initials;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(14.r),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5.w),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8.r,
-            offset: Offset(0, 2.h),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40.w,
-                height: 40.h,
-                decoration: BoxDecoration(
-                  color: avatarColor,
-                  shape: BoxShape.circle,
-                ),
-                child: initials != null
-                    ? Center(
-                        child: Text(
-                          initials!,
-                          style: TextStyle(
-                            color: iconColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      )
-                    : Icon(icon, color: iconColor, size: 20.sp),
-              ),
-              const Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 8.w, vertical: 3.h),
-                decoration: BoxDecoration(
-                  color: badgeColor,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Text(
-                  badgeLabel,
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w600,
-                    color: badgeTextColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12.h),
-          Text(
-            name,
-            style: GoogleFonts.poppins(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF1F2937),
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          if (detail.isNotEmpty)
-            Text(
-              detail,
-              style: GoogleFonts.poppins(
-                fontSize: 11.sp,
-                color: const Color(0xFF9CA3AF),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-        ],
-      ),
-    );
-  }
-}
 
 // ── URL launcher ──────────────────────────────────────────────────────────────
 

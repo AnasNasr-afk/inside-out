@@ -54,19 +54,19 @@ class T {
         fontSize: 28.sp, fontWeight: FontWeight.w800, letterSpacing: -0.6, color: ink);
 
   static TextStyle sectionHeader() => GoogleFonts.plusJakartaSans(
-        fontSize: 17.sp, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: ink);
+        fontSize: 18.sp, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: ink);
 
   static TextStyle cardTitle() => GoogleFonts.plusJakartaSans(
-        fontSize: 15.sp, fontWeight: FontWeight.w700, color: ink);
+        fontSize: 18.sp, fontWeight: FontWeight.w700, color: ink);
 
   static TextStyle body() => GoogleFonts.plusJakartaSans(
         fontSize: 15.sp, fontWeight: FontWeight.w500, height: 1.5, color: ink);
 
   static TextStyle caption() => GoogleFonts.plusJakartaSans(
-        fontSize: 12.sp, fontWeight: FontWeight.w600, color: muted);
+        fontSize: 14.sp, fontWeight: FontWeight.w600, color: muted);
 
   static TextStyle badge() => GoogleFonts.plusJakartaSans(
-        fontSize: 11.sp, fontWeight: FontWeight.w800);
+        fontSize: 14.sp, fontWeight: FontWeight.w800);
 
   static TextStyle navLabel() => GoogleFonts.plusJakartaSans(
         fontSize: 11.sp, fontWeight: FontWeight.w700);

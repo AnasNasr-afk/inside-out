@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/cubits/auth_cubit/auth_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
@@ -77,9 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            left: 20,
-            right: 20,
-            bottom: bottomInset + 12,
+            left: 20.w,
+            right: 20.w,
+            bottom: bottomInset ,
             child: BottomNavBar(
               selectedIndex: _selectedIndex,
               onTap: (i) => setState(() => _selectedIndex = i),

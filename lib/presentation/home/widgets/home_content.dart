@@ -9,6 +9,8 @@ import 'package:patient/gen/assets.gen.dart';
 import 'package:patient/presentation/home/widgets/mood_check_in_card.dart';
 import 'package:patient/presentation/home/widgets/child_mode_button.dart';
 
+import 'home_header.dart';
+
 class HomeContent extends StatelessWidget {
   final VoidCallback onSeeAllTasks;
   final VoidCallback onAvatarTap;
@@ -46,7 +48,7 @@ class HomeContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _HomeHeader(
+              HomeHeader(
                 greeting: _greeting,
                 displayName: displayName,
                 parentInitial: parentInitial,
@@ -85,95 +87,9 @@ class HomeContent extends StatelessWidget {
   }
 }
 
-// ── Header ─────────────────────────────────────────────────────────────────────
 
-class _HomeHeader extends StatelessWidget {
-  const _HomeHeader({
-    required this.greeting,
-    required this.displayName,
-    required this.parentInitial,
-    required this.onAvatarTap,
-    required this.onChatTap,
-  });
-  final String greeting;
-  final String displayName;
-  final String parentInitial;
-  final VoidCallback onAvatarTap;
-  final VoidCallback onChatTap;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-      child: Row(
-        children: [
-          // Avatar — taps to Profile
-          GestureDetector(
-            onTap: onAvatarTap,
-            child: Container(
-              width: 44.w,
-              height: 44.h,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [T.primary, T.mint],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Center(
-                child: Text(
-                  parentInitial,
-                  style: T.sectionHeader()
-                      .copyWith(color: Colors.white, fontSize: 18.sp),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 10.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                greeting,
-                style: T.caption().copyWith(color: T.muted, fontSize: 12.sp),
-              ),
-              Text(
-                displayName,
-                style: T.screenTitle().copyWith(fontSize: 22.sp, letterSpacing: -0.4),
-              ),
-            ],
-          ),
-          const Spacer(),
-          // Chat shortcut
-          GestureDetector(
-            onTap: onChatTap,
-            child: Container(
-              width: 40.w,
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: T.card,
-                shape: BoxShape.circle,
-                boxShadow: T.cardShadow,
-              ),
-              child: Center(
-                child: Assets.icons.icChat.svg(
-                  width: 18.w,
-                  height: 18.h,
-                  colorFilter:
-                      const ColorFilter.mode(T.ink, BlendMode.srcIn),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
-// ── Section header ─────────────────────────────────────────────────────────────
 
 class _HomeSectionHeader extends StatelessWidget {
   const _HomeSectionHeader({required this.label, required this.onSeeAll});
@@ -192,7 +108,7 @@ class _HomeSectionHeader extends StatelessWidget {
             'See all',
             style: T.caption().copyWith(
               color: T.primary,
-              fontSize: 13.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w700,
             ),
           ),

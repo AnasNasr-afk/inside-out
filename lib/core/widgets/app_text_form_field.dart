@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:patient/core/theme/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextFormField extends StatelessWidget {
@@ -20,9 +19,9 @@ class AppTextFormField extends StatelessWidget {
 
   // ── Design tokens from screenshot ──────────────────────
   static const _hintColor       = Color(0xFF83859C);
-  static const _borderColor     = Color(0xFFC7C8D2);
+  static const _borderColor     = Color(0xFFE3E1EF); // soft idle border
   static const _labelColor      = Color(0xFF545563);
-  static const _focusedBorder   = Color(0xFF6366F1); // primary purple — predicted
+  static const _focusedBorder   = Color(0xFF7C5CFF); // brand purple
   static const _errorColor      = Color(0xFFE53935); // standard red — predicted
   static const _fillColor       = Color(0xFFFFFFFF); // pure white from screenshot
   static const _inputTextColor  = Color(0xFF1F2033); // near black — predicted from label family

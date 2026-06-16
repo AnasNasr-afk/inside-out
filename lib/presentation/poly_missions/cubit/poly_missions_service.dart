@@ -42,7 +42,7 @@ class PolyMissionsService {
     String memory = '',
   }) {
     _repo.clearHistory();
-    _repo.primeWithTaskContext(taskTitle: label, taskDescription: question);
+    _repo.primeWithReflection(taskTitle: label, taskDescription: question);
     if (memory.isNotEmpty) _repo.primeWithChildMemory(memory);
 
     _sessionStartTime = DateTime.now();

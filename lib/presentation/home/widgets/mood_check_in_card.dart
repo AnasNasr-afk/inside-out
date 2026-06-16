@@ -125,7 +125,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                             'Daily check-in',
                             style: T.caption().copyWith(
                               color: Colors.white,
-                              fontSize: 9.sp,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ],
@@ -153,7 +153,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                             '5-day streak',
                             style: T.caption().copyWith(
                               color: T.gold,
-                              fontSize: 9.sp,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ],
@@ -232,7 +232,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                             'How is ${widget.childName}\nfeeling today?',
                             style: T.screenTitle().copyWith(
                               color: Colors.white,
-                              fontSize: 18.sp,
+                              fontSize: 22.sp,
                               height: 1.2,
                             ),
                           ),
@@ -278,7 +278,7 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
                           Text(
                             m.label,
                             style: T.caption().copyWith(
-                              fontSize: 10.sp,
+                              fontSize: 12.sp,
                               color: selected
                                   ? Colors.white
                                   : Colors.white.withValues(alpha: 0.45),

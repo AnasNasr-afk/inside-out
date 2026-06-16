@@ -13,6 +13,7 @@ import 'package:patient/presentation/poly_missions/widgets/pm_mission.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_mission_card.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_other_chip.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_poly_area.dart';
+import 'package:patient/presentation/poly_missions/widgets/pm_speech_bubble.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_top_bar.dart';
 
 class PolyMissionsScreen extends StatefulWidget {
@@ -50,7 +51,13 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
         body: BlocBuilder<PolyMissionsCubit, PolyMissionsState>(
           builder: (ctx, state) {
             final cubit = ctx.read<PolyMissionsCubit>();
-            final isPick = state.phase == PmPhase.pick;
+            // Only show the focused mission view when a mission is actually
+            // selected. On celebration the index is cleared, so we fall back to
+            // the pick cards (hidden under the celebration overlay) instead of
+            // dereferencing a null currentIndex.
+            final showFocus = state.currentIndex != null &&
+                state.phase != PmPhase.pick &&
+                state.phase != PmPhase.celebration;
 
             return Stack(
               children: [
@@ -85,9 +92,9 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
                         ? _buildLoading()
                         : state.tasks.isEmpty
                             ? _buildEmpty()
-                            : isPick
-                                ? _buildPickCards(state, cubit)
-                                : _buildFocusGroup(state),
+                            : showFocus
+                                ? _buildFocusGroup(state)
+                                : _buildPickCards(state, cubit),
                   ),
                 ),
 
@@ -100,6 +107,21 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
                     ),
                   ),
                 ),
+
+                // Dynamic guidance bubble floating above Poly's head.
+                if (!state.isLoadingTasks &&
+                    state.tasks.isNotEmpty &&
+                    state.phase != PmPhase.celebration)
+                  Positioned(
+                    bottom: 470.h, left: 24.w, right: 24.w,
+                    child: PmSpeechBubble(
+                      phase: state.phase,
+                      polyIsTalking: state.polyIsTalking,
+                      allDone: state.allDone,
+                      allTasksDone: state.tasks.isNotEmpty &&
+                          state.done.length >= state.tasks.length,
+                    ),
+                  ),
 
                 // All-done celebration overlay
                 if (state.phase == PmPhase.celebration)

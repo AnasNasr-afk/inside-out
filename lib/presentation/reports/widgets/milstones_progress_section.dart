@@ -32,7 +32,7 @@ class MilestonesProgressSection extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  backgroundColor: ReportColors.completedBg,
+                  backgroundColor: const Color(0xFFE2FBF6),
                   icon: Icons.bar_chart_rounded,
                   iconColor: ReportColors.completedIcon,
                   iconBg: Colors.white,
@@ -46,7 +46,7 @@ class MilestonesProgressSection extends StatelessWidget {
                 child: Column(
                   children: [
                     _StatCard(
-                      backgroundColor: ReportColors.missedBg,
+                      backgroundColor: const Color(0xFFFFF1DD),
                       icon: Icons.calendar_today_rounded,
                       iconColor: ReportColors.missedIcon,
                       iconBg: Colors.white,
@@ -55,7 +55,7 @@ class MilestonesProgressSection extends StatelessWidget {
                     ),
                     SizedBox(height: 12.h),
                     _StatCard(
-                      backgroundColor: ReportColors.lateBg,
+                      backgroundColor: Color(0xFFFFE7EC),
                       icon: Icons.person_rounded,
                       iconColor: ReportColors.lateIcon,
                       iconBg: Colors.white,

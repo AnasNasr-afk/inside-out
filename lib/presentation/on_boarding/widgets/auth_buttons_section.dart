@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/routing/routes.dart';
-import 'google_signin_button.dart';
 import 'get_started_button.dart';
 
 class AuthButtonsSection extends StatelessWidget {

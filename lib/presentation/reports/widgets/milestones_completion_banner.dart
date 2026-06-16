@@ -17,8 +17,15 @@ class MilestonesCompletionBanner extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 22.h),
       decoration: BoxDecoration(
-        color: ReportColors.salmon,
-        borderRadius: BorderRadius.circular(20.r),
+        gradient: const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Color(0xFFFF7E6B),
+            Color(0xFFFF5B72),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
         children: [

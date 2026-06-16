@@ -163,14 +163,16 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     ChildModeSounds.instance.playTap();
 
     final task = _currentBatch[index];
-    final question = task.description.trim().isNotEmpty
+    // The specialist's task brief — used for GPT context and the report,
+    // not spoken aloud.
+    final brief = task.description.trim().isNotEmpty
         ? task.description
         : task.title;
 
     PolyMissionsService.instance.startMission(
       missionIndex: task.taskId,
       label: task.title,
-      question: question,
+      question: brief,
       memory: _childMemory,
     );
 
@@ -181,10 +183,12 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
       clearPraise: true,
     ));
 
+    // Spoken flow: greet and name the task, then ask a reflective question
+    // that gets the child talking about what was hard or what they enjoyed.
     final greeting = _childName.isNotEmpty
-        ? 'Hi $_childName! You picked ${task.title}!'
-        : 'You picked ${task.title}!';
-    _greetThenAsk(greeting, question);
+        ? 'Hi $_childName! You picked ${task.title}.'
+        : 'You picked ${task.title}.';
+    _greetThenAsk(greeting, _reflectiveQuestion(task.title));
   }
 
   void startRecording() {
@@ -281,7 +285,8 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     await PolyMissionsService.instance.speakAndWait(greeting);
     if (isClosed || state.phase != PmPhase.focus) return;
 
-    // Step 2 — task question that gets the child talking.
+    // Step 2 — reflective question that gets the child talking about what was
+    // hard or what they enjoyed.
     await PolyMissionsService.instance.speakAndWait(question);
     if (isClosed) return;
 
@@ -396,6 +401,19 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
 
   String _keyAt(int i) =>
       i < _currentBatch.length ? _currentBatch[i].taskId.toString() : 'task_$i';
+
+  /// A warm, reflective question about a task the child just completed. Varies
+  /// by task title so repeated visits do not feel scripted, and always invites
+  /// the child to share what was hard or what they enjoyed.
+  String _reflectiveQuestion(String title) {
+    final questions = <String>[
+      'What was the hardest part of $title for you?',
+      'You did $title! Was any part of it tricky?',
+      'When you did $title, what part did you like the most?',
+      'Tell me about $title. What felt hard, and what felt fun?',
+    ];
+    return questions[title.hashCode.abs() % questions.length];
+  }
 
   String _fallbackFor(int i) {
     if (i < _currentBatch.length) {

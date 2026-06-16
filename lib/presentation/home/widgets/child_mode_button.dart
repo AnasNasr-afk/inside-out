@@ -64,46 +64,19 @@ class ChildModeButton extends StatelessWidget {
                   Text(
                     'Child Mode',
                     style: T.cardTitle().copyWith(
-                      fontSize: 15.sp,
+                      fontSize: 17.sp,
                       fontWeight: FontWeight.w700,
+                      color: T.ink,
                     ),
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     'A calmer, simpler space for kids',
-                    style: T.caption().copyWith(color: T.muted, fontSize: 10.sp),
+                    style: T.caption().copyWith(
+                        color: T.muted,
+                        fontSize: 13.sp),
                   ),
                 ],
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Container(
-              width: 46.w,
-              height: 27.h,
-              decoration: BoxDecoration(
-                color: const Color(0xFFD1D1D6),
-                borderRadius: BorderRadius.circular(999.r),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(3.r),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    width: 21.w,
-                    height: 21.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0x33000000),
-                          blurRadius: 4.r,
-                          offset: Offset(0, 1.h),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ),
             ),
           ],
