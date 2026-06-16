@@ -8,7 +8,7 @@ import 'package:patient/presentation/child_mood/child_mode_sounds.dart';
 import 'package:patient/presentation/home/widgets/bottom_nav_bar.dart';
 import 'package:patient/presentation/home/widgets/home_content.dart';
 import 'package:patient/presentation/chat/chat_screen.dart';
-import 'package:patient/presentation/notification/updates_screen.dart';
+import 'package:patient/presentation/notification/notification_screen.dart';
 import 'package:patient/presentation/profile/profile_screen.dart';
 import '../../core/helpers/shared_pref_keys.dart';
 import '../tasks /tasks_screen.dart';
@@ -38,6 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
     await cubit.getTasks(childId);
     if (!mounted) return;
     await cubit.getParentChildData(childId);
+    if (!mounted) return;
+    // Boot push notifications and register this device's FCM token.
+    await cubit.initNotifications();
   }
 
   void _goToTasks() {
@@ -56,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onAvatarTap: _goToProfile,
         onChatTap: _openChat),
     const TasksScreen(),
-    UpdatesScreen(),
+    const NotificationScreen(),
     BlocProvider(
       create: (context) => AuthCubit(),
       child: const ProfileScreen(),
