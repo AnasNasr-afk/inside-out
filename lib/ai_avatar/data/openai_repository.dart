@@ -9,7 +9,7 @@ part 'openai_repository.g.dart';
 class PolyAIRepository {
   final List<Map<String, String>> _history = [];
 
-  static const _model = 'gpt-4o';
+  static const _model = 'gpt-4.1';
   static const _url = 'https://api.openai.com/v1/chat/completions';
 
   static const _systemPrompt = """
@@ -149,6 +149,20 @@ Poly: "You said your hand was hurting before — it sounds like it is still the 
     }
   }
 
+  /// Injects a short memory summary from past sessions so Poly can reference
+  /// what the child struggled with or achieved before. Call after primeWithTaskContext.
+  void primeWithChildMemory(String memory) {
+    if (memory.trim().isEmpty) return;
+    _history.add({
+      'role': 'system',
+      'content':
+          'Memory from past sessions with this child: $memory '
+          'Reference this naturally when relevant — for example, if they '
+          'struggled with something before, acknowledge it warmly. '
+          'Never read the memory out like a list. Weave it in naturally.',
+    });
+  }
+
   /// Called once per session right after clearHistory().
   /// Injects the specialist's task brief as a supplemental system message so
   /// every response in the session is anchored to the task instructions.
@@ -272,8 +286,10 @@ Output format — copy exactly, fill in brackets, ONE LINE, NO NEWLINES:
           {'role': 'system', 'content': _systemPrompt},
           ..._history,
         ],
-        'max_tokens': 360,
+        'max_tokens': 180,
         'temperature': 0.82,
+        'frequency_penalty': 0.4,
+        'presence_penalty': 0.3,
       }),
     );
 

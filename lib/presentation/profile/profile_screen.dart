@@ -10,15 +10,24 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/cubits/auth_cubit/auth_cubit.dart';
 import '../../core/cubits/auth_cubit/auth_listener.dart';
 import '../../core/cubits/task_cubit/task_cubit.dart';
+import '../../core/cubits/task_cubit/task_listener.dart';
 import '../../core/routing/routes.dart';
+import '../reports/widgets/report_colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final userData = TaskCubit.get(context).parentChildData;
+    return BlocBuilder<TaskCubit, TaskStates>(
+      builder: (context, state) {
+        final userData = TaskCubit.get(context).parentChildData;
+        return _buildBody(context, userData);
+      },
+    );
+  }
 
+  Widget _buildBody(BuildContext context, ParentChildResponseModel? userData) {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -76,6 +85,62 @@ class ProfileScreen extends StatelessWidget {
                   detail: userData?.specialistEmail ?? '',
                 )),
               ],
+            ),
+            const SizedBox(height: 16),
+
+            // ── Reports button ────────────────────────────────────────
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, Routes.reportScreen),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                decoration: BoxDecoration(
+                  color: ReportColors.salmon,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Session Reports',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'View all therapy session reports',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.bar_chart_rounded,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
 

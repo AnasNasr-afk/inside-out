@@ -1,46 +1,334 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../../../gen/assets.gen.dart';
 import '../../games/games_screen.dart';
-import '../../home/widgets/therapy_goal_card.dart';
+import '../../poly_missions/poly_missions_screen.dart';
 
-class ChildModeBody extends StatelessWidget {
-  const ChildModeBody();
+class ChildModeBody extends StatefulWidget {
+  final VoidCallback? onTileTap;
+  const ChildModeBody({super.key, this.onTileTap});
+
+  @override
+  State<ChildModeBody> createState() => _ChildModeBodyState();
+}
+
+class _ChildModeBodyState extends State<ChildModeBody>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final List<Animation<double>> _anims;
+
+  // delays: 50ms, 160ms; each tile 550ms; total 820ms
+  static const _total = 820;
+  static const _tileDur = 550;
+  static const _delays = [50, 160];
+  // Matches spec: cubic-bezier(.2,.85,.25,1.05)
+  static const _curve = Cubic(0.2, 0.85, 0.25, 1.05);
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: _total),
+    );
+    _anims = _delays.map((d) {
+      final start = d / _total;
+      final end = ((d + _tileDur) / _total).clamp(0.0, 1.0);
+      return Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _ctrl, curve: Interval(start, end, curve: _curve)),
+      );
+    }).toList();
+    _ctrl.forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _tap(VoidCallback navigate) {
+    widget.onTileTap?.call();
+    navigate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // ── Online Tasks card ───────────────────────────────
-        GestureDetector(
-          onTap: () {
-            // TODO: navigate to online tasks screen
-          },
-          child: TherapyGoalCard(
-            title: 'Online',
-            subtitle: 'Tasks',
-            illustration: Assets.illustrations.i9nGoals,
-            backgroundColor: const Color(0xFFF9F3E3),
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (context, _) => Column(
+        children: [
+          _TileRise(
+            anim: _anims[0],
+            child: _Tile(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF1ED8C4), Color(0xFF0FB6A6)],
+              ),
+              shadowColor: const Color(0xFF0FB6A6),
+              iconBg: const Color(0x47FFFFFF),
+              icon: Icons.sports_esports_rounded,
+              iconColor: Colors.white,
+              title: 'Games',
+              titleColor: const Color(0xFF03342F),
+              subtitle: 'Play & learn with Poly',
+              subtitleColor: const Color(0xFF0A5C53),
+              playColor: Colors.white,
+              onTap: () => _tap(
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const GamesScreen()),
+                ),
+              ),
+            ),
           ),
-        ),
+          const SizedBox(height: 14),
+          _TileRise(
+            anim: _anims[1],
+            child: _TalkToPolyTile(
+              onTap: () => _tap(
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const PolyMissionsScreen()),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-        const SizedBox(height: 15),
+// ── Animated wrapper — translateY(46→0) + scale(0.94→1) + fade ────────────────
 
-        // ── Games card ──────────────────────────────────────
-        GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const GamesScreen()),
-          ),
-          child: TherapyGoalCard(
-            title: 'Games',
-            subtitle: '',
-            illustration: Assets.illustrations.i9nActivities,
-            backgroundColor: const Color(0xFFE8F5E9),
-          ),
+class _TileRise extends StatelessWidget {
+  final Animation<double> anim;
+  final Widget child;
+  const _TileRise({required this.anim, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: Offset(0, 46.0 * (1.0 - anim.value)),
+      child: Transform.scale(
+        scale: 0.94 + 0.06 * anim.value,
+        child: Opacity(
+          opacity: anim.value.clamp(0.0, 1.0),
+          child: child,
         ),
-      ],
+      ),
+    );
+  }
+}
+
+// ── Generic gradient tile ──────────────────────────────────────────────────────
+
+class _Tile extends StatelessWidget {
+  final LinearGradient gradient;
+  final Color shadowColor;
+  final Color iconBg;
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final Color titleColor;
+  final String subtitle;
+  final Color subtitleColor;
+  final Color playColor;
+  final VoidCallback onTap;
+
+  const _Tile({
+    required this.gradient,
+    required this.shadowColor,
+    required this.iconBg,
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.titleColor,
+    required this.subtitle,
+    required this.subtitleColor,
+    required this.playColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(26),
+          boxShadow: [
+            BoxShadow(
+              color: shadowColor.withValues(alpha: 0.42),
+              blurRadius: 30,
+              offset: const Offset(0, 16),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
+        child: Row(
+          children: [
+            Container(
+              width: 66,
+              height: 66,
+              decoration: BoxDecoration(
+                color: iconBg,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(icon, size: 32, color: iconColor),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.3,
+                      color: titleColor,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: subtitleColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.55),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.play_arrow_rounded, color: playColor, size: 20),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Talk to Poly tile — special because of the mint online dot ─────────────────
+
+class _TalkToPolyTile extends StatelessWidget {
+  final VoidCallback onTap;
+  const _TalkToPolyTile({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF8A6BFF), Color(0xFF6A4BF0)],
+          ),
+          borderRadius: BorderRadius.circular(26),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF7C5CFF).withValues(alpha: 0.45),
+              blurRadius: 30,
+              offset: const Offset(0, 16),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
+        child: Row(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 66,
+                  height: 66,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.sentiment_satisfied_alt_rounded,
+                    size: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                Positioned(
+                  top: -3,
+                  right: -3,
+                  child: Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF14D9C4),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF7558E8),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Talk to Poly',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.3,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Chat with your buddy · online',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xD1FFFFFF),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.25),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.play_arrow_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}</style>
+</helmet>
+<div style="display:flex;align-items:center;justify-content:space-around;background:#fff;border-radius:28px;padding:11px 10px;box-shadow:0 16px 36px rgba(33,30,64,.16);font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+  <button onClick="{{ nav.explore.go }}" style="display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:2px 4px;flex:1;">
+    <span style="{{ nav.explore.wrap }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+    <span style="{{ nav.explore.lb }}">Explore</span>
+  </button>
+  <button onClick="{{ nav.tasks.go }}" style="display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:2px 4px;flex:1;">
+    <span style="{{ nav.tasks.wrap }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg></span>
+    <span style="{{ nav.tasks.lb }}">Tasks</span>
+  </button>
+  <button onClick="{{ nav.chat.go }}" style="display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:2px 4px;flex:1;">
+    <span style="{{ nav.chat.wrap }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
+    <span style="{{ nav.chat.lb }}">Chat</span>
+  </button>
+  <button onClick="{{ nav.profile.go }}" style="display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:2px 4px;flex:1;">
+    <span style="{{ nav.profile.wrap }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+    <span style="{{ nav.profile.lb }}">Profile</span>
+  </button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:84},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;explore&quot;,&quot;tasks&quot;,&quot;chat&quot;,&quot;profile&quot;],&quot;default&quot;:&quot;explore&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { active: this.props.active ?? 'explore' };
+  mk(key) {
+    const on = this.state.active === key;
+    return {
+      wrap: { display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '7px 18px', borderRadius: '14px', background: on ? '#EDE9FF' : 'transparent', color: on ? '#7C5CFF' : '#9A98B6', transition: '.2s' },
+      lb: { fontSize: '11px', fontWeight: 700, color: on ? '#7C5CFF' : '#9A98B6' },
+      go: () => this.setState({ active: key })
+    };
+  }
+  renderVals() {
+    return {
+      nav: {
+        explore: this.mk('explore'),
+        tasks: this.mk('tasks'),
+        chat: this.mk('chat'),
+        profile: this.mk('profile')
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

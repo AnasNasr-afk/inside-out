@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  @keyframes pm-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @keyframes pm-cheer{0%{transform:translateY(0) rotate(0)}25%{transform:translateY(-22px) rotate(-4deg)}50%{transform:translateY(0)}68%{transform:translateY(-12px) rotate(4deg)}100%{transform:translateY(0) rotate(0)}}
+  @keyframes pm-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes pm-twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+  @keyframes pm-aurora{0%{transform:translateX(-6%) skewX(-8deg)}50%{transform:translateX(6%) skewX(-12deg)}100%{transform:translateX(-6%) skewX(-8deg)}}
+  @keyframes pm-snow{0%{transform:translateY(-20px);opacity:0}10%{opacity:.9}100%{transform:translateY(680px) translateX(var(--sx));opacity:.2}}
+  @keyframes pm-ring{0%{transform:scale(.7);opacity:.55}100%{transform:scale(1.6);opacity:0}}
+  @keyframes pm-recring{0%{transform:scale(.85);opacity:.6}100%{transform:scale(2);opacity:0}}
+  @keyframes pm-wave{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  @keyframes pm-dots{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+  @keyframes pm-plus{0%{opacity:0;transform:translateY(0) scale(.6)}25%{opacity:1;transform:translateY(-10px) scale(1.1)}100%{opacity:0;transform:translateY(-80px) scale(1)}}
+  @keyframes pm-confetti{0%{opacity:0;transform:translateY(-20px) rotate(0)}12%{opacity:1}100%{opacity:.9;transform:translateY(560px) rotate(var(--rot))}}
+  @keyframes pm-hint{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+</style>
+</helmet>
+<div style="width:392px;height:812px;position:relative;border-radius:44px;overflow:hidden;box-shadow:0 34px 80px rgba(35,32,72,.3);border:1px solid #fff;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(180deg,#2B2360 0%,#4A3A9C 38%,#6E5BC9 64%,#3FA8C9 100%);">
+
+  <!-- SCENE -->
+  <span style="position:absolute;top:16%;left:-14%;width:130%;height:120px;background:linear-gradient(90deg,transparent,rgba(155,123,255,.5),rgba(63,224,206,.45),transparent);filter:blur(26px);animation:pm-aurora 11s ease-in-out infinite;"></span>
+  <span style="position:absolute;top:28%;left:-14%;width:130%;height:90px;background:linear-gradient(90deg,transparent,rgba(63,224,206,.4),rgba(124,92,255,.4),transparent);filter:blur(22px);animation:pm-aurora 14s ease-in-out infinite reverse;"></span>
+  <sc-for list="{{ stars }}" as="s" hint-placeholder-count="0"><span style="{{ s.style }}"></span></sc-for>
+  <sc-for list="{{ snow }}" as="f" hint-placeholder-count="0"><span style="{{ f.style }}"></span></sc-for>
+  <span style="position:absolute;left:-12%;bottom:-60px;width:124%;height:300px;border-radius:50% 50% 0 0;background:linear-gradient(180deg,#EAF4F8,#C6DCEA);"></span>
+  <span style="position:absolute;left:50%;bottom:130px;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5),rgba(190,235,255,.16) 45%,transparent 70%);"></span>
+
+  <!-- TOP BAR (back only) -->
+  <div style="position:absolute;top:18px;left:20px;z-index:9;">
+    <span onClick="{{ back }}" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;border:1px solid rgba(255,255,255,.22);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div style="position:absolute;top:24px;left:0;right:0;display:flex;justify-content:center;z-index:8;">
+    <span style="display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.22);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="#FFC93C" stroke="none"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+      <span style="font-size:14px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;">{{ coins }}</span>
+      <span style="width:1px;height:14px;background:rgba(255,255,255,.3);"></span>
+      <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);">{{ progressLabel }} done</span>
+    </span>
+  </div>
+
+  <!-- ===== PICK PHASE: 3 cards ===== -->
+  <sc-if value="{{ isPick }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;top:150px;left:0;right:0;display:flex;justify-content:center;gap:13px;z-index:7;padding:0 20px;">
+      <sc-for list="{{ missions }}" as="m" hint-placeholder-count="3">
+        <button onClick="{{ m.onPick }}" style="{{ m.cardStyle }}">
+          <sc-if value="{{ m.attention }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:-4px;border-radius:24px;border:2px solid rgba(255,255,255,.55);animation:pm-ring 1.9s ease-out infinite;pointer-events:none;"></span></sc-if>
+          <span style="{{ m.iconWrap }}">{{ m.iconEl }}</span>
+          <span style="{{ m.labelStyle }}">{{ m.label }}</span>
+          <sc-if value="{{ m.done }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:800;color:#0E8F82;">✓ Done</span></sc-if>
+          <sc-if value="{{ m.pending }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:800;color:{{ m.rewardColor }};"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>+10</span></sc-if>
+          <sc-if value="{{ m.done }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:#14B2A0;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></sc-if>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- ===== FOCUS GROUP: current task + shrunken others ===== -->
+  <sc-if value="{{ isFocusGroup }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;top:118px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:14px;z-index:7;">
+      <div style="{{ currentStyle }}">
+        <span style="{{ currentIconWrap }}">{{ currentIconEl }}</span>
+        <span style="font-size:17px;font-weight:800;color:#2B2360;letter-spacing:-.3px;">{{ currentLabel }}</span>
+        <sc-if value="{{ isResponse }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:5px;background:#14B2A0;color:#fff;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Done</span></sc-if>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <sc-for list="{{ otherChips }}" as="o" hint-placeholder-count="2">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);padding:5px 11px 5px 7px;border-radius:999px;opacity:.65;">
+            <span style="width:22px;height:22px;border-radius:8px;background:{{ o.tint }};color:{{ o.color }};display:flex;align-items:center;justify-content:center;">{{ o.iconEl }}</span>
+            <span style="font-size:11.5px;font-weight:700;color:rgba(255,255,255,.9);">{{ o.label }}</span>
+          </span>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- SHARED SPEECH BUBBLE -->
+  <div style="position:absolute;bottom:432px;left:0;right:0;display:flex;justify-content:center;z-index:8;padding:0 26px;">
+    <div style="{{ bubbleStyle }}">
+      <span style="font-size:15px;font-weight:800;color:#2B2360;line-height:1.32;text-align:center;">{{ bubbleText }}</span>
+      <span style="position:absolute;bottom:-7px;left:50%;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;background:#fff;border-radius:2px;"></span>
+    </div>
+  </div>
+
+  <!-- POLY -->
+  <div style="position:absolute;left:50%;bottom:172px;transform:translateX(-50%);z-index:6;display:flex;flex-direction:column;align-items:center;">
+    <div style="{{ polyStyle }}">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="poly-bear" shape="rounded" radius="28" fit="contain" placeholder="Drop Poly here" style="width:228px;height:236px;display:block;" hint-size="228px,236px"></x-import>
+    </div>
+    <span style="margin-top:-4px;width:160px;height:24px;border-radius:50%;background:radial-gradient(circle,rgba(43,35,96,.26),transparent 70%);filter:blur(3px);"></span>
+    <sc-if value="{{ celebrate }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);font-size:22px;font-weight:800;color:#FFC93C;text-shadow:0 2px 8px rgba(0,0,0,.25);animation:pm-plus 1.4s ease-out forwards;display:inline-flex;align-items:center;gap:3px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFC93C" stroke="none"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>+10</span></sc-if>
+  </div>
+
+  <!-- ===== CONTROL AREA ===== -->
+  <!-- focus: start answering -->
+  <sc-if value="{{ isFocus }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;bottom:40px;display:flex;flex-direction:column;align-items:center;gap:12px;z-index:8;">
+      <button onClick="{{ startRec }}" style="position:relative;width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#8A6BFF,#6A4BF0);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 16px 30px rgba(124,92,255,.5);">
+        <span style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(138,107,255,.6);animation:pm-recring 2s ease-out infinite;"></span>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg>
+      </button>
+      <span style="font-size:13.5px;font-weight:700;color:#fff;">Tap to answer Poly</span>
+    </div>
+  </sc-if>
+  <!-- recording: waveform + timer + stop -->
+  <sc-if value="{{ isRecording }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;bottom:34px;display:flex;flex-direction:column;align-items:center;gap:13px;z-index:8;">
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);padding:9px 16px;border-radius:999px;">
+        <span style="width:9px;height:9px;border-radius:50%;background:#FF5B72;animation:pm-twinkle 1s ease-in-out infinite;"></span>
+        <span style="font-size:14px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;">{{ recTime }}</span>
+        <span style="display:flex;align-items:flex-end;gap:3px;height:22px;">
+          <sc-for list="{{ waves }}" as="w" hint-placeholder-count="9"><span style="{{ w.style }}"></span></sc-for>
+        </span>
+      </div>
+      <button onClick="{{ stopRec }}" style="width:78px;height:78px;border-radius:50%;background:#FF5B72;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 16px 30px rgba(255,91,114,.55);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="3"/></svg>
+      </button>
+      <span style="font-size:13.5px;font-weight:700;color:#fff;">Tap to stop</span>
+    </div>
+  </sc-if>
+  <!-- analyzing -->
+  <sc-if value="{{ isAnalyzing }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;bottom:58px;display:flex;justify-content:center;z-index:8;">
+      <div style="display:inline-flex;align-items:center;gap:11px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);padding:14px 22px;border-radius:999px;">
+        <span style="display:flex;align-items:center;gap:5px;">
+          <span style="width:9px;height:9px;border-radius:50%;background:#fff;animation:pm-dots 1s ease-in-out infinite;"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:#fff;animation:pm-dots 1s ease-in-out .2s infinite;"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:#fff;animation:pm-dots 1s ease-in-out .4s infinite;"></span>
+        </span>
+        <span style="font-size:14.5px;font-weight:800;color:#fff;">Poly is thinking…</span>
+      </div>
+    </div>
+  </sc-if>
+  <!-- response: continue -->
+  <sc-if value="{{ isResponse }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;bottom:44px;display:flex;justify-content:center;z-index:8;">
+      <button onClick="{{ next }}" style="display:inline-flex;align-items:center;gap:10px;background:#14D9C4;color:#06342F;border:none;border-radius:999px;padding:16px 40px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 16px 30px rgba(20,217,196,.5);">{{ nextLabel }}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+  </sc-if>
+
+  <!-- SHELF (pick only) -->
+  <sc-if value="{{ isPick }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;left:0;right:0;bottom:0;z-index:8;padding:14px 16px 18px;background:linear-gradient(to top,rgba(20,15,50,.5),transparent);">
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.22);border-radius:22px;padding:12px 16px;">
+        <div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:13px;font-weight:800;color:#fff;">Today's wins</span><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.7);">{{ progressLabel }} missions</span></div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;justify-content:flex-end;">
+          <sc-if value="{{ noWins }}" hint-placeholder-val="{{ true }}"><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,.55);">No missions yet — pick one!</span></sc-if>
+          <sc-for list="{{ wins }}" as="w" hint-placeholder-count="0"><span style="width:38px;height:38px;border-radius:13px;background:{{ w.color }};display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.2);"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- CONFETTI -->
+  <sc-if value="{{ celebrate }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10;"><sc-for list="{{ confetti }}" as="c" hint-placeholder-count="0"><span style="{{ c.style }}"></span></sc-for></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:812}}">
+class Component extends DCLogic {
+  state = { phase: 'pick', current: null, completed: [], coins: 0, recSec: 0, celebrate: false };
+  componentWillUnmount() { this.clearAll(); }
+  clearAll() { clearInterval(this._ri); clearTimeout(this._at); clearTimeout(this._ct); }
+  defs() {
+    return [
+      { key: 'tooth', label: 'Brush teeth', color: '#1ED8C4', deep: '#0E8F82', q: 'Show me how you brush your teeth — tell me the steps!', resp: 'Awesome! Up, down and all around — super clean! 🦷' },
+      { key: 'toys',  label: 'Tidy toys',   color: '#FFC93C', deep: '#A9750E', q: 'How do you tidy your toys? Tell me your plan!', resp: 'Great plan! A tidy room feels so good. 🧸' },
+      { key: 'hello', label: 'Say hello',   color: '#8A6BFF', deep: '#5A3DD6', q: 'Can you say hello and tell me your name?', resp: 'So friendly! That was a lovely hello. 👋' }
+    ];
+  }
+  icon(key, size, opts) {
+    const o = opts || {}, R = React.createElement;
+    const paths = {
+      tooth: ['M12 5.5c-2-2-5-2-6.5 0C4 7.5 4.5 11 6 15c.8 2.2 1.3 4 2.5 4s1.2-2.5 1.5-4 .8-2 2-2 1.7.5 2 2 .3 4 1.5 4 1.7-1.8 2.5-4c1.5-4 2-7.5.5-9.5-1.5-2-4.5-2-6.5 0Z'],
+      toys: ['M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z', 'm3.3 7 8.7 5 8.7-5', 'M12 22V12'],
+      hello: ['M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2', 'M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2', 'M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8', 'M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15']
+    };
+    return R('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: o.stroke || 'currentColor', strokeWidth: o.sw || 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, (paths[key] || []).map((d, i) => R('path', { d: d, key: i })));
+  }
+  audio() { try { if (!this._ac) this._ac = new (window.AudioContext || window.webkitAudioContext)(); if (this._ac.state === 'suspended') this._ac.resume(); } catch (e) {} }
+  tone(f, s, d, t, g) { const c = this._ac; if (!c) return; const o = c.createOscillator(), gn = c.createGain(); o.type = t || 'sine'; o.frequency.value = f; const tt = c.currentTime + (s || 0); gn.gain.setValueAtTime(0.0001, tt); gn.gain.exponentialRampToValueAtTime(g || 0.18, tt + 0.02); gn.gain.exponentialRampToValueAtTime(0.0001, tt + d); o.connect(gn).connect(c.destination); o.start(tt); o.stop(tt + d + 0.03); }
+  sPop() { this.tone(660, 0, 0.08, 'triangle', 0.16); this.tone(990, 0.04, 0.08, 'triangle', 0.12); }
+  sRecOn() { this.tone(523, 0, 0.1, 'sine', 0.16); this.tone(784, 0.08, 0.12, 'sine', 0.14); }
+  sRecOff() { this.tone(523, 0, 0.1, 'sine', 0.14); this.tone(330, 0.08, 0.14, 'sine', 0.14); }
+  sWin() { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => this.tone(f, i * 0.08, 0.45, 'triangle', 0.2)); this.tone(1568, 0.32, 0.5, 'sine', 0.1); }
+  pick(i) { if (this.state.completed.includes(i)) return; this.audio(); this.sPop(); this.setState({ current: i, phase: 'focus' }); }
+  startRec() { this.audio(); this.sRecOn(); this.clearAll(); this.setState({ phase: 'recording', recSec: 0 }); this._ri = setInterval(() => this.setState(s => ({ recSec: s.recSec + 1 })), 1000); }
+  stopRec() {
+    this.audio(); this.sRecOff(); clearInterval(this._ri);
+    this.setState({ phase: 'analyzing' });
+    this._at = setTimeout(() => {
+      this.sWin();
+      this.setState(s => ({ phase: 'response', completed: s.completed.includes(s.current) ? s.completed : [...s.completed, s.current], coins: s.coins + 10, celebrate: true }));
+      this._ct = setTimeout(() => this.setState({ celebrate: false }), 1500);
+    }, 1800);
+  }
+  next() { this.clearAll(); this.setState({ phase: 'pick', current: null, celebrate: false, recSec: 0 }); }
+  back() {}
+  renderVals() {
+    const defs = this.defs();
+    const { phase, current, completed, celebrate, recSec } = this.state;
+    const allDone = completed.length === defs.length;
+    const missions = defs.map((d, i) => {
+      const done = completed.includes(i);
+      return {
+        label: d.label, rewardColor: d.deep, done, pending: !done,
+        attention: !done && !celebrate,
+        iconEl: this.icon(d.key, 24, { stroke: d.deep }),
+        onPick: () => this.pick(i),
+        cardStyle: { position: 'relative', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', background: done ? 'rgba(255,255,255,.5)' : 'rgba(255,255,255,.95)', border: '3px solid transparent', borderRadius: '22px', padding: '15px 8px 13px', cursor: done ? 'default' : 'pointer', fontFamily: 'inherit', boxShadow: '0 10px 22px rgba(40,25,90,.3)', opacity: done ? 0.7 : 1, animation: (!done && !celebrate) ? ('pm-float 3s ease-in-out ' + (i * 0.4) + 's infinite') : 'none' },
+        iconWrap: { width: '46px', height: '46px', borderRadius: '15px', background: d.color + '26', color: d.deep, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        labelStyle: { fontSize: '12.5px', fontWeight: 800, color: '#2B2360', letterSpacing: '-.3px', whiteSpace: 'nowrap' }
+      };
+    });
+    const cur = current != null ? defs[current] : null;
+    const otherChips = cur ? defs.map((d, i) => ({ d, i })).filter(x => x.i !== current).map(x => ({
+      label: x.d.label, tint: x.d.color + '33', color: '#fff',
+      iconEl: this.icon(x.d.key, 14, { stroke: '#fff' })
+    })) : [];
+    const wins = completed.map(i => ({ color: defs[i].color }));
+    const palette = ['#FFC93C', '#14D9C4', '#FF5B72', '#8A6BFF', '#4CA9F5', '#fff'];
+    const stars = Array.from({ length: 20 }, () => ({ style: { position: 'absolute', top: (4 + Math.random() * 50) + '%', left: (3 + Math.random() * 94) + '%', width: (2 + Math.random() * 3) + 'px', height: (2 + Math.random() * 3) + 'px', borderRadius: '50%', background: '#fff', animation: 'pm-twinkle ' + (2 + Math.random() * 2.5) + 's ease-in-out ' + (Math.random() * 2) + 's infinite' } }));
+    const snow = Array.from({ length: 14 }, () => ({ style: { position: 'absolute', top: '0', left: (Math.random() * 100) + '%', width: (3 + Math.random() * 4) + 'px', height: (3 + Math.random() * 4) + 'px', borderRadius: '50%', background: 'rgba(255,255,255,.75)', '--sx': (Math.random() * 40 - 20) + 'px', animation: 'pm-snow ' + (7 + Math.random() * 6) + 's linear ' + (Math.random() * 7) + 's infinite' } }));
+    const confetti = celebrate ? Array.from({ length: 28 }, (_, i) => { const dur = 1.6 + Math.random() * 0.9, rot = (Math.random() * 720 - 360) + 'deg'; return { style: { position: 'absolute', top: '22%', left: (8 + Math.random() * 84) + '%', width: (7 + Math.random() * 4) + 'px', height: (10 + Math.random() * 6) + 'px', background: palette[i % palette.length], borderRadius: '2px', '--rot': rot, animation: 'pm-confetti ' + dur + 's linear forwards', animationDelay: (Math.random() * 0.4) + 's' } }; }) : [];
+    const waves = Array.from({ length: 9 }, (_, i) => ({ style: { width: '4px', height: (6 + Math.abs(Math.sin(i * 1.3)) * 16) + 'px', borderRadius: '2px', background: '#fff', transformOrigin: 'bottom', animation: 'pm-wave ' + (0.6 + (i % 4) * 0.12) + 's ease-in-out ' + (i * 0.06) + 's infinite' } }));
+    const mm = Math.floor(recSec / 60), ss = recSec % 60;
+    const bubbleText = phase === 'recording' ? "I'm listening… 👂"
+      : phase === 'analyzing' ? 'Hmm, let me think… 🤔'
+      : phase === 'response' ? (cur ? cur.resp : 'Great job!')
+      : phase === 'focus' ? (cur ? cur.q : '')
+      : allDone ? 'You finished them all! 🌟'
+      : 'Pick a mission, HOSS!';
+    return {
+      missions, otherChips, wins, stars, snow, confetti, waves,
+      coins: this.state.coins,
+      progressLabel: completed.length + '/' + defs.length,
+      noWins: completed.length === 0,
+      isPick: phase === 'pick',
+      isFocusGroup: phase !== 'pick',
+      isFocus: phase === 'focus',
+      isRecording: phase === 'recording',
+      isAnalyzing: phase === 'analyzing',
+      isResponse: phase === 'response',
+      celebrate,
+      recTime: mm + ':' + (ss < 10 ? '0' + ss : ss),
+      bubbleText,
+      currentLabel: cur ? cur.label : '',
+      currentIconEl: cur ? this.icon(cur.key, 26, { stroke: cur.deep }) : null,
+      nextLabel: allDone ? 'All done!' : 'Next mission',
+      back: () => this.back(),
+      startRec: () => this.startRec(),
+      stopRec: () => this.stopRec(),
+      next: () => this.next(),
+      bubbleStyle: { position: 'relative', background: '#fff', borderRadius: '20px', padding: '14px 20px', maxWidth: '300px', boxShadow: '0 12px 28px rgba(20,12,50,.35)' },
+      polyStyle: { animation: celebrate ? 'pm-cheer .9s ease-in-out' : 'pm-bob 3.4s ease-in-out infinite' },
+      currentStyle: { display: 'inline-flex', alignItems: 'center', gap: '12px', background: '#fff', borderRadius: '20px', padding: '12px 20px', boxShadow: '0 14px 30px rgba(20,12,50,.4)', border: '3px solid ' + (cur ? cur.color : '#fff') },
+      currentIconWrap: { width: '40px', height: '40px', borderRadius: '13px', background: (cur ? cur.color : '#ccc') + '26', color: cur ? cur.deep : '#999', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+    };
+  }
+}
+</script>
+</body>
+</html>

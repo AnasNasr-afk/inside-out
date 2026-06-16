@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
+import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/tasks%20/widgets/progress_banner.dart';
 import 'package:patient/presentation/tasks%20/widgets/task_card.dart';
 import 'package:patient/presentation/tasks%20/widgets/task_header.dart';
@@ -52,19 +53,22 @@ class _TasksScreenState extends State<TasksScreen> {
   }
 
   List<TaskModel> _filterTasks(List<TaskModel> tasks) {
+    final visible = tasks.where((t) => !t.isHidden && !t.isOverdue).toList();
     switch (_selectedFilter) {
       case 'Pending':
-        return tasks.where((t) => !t.isCompleted).toList();
+        return visible.where((t) => !t.isCompleted).toList();
       case 'Completed':
-        return tasks.where((t) => t.isCompleted).toList();
+        return visible.where((t) => t.isCompleted).toList();
       default:
-        return tasks;
+        return visible;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return ColoredBox(
+      color: T.appBg,
+      child: SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -85,13 +89,15 @@ class _TasksScreenState extends State<TasksScreen> {
           Expanded(child: _buildTaskList()),
         ],
       ),
+      ),
     );
   }
 
   Widget _buildFilterChips() {
     return SizedBox(
-      height: 36,
+      height: 40,
       child: ListView.separated(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: _filters.length,
@@ -104,18 +110,22 @@ class _TasksScreenState extends State<TasksScreen> {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
-                color: active ? const Color(0xFF6366F1) : Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                color: active ? T.primary : T.card,
+                borderRadius: BorderRadius.circular(999),
+                border: active ? null : Border.all(color: T.border),
                 boxShadow: active
-                    ? [BoxShadow(color: const Color(0xFF6366F1).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]
-                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6)],
+                    ? [BoxShadow(
+                        color: T.primary.withValues(alpha: 0.28),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      )]
+                    : null,
               ),
               child: Text(
                 _filters[i],
-                style: TextStyle(
+                style: T.badge().copyWith(
                   fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: active ? Colors.white : const Color(0xFF6B7280),
+                  color: active ? Colors.white : T.muted,
                 ),
               ),
             ),
@@ -166,10 +176,11 @@ class _TasksScreenState extends State<TasksScreen> {
           if (filtered.isEmpty) {
             return const Center(child: Text('No tasks found.'));
           }
+          final navBottom = MediaQuery.of(context).padding.bottom + 96;
           return RefreshIndicator(
             onRefresh: () async => _fetchTasks(),
             child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: EdgeInsets.fromLTRB(20, 0, 20, navBottom),
               itemCount: filtered.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) => TaskCard(task: filtered[index]),

@@ -92,7 +92,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Task marked as completed!'),
-              backgroundColor: Color(0xFF10B981),
+              backgroundColor: Color(0xFF14D9C4),
             ),
           );
         } else if (state is TaskCompleteErrorState) {
@@ -111,9 +111,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
           if (!didPop) Navigator.pop(context, _markedDone);
         },
         child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFBFAFF),
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: const Color(0xFFFBFAFF),
           elevation: 0,
           scrolledUnderElevation: 0,
           leading: GestureDetector(
@@ -121,13 +121,13 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             child: Container(
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: const Color(0xFFECEAF6),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
                 Icons.arrow_back_ios_new_rounded,
                 size: 16,
-                color: Color(0xFF1F2937),
+                color: Color(0xFF211E40),
               ),
             ),
           ),
@@ -141,7 +141,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF111827),
+                color: Color(0xFF211E40),
               ),
             ),
           ),
@@ -150,7 +150,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             child: AnimatedOpacity(
               opacity: _showAppBarTitle ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 180),
-              child: Container(height: 1, color: const Color(0xFFF3F4F6)),
+              child: Container(height: 1, color: const Color(0xFFECEAF6)),
             ),
           ),
         ),
@@ -163,14 +163,25 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Title — hero text ───────────────────
+                    // ── Overline + hero title ────────────────
+                    const Text(
+                      'TASK DETAIL',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
+                        color: Color(0xFF8B89A6),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
                     Text(
                       task.title,
                       style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF111827),
-                        height: 1.3,
+                        fontSize: 27,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.6,
+                        color: Color(0xFF211E40),
+                        height: 1.15,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -190,7 +201,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF9FAFB),
+                        color: const Color(0xFFF4F2FB),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: task.isGameTask && task.description.isEmpty
@@ -199,7 +210,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                 const Icon(
                                   Icons.sports_esports_rounded,
                                   size: 18,
-                                  color: Color(0xFF7C3AED),
+                                  color: Color(0xFF7C5CFF),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
@@ -208,7 +219,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                     style: const TextStyle(
                                       fontSize: 15,
                                       height: 1.6,
-                                      color: Color(0xFF7C3AED),
+                                      color: Color(0xFF7C5CFF),
                                     ),
                                   ),
                                 ),
@@ -243,24 +254,40 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               padding: EdgeInsets.fromLTRB(24, 12, 24, bottomPadding + 12),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                border: Border(top: BorderSide(color: Color(0xFFF3F4F6))),
+                border: Border(top: BorderSide(color: Color(0xFFECEAF6))),
               ),
               child: _markedDone
-                  ? const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.check_circle_rounded,
-                            size: 18, color: Color(0xFF10B981)),
-                        SizedBox(width: 8),
-                        Text(
-                          'Task completed',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF10B981),
-                          ),
+                  ? Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF17E2CD), Color(0xFF0FBDAD)],
                         ),
-                      ],
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF14D9C4).withValues(alpha: 0.35),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_rounded, color: Colors.white, size: 20),
+                          SizedBox(width: 8),
+                          Text(
+                            'Task completed',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   : widget.task.isGameTask
                       ? _PlayGameButton(
@@ -274,11 +301,11 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF6366F1),
+                              color: const Color(0xFF7C5CFF),
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF6366F1)
+                                  color: const Color(0xFF7C5CFF)
                                       .withValues(alpha: 0.3),
                                   blurRadius: 16,
                                   offset: const Offset(0, 6),
@@ -345,7 +372,7 @@ class _SectionLabel extends StatelessWidget {
           width: 3,
           height: 16,
           decoration: BoxDecoration(
-            color: const Color(0xFF6366F1),
+            color: const Color(0xFF7C5CFF),
             borderRadius: BorderRadius.circular(2),
           ),
         ),
@@ -355,7 +382,7 @@ class _SectionLabel extends StatelessWidget {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF1F2937),
+            color: Color(0xFF211E40),
           ),
         ),
       ],
@@ -421,10 +448,10 @@ class _CompletionBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFECFDF5),
+        color: const Color(0xFFE2FBF6),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF10B981).withValues(alpha: 0.3),
+          color: const Color(0xFFB6F0E6),
         ),
       ),
       child: Row(
@@ -434,7 +461,7 @@ class _CompletionBanner extends StatelessWidget {
             height: 40,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0xFF10B981),
+              color: Color(0xFF14D9C4),
             ),
             child: const Icon(Icons.check_rounded,
                 color: Colors.white, size: 22),
@@ -448,7 +475,7 @@ class _CompletionBanner extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF065F46),
+                  color: Color(0xFF0E8F82),
                 ),
               ),
               const SizedBox(height: 2),
@@ -456,7 +483,7 @@ class _CompletionBanner extends StatelessWidget {
                 dateText,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: Color(0xFF059669),
+                  color: Color(0xFF0FA697),
                 ),
               ),
             ],
@@ -478,10 +505,10 @@ class _VisualTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color dueColor = markedDone
-        ? const Color(0xFF10B981)
+        ? const Color(0xFF14D9C4)
         : task.isOverdue
             ? const Color(0xFFDC2626)
-            : const Color(0xFF6366F1);
+            : const Color(0xFF7C5CFF);
 
     final String dueLabel = markedDone
         ? 'Completed'
@@ -509,7 +536,7 @@ class _VisualTimeline extends StatelessWidget {
                 height: 14,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFF6366F1),
+                  color: Color(0xFF7C5CFF),
                 ),
               ),
               Container(
@@ -552,7 +579,7 @@ class _VisualTimeline extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF111827),
+                      color: Color(0xFF211E40),
                     ),
                   ),
                 ],
@@ -606,12 +633,12 @@ class _PlayGameButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [Color(0xFF10B981), Color(0xFF059669)],
+            colors: [Color(0xFF14D9C4), Color(0xFF0FA697)],
           ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF10B981).withValues(alpha: 0.35),
+              color: const Color(0xFF14D9C4).withValues(alpha: 0.35),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -701,7 +728,7 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1F2937),
+              color: Color(0xFF211E40),
             ),
           ),
           const SizedBox(height: 4),
@@ -731,7 +758,7 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
               errorText:
                   _showError ? 'Please write a note before submitting.' : null,
               filled: true,
-              fillColor: const Color(0xFFF9FAFB),
+              fillColor: const Color(0xFFF4F2FB),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
@@ -749,7 +776,7 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
                 borderSide: BorderSide(
                   color: _showError
                       ? const Color(0xFFDC2626)
-                      : const Color(0xFF6366F1),
+                      : const Color(0xFF7C5CFF),
                   width: 1.5,
                 ),
               ),
@@ -762,7 +789,7 @@ class _ParentNoteSheetState extends State<_ParentNoteSheet> {
             child: ElevatedButton(
               onPressed: _submit,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6366F1),
+                backgroundColor: const Color(0xFF7C5CFF),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(

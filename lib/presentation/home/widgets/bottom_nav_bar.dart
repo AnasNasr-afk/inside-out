@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/theme.dart';
-import '../../../gen/assets.gen.dart'; // IMPORTANT
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:patient/gen/assets.gen.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -14,47 +15,102 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icons = [
-      Assets.icons.icHome,
-      Assets.icons.icTasks,
-      Assets.icons.icNotifications,
-      Assets.icons.icProfile,
-    ];
-
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      height: 64,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade200)),
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF211E40).withValues(alpha: 0.10),
+            blurRadius: 28,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: const Color(0xFF7C5CFF).withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: icons
-            .asMap()
-            .entries
-            .map(
-              (entry) => _buildItem(
-            icon: entry.value,
-            index: entry.key,
-          ),
-        )
-            .toList(),
+        children: [
+          _Item(icon: Assets.icons.icHome,          label: 'Explore', active: selectedIndex == 0, onTap: () { HapticFeedback.lightImpact(); onTap(0); }),
+          _Item(icon: Assets.icons.icTasks,         label: 'Tasks',   active: selectedIndex == 1, onTap: () { HapticFeedback.lightImpact(); onTap(1); }),
+          _Item(icon: Assets.icons.icNotifications, label: 'Alerts',  active: selectedIndex == 2, onTap: () { HapticFeedback.lightImpact(); onTap(2); }),
+          _Item(icon: Assets.icons.icProfile,       label: 'Profile', active: selectedIndex == 3, onTap: () { HapticFeedback.lightImpact(); onTap(3); }),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildItem({
-    required SvgGenImage icon,
-    required int index,
-  }) {
-    final isSelected = selectedIndex == index;
+class _Item extends StatelessWidget {
+  final dynamic icon;
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
 
+  const _Item({
+    required this.icon,
+    required this.label,
+    required this.active,
+    required this.onTap,
+  });
+
+  static const _violet = Color(0xFF7C5CFF);
+  static const _grey   = Color(0xFF9A98B6);
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap(index),
-      child: icon.svg(
-        width: 24,
-        height: 24,
-        color: isSelected ? AppTheme.primaryColor : Colors.grey,
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeInOutCubic,
+        padding: EdgeInsets.symmetric(
+          horizontal: active ? 16.0 : 13.0,
+          vertical: 10,
+        ),
+        decoration: BoxDecoration(
+          color: active ? _violet : Colors.transparent,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon.svg(
+              width: 22.0,
+              height: 22.0,
+              colorFilter: ColorFilter.mode(
+                active ? Colors.white : _grey,
+                BlendMode.srcIn,
+              ),
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 280),
+              curve: Curves.easeInOutCubic,
+              child: active
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(width: 7),
+                        Text(
+                          label,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
       ),
     );
   }

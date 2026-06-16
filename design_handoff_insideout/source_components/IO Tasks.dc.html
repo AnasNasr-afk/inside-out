@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}.io-sc::-webkit-scrollbar{width:0;}</style>
+</helmet>
+<div style="width:392px;height:812px;position:relative;background:#FBFAFF;border-radius:44px;overflow:hidden;box-shadow:0 34px 80px rgba(35,32,72,.26);border:1px solid #fff;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+  <div style="position:absolute;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:space-between;padding:16px 26px 0;z-index:7;">
+    <span style="font-size:14px;font-weight:800;color:#211E40;">9:41</span>
+    <div style="display:flex;align-items:center;gap:6px;color:#211E40;">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".35"/></svg>
+      <svg width="17" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.5 16.4a6 6 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+      <div style="display:flex;align-items:center;gap:2px;"><span style="width:22px;height:11px;border:1.6px solid #211E40;border-radius:3px;display:inline-flex;align-items:center;padding:1px;"><span style="width:14px;height:7px;background:#211E40;border-radius:1px;"></span></span><span style="width:2px;height:5px;background:#211E40;border-radius:0 1px 1px 0;"></span></div>
+    </div>
+  </div>
+
+  <div class="io-sc" style="position:absolute;top:48px;left:0;right:0;bottom:0;overflow-y:auto;padding:6px 18px 130px;display:flex;flex-direction:column;gap:16px;">
+    <h1 style="margin:4px 2px 0;font-size:28px;font-weight:800;letter-spacing:-.6px;color:#211E40;">Tasks</h1>
+
+    <div style="position:relative;overflow:hidden;border-radius:24px;padding:20px;background:linear-gradient(135deg,#7C5CFF,#6A4BF0);box-shadow:0 16px 34px rgba(124,92,255,.30);color:#fff;">
+      <div style="position:absolute;top:-40px;right:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.10);"></div>
+      <span style="position:relative;font-size:13px;font-weight:600;color:rgba(255,255,255,.85);">Weekly Progress</span>
+      <div style="position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:8px;">
+        <span style="font-size:21px;font-weight:800;line-height:1.15;letter-spacing:-.3px;max-width:200px;">11 of 14 tasks completed</span>
+        <span style="font-size:34px;font-weight:800;letter-spacing:-1px;">79%</span>
+      </div>
+      <div style="position:relative;margin-top:16px;height:9px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden;"><div style="width:79%;height:100%;border-radius:999px;background:#fff;"></div></div>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <span style="background:#7C5CFF;color:#fff;padding:10px 22px;border-radius:999px;font-size:14px;font-weight:700;box-shadow:0 8px 16px rgba(124,92,255,.28);">All</span>
+      <span style="background:#fff;color:#6E6B8C;padding:10px 22px;border-radius:999px;font-size:14px;font-weight:600;border:1px solid #ECEAF4;">Pending</span>
+      <span style="background:#fff;color:#6E6B8C;padding:10px 22px;border-radius:999px;font-size:14px;font-weight:600;border:1px solid #ECEAF4;">Completed</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <sc-for list="{{ items }}" as="t" hint-placeholder-count="4">
+        <div style="position:relative;overflow:hidden;background:#fff;border:1px solid #EEEDF6;border-radius:20px;padding:15px 15px 15px 18px;display:flex;align-items:center;gap:13px;box-shadow:0 6px 18px rgba(33,30,64,.05);">
+          <span style="position:absolute;left:0;top:0;bottom:0;width:5px;background:{{ t.accent }};"></span>
+          <span style="{{ t.iconWrap }}">
+            <sc-if value="{{ t.done }}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>
+          </span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;">
+            <span style="{{ t.titleStyle }}">{{ t.title }}</span>
+            <span style="font-size:12.5px;font-weight:600;color:{{ t.subColor }};">{{ t.sub }}</span>
+          </div>
+          <span style="{{ t.badgeStyle }}">{{ t.badge }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(to top,#FBFAFF 38%,rgba(251,250,255,0));pointer-events:none;z-index:5;"></div>
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:26px 16px 16px;z-index:6;">
+    <dc-import name="IO BottomNav" active="tasks" hint-size="100%,80px"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:812}}">
+class Component extends DCLogic {
+  renderVals() {
+    const raw = [
+      { title: 'Follow 2-step instructions', sub: 'Completed · Jun 11', done: true },
+      { title: 'Color Match', sub: 'Completed · Jun 10', done: true },
+      { title: 'Memory Cards', sub: 'Completed · Jun 10', done: true },
+      { title: 'Talk to Poly', sub: 'Due today · 6:00 PM', done: false }
+    ];
+    const items = raw.map(t => ({
+      title: t.title, sub: t.sub, done: t.done,
+      accent: t.done ? '#14D9C4' : '#7C5CFF',
+      subColor: t.done ? '#0FA697' : '#8B89A6',
+      iconWrap: t.done
+        ? { flex: 'none', width: '40px', height: '40px', borderRadius: '13px', background: '#14D9C4', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 16px rgba(20,217,196,.30)' }
+        : { flex: 'none', width: '40px', height: '40px', borderRadius: '13px', background: '#F1ECFF', border: '2px dashed #C9BCF7', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      titleStyle: t.done
+        ? { fontSize: '15px', fontWeight: 700, color: '#9A98B6', textDecoration: 'line-through', letterSpacing: '-.2px' }
+        : { fontSize: '15px', fontWeight: 700, color: '#211E40', letterSpacing: '-.2px' },
+      badge: t.done ? 'Completed' : 'Pending',
+      badgeStyle: t.done
+        ? { flex: 'none', background: '#E2FBF6', color: '#0FA697', padding: '7px 13px', borderRadius: '999px', fontSize: '12.5px', fontWeight: 800 }
+        : { flex: 'none', background: '#FFF3D4', color: '#A9750E', padding: '7px 13px', borderRadius: '999px', fontSize: '12.5px', fontWeight: 800 }
+    }));
+    return { items };
+  }
+}
+</script>
+</body>
+</html>

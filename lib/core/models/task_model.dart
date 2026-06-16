@@ -133,6 +133,14 @@ class TaskModel {
 
   bool get isOverdue => !isCompleted && DateTime.now().isAfter(dueDate);
 
+  bool get isHidden {
+    if (!isCompleted) return false;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final due  = DateTime(dueDate.year, dueDate.month, dueDate.day);
+    return !due.isAfter(today);
+  }
+
   String get timeLabel {
     if (isCompleted) {
       return completedAt != null

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}</style>
+</helmet>
+<div style="position:relative;overflow:hidden;border-radius:26px;background:#232048;padding:20px 18px 16px;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#fff;box-shadow:0 20px 44px rgba(35,32,72,.32);">
+  <div style="position:absolute;top:-50px;right:-40px;width:230px;height:230px;border-radius:50%;border:1.5px solid rgba(20,217,196,.13);"></div>
+  <div style="position:absolute;top:-14px;right:0;width:160px;height:160px;border-radius:50%;border:1.5px solid rgba(20,217,196,.09);"></div>
+
+  <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+    <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;color:#D8D6F0;"><span style="width:7px;height:7px;border-radius:50%;background:#14D9C4;"></span>Daily check-in</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,201,60,.16);color:#FFC93C;padding:6px 11px;border-radius:999px;font-size:12.5px;font-weight:800;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+      {{ streak }}-day streak
+    </span>
+  </div>
+
+  <div style="position:relative;display:flex;align-items:center;gap:15px;margin-top:16px;">
+    <div style="position:relative;flex:none;width:92px;height:92px;border-radius:50%;background:linear-gradient(150deg,#17E2CD,#0FBDAD);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 28px rgba(20,217,196,.36);">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#06342F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+      <span style="position:absolute;top:5px;right:7px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.14);"></span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      <h3 style="margin:0;font-size:22px;line-height:1.12;font-weight:800;letter-spacing:-.4px;">How are you<br>feeling today?</h3>
+      <span style="font-size:12.5px;color:#A6A3C8;font-weight:500;">Takes about 20 seconds</span>
+    </div>
+  </div>
+
+  <div style="position:relative;display:flex;justify-content:space-between;gap:6px;margin-top:18px;">
+    <sc-for list="{{ moodViews }}" as="m" hint-placeholder-count="5">
+      <button onClick="{{ m.onSelect }}" style="display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:none;cursor:pointer;padding:0;flex:1;">
+        <span style="{{ m.dotStyle }}">
+          <sc-if value="{{ m.selected }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>
+        </span>
+        <span style="{{ m.labelStyle }}">{{ m.label }}</span>
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-radius:17px;padding:8px;margin-top:18px;">
+    <button onClick="{{ logMood }}" style="{{ logStyle }}">
+      <sc-if value="{{ logged }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>
+      {{ logLabel }}
+    </button>
+    <div style="display:flex;align-items:center;gap:9px;padding-right:6px;">
+      <div style="display:flex;align-items:center;">
+        <span style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#7C5CFF,#A88BFF);border:2px solid #fff;"></span>
+        <span style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#FF8FA0,#FF5B72);border:2px solid #fff;margin-left:-9px;"></span>
+        <span style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#16E2CD,#0FBDAD);border:2px solid #fff;margin-left:-9px;"></span>
+      </div>
+      <div style="display:flex;flex-direction:column;line-height:1.05;">
+        <span style="font-size:13px;font-weight:800;color:#211E40;">{{ count }}</span>
+        <span style="font-size:10px;color:#8B89A6;font-weight:600;">checked in</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:380},&quot;streak&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;5&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;count&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;1,204&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { sel: 1, logged: false };
+  renderVals() {
+    const moods = [
+      { label: 'Great', color: '#14D9C4' },
+      { label: 'Good',  color: '#5BD17A' },
+      { label: 'Okay',  color: '#FFC93C' },
+      { label: 'Low',   color: '#FF9E5B' },
+      { label: 'Rough', color: '#FF5B72' }
+    ];
+    const sel = this.state.sel;
+    const moodViews = moods.map((m, i) => {
+      const selected = i === sel;
+      return {
+        label: m.label,
+        selected,
+        onSelect: () => this.setState({ sel: i }),
+        dotStyle: selected
+          ? { width: '48px', height: '48px', borderRadius: '50%', background: m.color, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 3px ' + m.color + '59', transition: '.18s' }
+          : { width: '42px', height: '42px', borderRadius: '50%', background: m.color + '24', border: '1.5px solid ' + m.color + '66', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '.18s' },
+        labelStyle: selected
+          ? { fontSize: '11.5px', fontWeight: 700, color: '#fff' }
+          : { fontSize: '11.5px', fontWeight: 600, color: '#8E8BB2' }
+      };
+    });
+    return {
+      streak: this.props.streak ?? '5',
+      count: this.props.count ?? '1,204',
+      moodViews,
+      logged: this.state.logged,
+      logLabel: this.state.logged ? 'Logged today' : 'Log my mood',
+      logStyle: { display: 'inline-flex', alignItems: 'center', gap: '8px', background: this.state.logged ? '#0FBFAE' : '#14D9C4', color: '#06342F', border: 'none', borderRadius: '13px', padding: '12px 18px', fontSize: '14px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 8px 18px rgba(20,217,196,.4)' },
+      logMood: () => this.setState({ logged: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

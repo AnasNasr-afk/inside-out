@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}</style>
+</helmet>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 2px;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:46px;height:46px;border-radius:16px;background:linear-gradient(140deg,#7C5CFF,#14D9C4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 8px 18px rgba(124,92,255,.30);">{{ initial }}</div>
+    <div style="display:flex;flex-direction:column;gap:1px;">
+      <span style="font-size:12.5px;color:#8B89A6;font-weight:600;">{{ greeting }}</span>
+      <span style="font-size:18px;color:#211E40;font-weight:800;letter-spacing:-.3px;">{{ user }}</span>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button style="width:44px;height:44px;border:none;border-radius:14px;background:#ECEAF6;color:#211E40;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+    <button style="position:relative;width:44px;height:44px;border:none;border-radius:14px;background:#ECEAF6;color:#211E40;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span style="position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:#FF5B72;border:2px solid #ECEAF6;"></span>
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:72},&quot;user&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lina&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;greeting&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Good morning&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const user = this.props.user ?? 'Lina';
+    const greeting = this.props.greeting ?? 'Good morning';
+    return { user, greeting, initial: String(user).trim().charAt(0).toUpperCase() || 'L' };
+  }
+}
+</script>
+</body>
+</html>

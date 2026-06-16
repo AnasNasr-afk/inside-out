@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}</style>
+</helmet>
+<div style="position:relative;overflow:hidden;border-radius:22px;padding:17px 18px;background:linear-gradient(125deg,#FF5B72,#FF7E6B);box-shadow:0 14px 30px rgba(255,91,114,.28);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#fff;">
+  <div style="position:absolute;top:-34px;right:-22px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.13);"></div>
+  <div style="position:absolute;bottom:-44px;right:38px;width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.08);"></div>
+  <div style="position:relative;display:flex;flex-direction:column;gap:5px;max-width:235px;">
+    <h3 style="margin:0;font-size:17px;font-weight:800;letter-spacing:-.2px;">{{ title }}</h3>
+    <p style="margin:0;font-size:12.5px;line-height:1.35;font-weight:500;color:rgba(255,255,255,.92);">{{ subtitle }}</p>
+  </div>
+  <div style="position:relative;margin-top:13px;display:inline-flex;align-items:center;gap:7px;background:#FFC93C;color:#5A3A00;padding:7px 13px;border-radius:999px;font-weight:800;font-size:13px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span style="white-space:nowrap;">Resets in</span> <span style="font-variant-numeric:tabular-nums;">{{ time }}</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:120},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Welcome back, Lina&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;subtitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Log your mood before the day resets to keep your streak alive&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;seconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:120,&quot;min&quot;:10,&quot;max&quot;:3600,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  state = { s: null };
+  componentDidMount() {
+    const base = Number(this.props.seconds) || 120;
+    this.setState({ s: base });
+    this._t = setInterval(() => {
+      this.setState(st => ({ s: st.s <= 0 ? base : st.s - 1 }));
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this._t); }
+  renderVals() {
+    const base = Number(this.props.seconds) || 120;
+    const total = this.state.s == null ? base : this.state.s;
+    const mm = String(Math.floor(total / 60)).padStart(2, '0');
+    const ss = String(total % 60).padStart(2, '0');
+    return {
+      title: this.props.title ?? 'Welcome back, Lina',
+      subtitle: this.props.subtitle ?? 'Log your mood before the day resets to keep your streak alive',
+      time: mm + ':' + ss
+    };
+  }
+}
+</script>
+</body>
+</html>
