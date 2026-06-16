@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PmBackground extends StatefulWidget {
   const PmBackground({super.key});
@@ -19,7 +20,7 @@ class _PmBackgroundState extends State<PmBackground>
     return _StarData(
       x: 0.03 + rng.nextDouble() * 0.94,
       y: 0.04 + rng.nextDouble() * 0.50,
-      radius: 1.0 + rng.nextDouble() * 1.5,
+      radius: (1.0 + rng.nextDouble() * 1.5).r,
       phase: rng.nextDouble() * math.pi * 2,
       speed: 2.0 + rng.nextDouble() * 2.5,
     );
@@ -29,10 +30,10 @@ class _PmBackgroundState extends State<PmBackground>
     final rng = math.Random(i * 23 + 11);
     return _SnowData(
       x: rng.nextDouble(),
-      radius: 1.5 + rng.nextDouble() * 2.0,
+      radius: (1.5 + rng.nextDouble() * 2.0).r,
       phase: rng.nextDouble(),
       duration: 7.0 + rng.nextDouble() * 6.0,
-      drift: (rng.nextDouble() - 0.5) * 40,
+      drift: (rng.nextDouble() - 0.5) * 40.w,
     );
   });
 
@@ -85,9 +86,9 @@ class _PmBackgroundState extends State<PmBackground>
               top: size.height * 0.16,
               left: -size.width * 0.14 + a1,
               width: size.width * 1.30,
-              height: 120,
+              height: 120.h,
               child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 26, sigmaY: 26),
+                imageFilter: ImageFilter.blur(sigmaX: 26.r, sigmaY: 26.r),
                 child: Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -108,9 +109,9 @@ class _PmBackgroundState extends State<PmBackground>
               top: size.height * 0.28,
               left: -size.width * 0.14 + a2,
               width: size.width * 1.30,
-              height: 90,
+              height: 90.h,
               child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
+                imageFilter: ImageFilter.blur(sigmaX: 22.r, sigmaY: 22.r),
                 child: Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -138,13 +139,13 @@ class _PmBackgroundState extends State<PmBackground>
               left: -size.width * 0.12,
               bottom: 0,
               width: size.width * 1.24,
-              height: 225,
+              height: 225.h,
               child: Stack(
                 children: [
                   Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(1200)),
-                      gradient: LinearGradient(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(1200.r)),
+                      gradient: const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [Color(0xFFEAF4F8), Color(0xFFC6DCEA)],
@@ -153,7 +154,7 @@ class _PmBackgroundState extends State<PmBackground>
                   ),
                   Positioned.fill(
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(1200)),
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(1200.r)),
                       child: CustomPaint(painter: _MoonCraterPainter()),
                     ),
                   ),
@@ -163,10 +164,10 @@ class _PmBackgroundState extends State<PmBackground>
 
             // ── Glow behind Poly ─────────────────────────────────────
             Positioned(
-              bottom: 100,
-              left: size.width / 2 - 150,
-              width: 300,
-              height: 300,
+              bottom: 100.h,
+              left: size.width / 2 - 150.w,
+              width: 300.w,
+              height: 300.h,
               child: const DecoratedBox(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -241,7 +242,8 @@ class _MoonCraterPainter extends CustomPainter {
     final rimPaint = Paint()..style = PaintingStyle.stroke;
     final fillPaint = Paint()..style = PaintingStyle.fill;
 
-    for (final (xf, yf, r) in _craters) {
+    for (final (xf, yf, rRaw) in _craters) {
+      final r = rRaw.r;
       final c = Offset(xf * size.width, yf * size.height);
 
       // Crater floor (slightly deeper tone)
@@ -268,7 +270,8 @@ class _MoonCraterPainter extends CustomPainter {
     }
 
     // Small pebble dots
-    for (final (xf, yf, r) in _dots) {
+    for (final (xf, yf, rRaw) in _dots) {
+      final r = rRaw.r;
       fillPaint.color = const Color(0xFFBDD4DF);
       canvas.drawCircle(Offset(xf * size.width, yf * size.height), r, fillPaint);
     }
@@ -305,7 +308,7 @@ class _ScenePainter extends CustomPainter {
     for (final f in snow) {
       final cycles = 20 / f.duration;
       final progress = ((t * cycles) + f.phase) % 1.0;
-      final y = progress * (size.height + 20) - 20;
+      final y = progress * (size.height + 20.h) - 20.h;
       final x = f.x * size.width + f.drift * progress;
       paint.color = Colors.white.withValues(alpha: 0.75);
       canvas.drawCircle(Offset(x, y), f.radius, paint);

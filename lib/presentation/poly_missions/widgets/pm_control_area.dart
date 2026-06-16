@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/poly_missions/cubit/poly_missions_cubit.dart';
 
@@ -87,20 +88,20 @@ class _PmControlAreaState extends State<PmControlArea>
   Widget _buildPolyTalking() {
     return Container(
       key: const ValueKey('poly-talking'),
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 14.h),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(999.r),
         border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _Waveform(ctrl: _waveCtrl, color: const Color(0xFF8A6BFF)),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Text(
             'Poly is speaking…',
-            style: T.badge().copyWith(fontSize: 14.5, color: Colors.white),
+            style: T.badge().copyWith(fontSize: 14.5.sp, color: Colors.white),
           ),
         ],
       ),
@@ -126,13 +127,13 @@ class _PmControlAreaState extends State<PmControlArea>
                   child: Opacity(
                     opacity: opacity,
                     child: Container(
-                      width: 78,
-                      height: 78,
+                      width: 78.w,
+                      height: 78.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: const Color(0x998A6BFF),
-                          width: 2,
+                          width: 2.w,
                         ),
                       ),
                     ),
@@ -144,10 +145,10 @@ class _PmControlAreaState extends State<PmControlArea>
           },
           child: _MicCircle(onTap: widget.onStartRec),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         Text(
           'Tap to answer Poly',
-          style: T.navLabel().copyWith(fontSize: 13.5, color: Colors.white),
+          style: T.navLabel().copyWith(fontSize: 13.5.sp, color: Colors.white),
         ),
       ],
     );
@@ -160,10 +161,10 @@ class _PmControlAreaState extends State<PmControlArea>
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 9.h),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.16),
-            borderRadius: BorderRadius.circular(999),
+            borderRadius: BorderRadius.circular(999.r),
             border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
           ),
           child: Row(
@@ -174,8 +175,8 @@ class _PmControlAreaState extends State<PmControlArea>
                 builder: (_, __) => Opacity(
                   opacity: 0.4 + 0.6 * math.sin(_micRingCtrl.value * math.pi),
                   child: Container(
-                    width: 9,
-                    height: 9,
+                    width: 9.w,
+                    height: 9.h,
                     decoration: const BoxDecoration(
                       color: Color(0xFFFF5B72),
                       shape: BoxShape.circle,
@@ -183,44 +184,44 @@ class _PmControlAreaState extends State<PmControlArea>
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10.w),
               Text(
                 _formatTime(widget.recSeconds),
                 style: T.badge().copyWith(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: Colors.white,
                   fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10.w),
               _Waveform(ctrl: _waveCtrl, color: Colors.white),
             ],
           ),
         ),
-        const SizedBox(height: 13),
+        SizedBox(height: 13.h),
         GestureDetector(
           onTap: widget.onStopRec,
           child: Container(
-            width: 78,
-            height: 78,
+            width: 78.w,
+            height: 78.h,
             decoration: BoxDecoration(
               color: const Color(0xFFFF5B72),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFFFF5B72).withValues(alpha: 0.55),
-                  blurRadius: 30,
-                  offset: const Offset(0, 16),
+                  blurRadius: 30.r,
+                  offset: Offset(0, 16.h),
                 ),
               ],
             ),
-            child: const Icon(Icons.stop_rounded, color: Colors.white, size: 34),
+            child: Icon(Icons.stop_rounded, color: Colors.white, size: 34.sp),
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         Text(
           'Tap to stop',
-          style: T.navLabel().copyWith(fontSize: 13.5, color: Colors.white),
+          style: T.navLabel().copyWith(fontSize: 13.5.sp, color: Colors.white),
         ),
       ],
     );
@@ -230,20 +231,20 @@ class _PmControlAreaState extends State<PmControlArea>
   Widget _buildAnalyzing() {
     return Container(
       key: const ValueKey('analyzing'),
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 14.h),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(999.r),
         border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _BouncingDots(ctrl: _dotsCtrl),
-          const SizedBox(width: 11),
+          SizedBox(width: 11.w),
           Text(
             'Poly is thinking…',
-            style: T.badge().copyWith(fontSize: 14.5, color: Colors.white),
+            style: T.badge().copyWith(fontSize: 14.5.sp, color: Colors.white),
           ),
         ],
       ),
@@ -260,40 +261,40 @@ class _PmControlAreaState extends State<PmControlArea>
         GestureDetector(
           onTap: widget.onStartRec,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 12.h),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(999.r),
               border: Border.all(color: Colors.white.withValues(alpha: 0.30)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.mic_rounded, color: Colors.white, size: 18),
-                const SizedBox(width: 8),
+                Icon(Icons.mic_rounded, color: Colors.white, size: 18.sp),
+                SizedBox(width: 8.w),
                 Text(
                   'Record again',
                   style: T.navLabel()
-                      .copyWith(fontSize: 13.5, color: Colors.white),
+                      .copyWith(fontSize: 13.5.sp, color: Colors.white),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         // "Next mission" filled button
         GestureDetector(
           onTap: widget.onNext,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 16.h),
             decoration: BoxDecoration(
               color: const Color(0xFF14D9C4),
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(999.r),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF14D9C4).withValues(alpha: 0.50),
-                  blurRadius: 30,
-                  offset: const Offset(0, 16),
+                  blurRadius: 30.r,
+                  offset: Offset(0, 16.h),
                 ),
               ],
             ),
@@ -306,11 +307,11 @@ class _PmControlAreaState extends State<PmControlArea>
                     color: const Color(0xFF06342F),
                   ),
                 ),
-                const SizedBox(width: 10),
-                const Icon(
+                SizedBox(width: 10.w),
+                Icon(
                   Icons.chevron_right_rounded,
-                  color: Color(0xFF06342F),
-                  size: 22,
+                  color: const Color(0xFF06342F),
+                  size: 22.sp,
                 ),
               ],
             ),
@@ -332,8 +333,8 @@ class _MicCircle extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 78,
-        height: 78,
+        width: 78.w,
+        height: 78.h,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: const LinearGradient(
@@ -344,12 +345,12 @@ class _MicCircle extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: const Color(0xFF7C5CFF).withValues(alpha: 0.50),
-              blurRadius: 30,
-              offset: const Offset(0, 16),
+              blurRadius: 30.r,
+              offset: Offset(0, 16.h),
             ),
           ],
         ),
-        child: const Icon(Icons.mic_rounded, color: Colors.white, size: 32),
+        child: Icon(Icons.mic_rounded, color: Colors.white, size: 32.sp),
       ),
     );
   }
@@ -375,8 +376,8 @@ class _Waveform extends StatelessWidget {
           children: [
             for (int i = 0; i < _heights.length; i++) ...[
               Container(
-                width: 4,
-                height: _heights[i] *
+                width: 4.w,
+                height: _heights[i].h *
                     (0.4 +
                         0.6 *
                             math
@@ -384,10 +385,10 @@ class _Waveform extends StatelessWidget {
                                 .abs()),
                 decoration: BoxDecoration(
                   color: color,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
-              if (i < _heights.length - 1) const SizedBox(width: 3),
+              if (i < _heights.length - 1) SizedBox(width: 3.w),
             ],
           ],
         );
@@ -414,21 +415,21 @@ class _BouncingDots extends StatelessWidget {
               Transform.translate(
                 offset: Offset(
                   0,
-                  -6 *
+                  -6.h *
                       math
                           .sin((ctrl.value * math.pi * 2) - (i * 0.4))
                           .clamp(0.0, 1.0),
                 ),
                 child: Container(
-                  width: 9,
-                  height: 9,
+                  width: 9.w,
+                  height: 9.h,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                 ),
               ),
-              if (i < 2) const SizedBox(width: 5),
+              if (i < 2) SizedBox(width: 5.w),
             ],
           ],
         );

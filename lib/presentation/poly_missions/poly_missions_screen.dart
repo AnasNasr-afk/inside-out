@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/poly_missions/cubit/poly_missions_cubit.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_all_done.dart';
@@ -68,7 +69,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
 
                 // Cards / focus / loading / empty area
                 Positioned(
-                  top: 118, left: 0, right: 0,
+                  top: 118.h, left: 0, right: 0,
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     switchInCurve: Curves.easeOut,
@@ -92,7 +93,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
 
                 // Poly avatar
                 Positioned(
-                  bottom: 180, left: 0, right: 0,
+                  bottom: 180.h, left: 0, right: 0,
                   child: Center(
                     child: PmPolyArea(
                       isHearing: state.phase == PmPhase.recording,
@@ -110,7 +111,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
 
                 // Control area
                 Positioned(
-                  bottom: 20, left: 0, right: 0,
+                  bottom: 20.h, left: 0, right: 0,
                   child: Center(
                     child: PmControlArea(
                       phase: state.phase,
@@ -132,13 +133,13 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
   }
 
   Widget _buildLoading() {
-    return const SizedBox(
-      key: ValueKey('loading'),
-      height: 180,
+    return SizedBox(
+      key: const ValueKey('loading'),
+      height: 180.h,
       child: Center(
         child: CircularProgressIndicator(
           color: Colors.white,
-          strokeWidth: 2.5,
+          strokeWidth: 2.5.w,
         ),
       ),
     );
@@ -147,30 +148,30 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
   Widget _buildEmpty() {
     return SizedBox(
       key: const ValueKey('empty'),
-      height: 180,
+      height: 180.h,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: EdgeInsets.symmetric(horizontal: 32.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.check_circle_outline_rounded,
                 color: Colors.white54,
-                size: 42,
+                size: 42.sp,
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
               Text(
                 'No missions yet',
                 style: T.sectionHeader().copyWith(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 'Your specialist will assign tasks soon.',
                 style: T.navLabel().copyWith(
                   color: Colors.white60,
-                  fontSize: 13.5,
+                  fontSize: 13.5.sp,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -184,7 +185,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
   Widget _buildPickCards(PolyMissionsState state, PolyMissionsCubit cubit) {
     return Padding(
       key: const ValueKey('pick'),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: AnimatedBuilder(
         animation: _bobCtrl,
         builder: (_, __) => Row(
@@ -197,7 +198,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
                     0,
                     state.done.contains(state.tasks[i].taskId.toString())
                         ? 0
-                        : -9.0 *
+                        : -9.0.h *
                             math.sin(
                               _bobCtrl.value * 2 * math.pi +
                                   i * 1.3 * math.pi / 3,
@@ -211,7 +212,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
                   ),
                 ),
               ),
-              if (i < state.tasks.length - 1) const SizedBox(width: 13),
+              if (i < state.tasks.length - 1) SizedBox(width: 13.w),
             ],
           ],
         ),
@@ -229,7 +230,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
 
     return Padding(
       key: const ValueKey('focus'),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -237,14 +238,14 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
             mission: cur,
             showDone: state.phase == PmPhase.response,
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           if (others.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (int i = 0; i < others.length; i++) ...[
                   PmOtherChip(mission: others[i]),
-                  if (i < others.length - 1) const SizedBox(width: 8),
+                  if (i < others.length - 1) SizedBox(width: 8.w),
                 ],
               ],
             ),

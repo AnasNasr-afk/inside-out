@@ -152,7 +152,7 @@ class _HomeHeader extends StatelessWidget {
             child: Container(
               width: 40.w,
               height: 40.h,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: T.card,
                 shape: BoxShape.circle,
                 boxShadow: T.cardShadow,

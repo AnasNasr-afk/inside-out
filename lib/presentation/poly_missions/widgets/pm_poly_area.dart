@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:patient/presentation/poly_missions/cubit/poly_missions_service.dart';
 import 'package:rive/rive.dart' hide RadialGradient, LinearGradient;
@@ -88,10 +89,10 @@ class _PmPolyAreaState extends State<PmPolyArea> {
           ).createShader(bounds),
           blendMode: BlendMode.dstIn,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30.r),
             child: SizedBox(
-              width: 400,
-              height: 360,
+              width: 400.w,
+              height: 360.h,
               child: _artboard == null
                   ? const SizedBox.shrink()
                   : Rive(artboard: _artboard!, fit: BoxFit.contain),
@@ -101,14 +102,14 @@ class _PmPolyAreaState extends State<PmPolyArea> {
 
         // Ground shadow ellipse
         Transform.translate(
-          offset: const Offset(0, -9),
+          offset: Offset(0, -9.h),
           child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+            imageFilter: ImageFilter.blur(sigmaX: 3.r, sigmaY: 3.r),
             child: Container(
-              width: 160,
-              height: 22,
+              width: 160.w,
+              height: 22.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(80),
+                borderRadius: BorderRadius.circular(80.r),
                 gradient: RadialGradient(
                   colors: [
                     const Color(0xFF2B2360).withValues(alpha: 0.26),

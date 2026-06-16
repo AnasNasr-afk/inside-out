@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class T {
@@ -34,42 +35,42 @@ class T {
   static const Color border      = Color(0xFFECEAF4);
 
   // ── Shadows ───────────────────────────────────────────────────────────────
-  static const List<BoxShadow> cardShadow = [
-    BoxShadow(color: Color(0x0D211E40), blurRadius: 18, offset: Offset(0, 6)),
+  static List<BoxShadow> get cardShadow => [
+    BoxShadow(color: const Color(0x0D211E40), blurRadius: 18.r, offset: Offset(0.w, 6.h)),
   ];
-  static const List<BoxShadow> navShadow = [
-    BoxShadow(color: Color(0x29211E40), blurRadius: 36, offset: Offset(0, 16)),
+  static List<BoxShadow> get navShadow => [
+    BoxShadow(color: const Color(0x29211E40), blurRadius: 36.r, offset: Offset(0.w, 16.h)),
   ];
   static List<BoxShadow> primaryCta = [
     BoxShadow(
       color: primary.withValues(alpha: 0.38),
-      blurRadius: 24,
-      offset: const Offset(0, 12),
+      blurRadius: 24.r,
+      offset: Offset(0, 12.h),
     ),
   ];
 
   // ── Typography (Plus Jakarta Sans) ───────────────────────────────────────
   static TextStyle screenTitle() => GoogleFonts.plusJakartaSans(
-        fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -0.6, color: ink);
+        fontSize: 28.sp, fontWeight: FontWeight.w800, letterSpacing: -0.6, color: ink);
 
   static TextStyle sectionHeader() => GoogleFonts.plusJakartaSans(
-        fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: ink);
+        fontSize: 17.sp, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: ink);
 
   static TextStyle cardTitle() => GoogleFonts.plusJakartaSans(
-        fontSize: 15, fontWeight: FontWeight.w700, color: ink);
+        fontSize: 15.sp, fontWeight: FontWeight.w700, color: ink);
 
   static TextStyle body() => GoogleFonts.plusJakartaSans(
-        fontSize: 15, fontWeight: FontWeight.w500, height: 1.5, color: ink);
+        fontSize: 15.sp, fontWeight: FontWeight.w500, height: 1.5, color: ink);
 
   static TextStyle caption() => GoogleFonts.plusJakartaSans(
-        fontSize: 12, fontWeight: FontWeight.w600, color: muted);
+        fontSize: 12.sp, fontWeight: FontWeight.w600, color: muted);
 
   static TextStyle badge() => GoogleFonts.plusJakartaSans(
-        fontSize: 11, fontWeight: FontWeight.w800);
+        fontSize: 11.sp, fontWeight: FontWeight.w800);
 
   static TextStyle navLabel() => GoogleFonts.plusJakartaSans(
-        fontSize: 11, fontWeight: FontWeight.w700);
+        fontSize: 11.sp, fontWeight: FontWeight.w700);
 
   static TextStyle bigNumeral() => GoogleFonts.plusJakartaSans(
-        fontSize: 34, fontWeight: FontWeight.w800, letterSpacing: -1.0);
+        fontSize: 34.sp, fontWeight: FontWeight.w800, letterSpacing: -1.0);
 }

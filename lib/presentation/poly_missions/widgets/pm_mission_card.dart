@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_mission.dart';
 
@@ -70,17 +71,17 @@ class _PmMissionCardState extends State<PmMissionCard>
             color: widget.isDone
                 ? Colors.white.withValues(alpha: 0.50)
                 : Colors.white.withValues(alpha: 0.95),
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: Colors.transparent, width: 3),
-            boxShadow: const [
+            borderRadius: BorderRadius.circular(22.r),
+            border: Border.all(color: Colors.transparent, width: 3.w),
+            boxShadow: [
               BoxShadow(
-                color: Color(0x4D281959),
-                blurRadius: 22,
-                offset: Offset(0, 10),
+                color: const Color(0x4D281959),
+                blurRadius: 22.r,
+                offset: Offset(0, 10.h),
               ),
             ],
           ),
-          padding: const EdgeInsets.fromLTRB(8, 15, 8, 13),
+          padding: EdgeInsets.fromLTRB(8.w, 15.h, 8.w, 13.h),
           child: Stack(
             alignment: Alignment.topCenter,
             clipBehavior: Clip.none,
@@ -88,10 +89,10 @@ class _PmMissionCardState extends State<PmMissionCard>
               // Pulsing ring (undone only) — extends 4px outside the card
               if (!widget.isDone)
                 Positioned(
-                  top: -4,
-                  left: -4,
-                  right: -4,
-                  bottom: -4,
+                  top: -4.h,
+                  left: -4.w,
+                  right: -4.w,
+                  bottom: -4.h,
                   child: AnimatedBuilder(
                     animation: _ringCtrl,
                     builder: (_, __) => Transform.scale(
@@ -100,10 +101,10 @@ class _PmMissionCardState extends State<PmMissionCard>
                         opacity: _ringOpacity.value,
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(24.r),
                             border: Border.all(
                               color: Colors.white.withValues(alpha: 0.55),
-                              width: 2,
+                              width: 2.w,
                             ),
                           ),
                         ),
@@ -118,19 +119,19 @@ class _PmMissionCardState extends State<PmMissionCard>
                 children: [
                   // Icon tile
                   Container(
-                    width: 46,
-                    height: 46,
+                    width: 46.w,
+                    height: 46.h,
                     decoration: BoxDecoration(
                       color: widget.mission.color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(15.r),
                     ),
                     child: Icon(
                       widget.mission.icon,
-                      size: 24,
+                      size: 24.sp,
                       color: widget.mission.deepColor,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
 
                   // Label — single line, no wrap
                   Text(
@@ -140,13 +141,13 @@ class _PmMissionCardState extends State<PmMissionCard>
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: T.caption().copyWith(
-                      fontSize: 12.5,
+                      fontSize: 12.5.sp,
                       fontWeight: FontWeight.w800,
                       color: const Color(0xFF2B2360),
                       letterSpacing: -0.3,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5.h),
 
                   // Reward or done label
                   widget.isDone
@@ -161,10 +162,10 @@ class _PmMissionCardState extends State<PmMissionCard>
                           children: [
                             Icon(
                               Icons.star_rounded,
-                              size: 11,
+                              size: 11.sp,
                               color: widget.mission.deepColor,
                             ),
-                            const SizedBox(width: 2),
+                            SizedBox(width: 2.w),
                             Text(
                               '+10',
                               style: T.badge().copyWith(
@@ -179,18 +180,18 @@ class _PmMissionCardState extends State<PmMissionCard>
               // Done check badge
               if (widget.isDone)
                 Positioned(
-                  top: -4,
-                  right: -4,
+                  top: -4.h,
+                  right: -4.w,
                   child: Container(
-                    width: 22,
-                    height: 22,
+                    width: 22.w,
+                    height: 22.h,
                     decoration: const BoxDecoration(
                       color: Color(0xFF14B2A0),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.check_rounded,
-                      size: 13,
+                      size: 13.sp,
                       color: Colors.white,
                     ),
                   ),

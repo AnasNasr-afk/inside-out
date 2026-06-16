@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 class PmAllDone extends StatefulWidget {
@@ -92,19 +93,19 @@ class _PmAllDoneState extends State<PmAllDone> with TickerProviderStateMixin {
               child: ScaleTransition(
                 scale: _scale,
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 36),
-                  padding: const EdgeInsets.fromLTRB(28, 34, 28, 28),
+                  margin: EdgeInsets.symmetric(horizontal: 36.w),
+                  padding: EdgeInsets.fromLTRB(28.w, 34.h, 28.w, 28.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFF2D1F6E),
-                    borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.circular(32.r),
                     border: Border.all(
                       color: Colors.white.withValues(alpha: 0.15),
                     ),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: Color(0x66000000),
-                        blurRadius: 40,
-                        offset: Offset(0, 20),
+                        color: const Color(0x66000000),
+                        blurRadius: 40.r,
+                        offset: Offset(0, 20.h),
                       ),
                     ],
                   ),
@@ -113,8 +114,8 @@ class _PmAllDoneState extends State<PmAllDone> with TickerProviderStateMixin {
                     children: [
                       // Star burst
                       Container(
-                        width: 80,
-                        height: 80,
+                        width: 80.w,
+                        height: 80.h,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const RadialGradient(
@@ -124,45 +125,45 @@ class _PmAllDoneState extends State<PmAllDone> with TickerProviderStateMixin {
                             BoxShadow(
                               color: const Color(0xFFFFC93C)
                                   .withValues(alpha: 0.50),
-                              blurRadius: 28,
-                              offset: const Offset(0, 10),
+                              blurRadius: 28.r,
+                              offset: Offset(0, 10.h),
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.star_rounded,
                           color: Colors.white,
-                          size: 42,
+                          size: 42.sp,
                         ),
                       ),
-                      const SizedBox(height: 22),
+                      SizedBox(height: 22.h),
 
                       Text(
                         'Amazing!',
                         style: T.sectionHeader().copyWith(
-                          fontSize: 28,
+                          fontSize: 28.sp,
                           color: Colors.white,
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       Text(
                         'You finished all your missions today!',
                         style: T.navLabel().copyWith(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           color: Colors.white70,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // Coins pill
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 22, vertical: 11),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 22.w, vertical: 11.h),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFC93C).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(999),
+                          borderRadius: BorderRadius.circular(999.r),
                           border: Border.all(
                             color:
                                 const Color(0xFFFFC93C).withValues(alpha: 0.40),
@@ -171,39 +172,39 @@ class _PmAllDoneState extends State<PmAllDone> with TickerProviderStateMixin {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.star_rounded,
-                              color: Color(0xFFFFC93C),
-                              size: 20,
+                              color: const Color(0xFFFFC93C),
+                              size: 20.sp,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Text(
                               '+${widget.coinsEarned} stars  ·  ${widget.totalCoins} total',
                               style: T.badge().copyWith(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: const Color(0xFFFFC93C),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28.h),
 
                       // Continue button
                       GestureDetector(
                         onTap: widget.onContinue,
                         child: Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 17),
+                          padding: EdgeInsets.symmetric(vertical: 17.h),
                           decoration: BoxDecoration(
                             color: const Color(0xFF14D9C4),
-                            borderRadius: BorderRadius.circular(999),
+                            borderRadius: BorderRadius.circular(999.r),
                             boxShadow: [
                               BoxShadow(
                                 color: const Color(0xFF14D9C4)
                                     .withValues(alpha: 0.45),
-                                blurRadius: 24,
-                                offset: const Offset(0, 12),
+                                blurRadius: 24.r,
+                                offset: Offset(0, 12.h),
                               ),
                             ],
                           ),
@@ -216,11 +217,11 @@ class _PmAllDoneState extends State<PmAllDone> with TickerProviderStateMixin {
                                   color: const Color(0xFF06342F),
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              const Icon(
+                              SizedBox(width: 8.w),
+                              Icon(
                                 Icons.nights_stay_rounded,
-                                color: Color(0xFF06342F),
-                                size: 22,
+                                color: const Color(0xFF06342F),
+                                size: 22.sp,
                               ),
                             ],
                           ),
@@ -264,7 +265,7 @@ class _Particle {
       x: rng.nextDouble(),
       yOffset: rng.nextDouble(),
       speed: 0.5 + rng.nextDouble() * 0.5,
-      size: 5 + rng.nextDouble() * 8,
+      size: (5 + rng.nextDouble() * 8).r,
       color: colors[rng.nextInt(colors.length)],
       rotation: rng.nextDouble() * math.pi * 2,
       isRect: rng.nextBool(),
@@ -289,8 +290,8 @@ class _ConfettiPainter extends CustomPainter {
       // Each particle starts at its yOffset and falls at its speed.
       final t = ((progress * p.speed + p.yOffset) % 1.0);
       final x = p.x * size.width +
-          math.sin(t * math.pi * 2 + p.yOffset * 6) * 20;
-      final y = t * (size.height + 30) - 20;
+          math.sin(t * math.pi * 2 + p.yOffset * 6) * 20.r;
+      final y = t * (size.height + 30.h) - 20.h;
 
       final paint = Paint()
         ..color = p.color.withValues(alpha: (1 - t * 0.6).clamp(0, 1))

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_mission.dart';
 
@@ -12,33 +13,33 @@ class PmOtherChip extends StatelessWidget {
     return Opacity(
       opacity: 0.65,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(7, 5, 11, 5),
+        padding: EdgeInsets.fromLTRB(7.w, 5.h, 11.w, 5.h),
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(999.r),
           border: Border.all(color: Colors.white.withValues(alpha: 0.20)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 22,
-              height: 22,
+              width: 22.w,
+              height: 22.h,
               decoration: BoxDecoration(
                 color: mission.color.withValues(alpha: 0.20),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Icon(mission.icon, size: 13, color: Colors.white),
+              child: Icon(mission.icon, size: 13.sp, color: Colors.white),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6.w),
             ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 100),
+              constraints: BoxConstraints(maxWidth: 100.w),
               child: Text(
                 mission.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: T.navLabel().copyWith(
-                  fontSize: 11.5,
+                  fontSize: 11.5.sp,
                   color: Colors.white.withValues(alpha: 0.90),
                 ),
               ),

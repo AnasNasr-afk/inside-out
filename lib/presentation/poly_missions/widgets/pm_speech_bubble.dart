@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 class PmSpeechBubble extends StatelessWidget {
@@ -12,22 +13,22 @@ class PmSpeechBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 300),
+        constraints: BoxConstraints(maxWidth: 300.w),
         child: Stack(
           alignment: Alignment.bottomCenter,
           clipBehavior: Clip.none,
           children: [
             // Bubble body
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: const [
+                borderRadius: BorderRadius.circular(20.r),
+                boxShadow: [
                   BoxShadow(
-                    color: Color(0x5914120C),
-                    blurRadius: 28,
-                    offset: Offset(0, 12),
+                    color: const Color(0x5914120C),
+                    blurRadius: 28.r,
+                    offset: Offset(0, 12.h),
                   ),
                 ],
               ),
@@ -43,15 +44,15 @@ class PmSpeechBubble extends StatelessWidget {
 
             // Downward tail
             Positioned(
-              bottom: -7,
+              bottom: -7.h,
               child: Transform.rotate(
                 angle: math.pi / 4,
                 child: Container(
-                  width: 14,
-                  height: 14,
-                  decoration: const BoxDecoration(
+                  width: 14.w,
+                  height: 14.h,
+                  decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(2)),
+                    borderRadius: BorderRadius.all(Radius.circular(2.r)),
                   ),
                 ),
               ),

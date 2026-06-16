@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 class PmTopBar extends StatelessWidget {
@@ -17,24 +18,24 @@ class PmTopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final topInset = MediaQuery.of(context).padding.top;
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, topInset + 12, 20, 0),
+      padding: EdgeInsets.fromLTRB(20.w, topInset + 12.h, 20.w, 0),
       child: Row(
         children: [
           // Back button
           GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: Container(
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.h,
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.18),
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.chevron_left_rounded,
                 color: Colors.white,
-                size: 26,
+                size: 26.sp,
               ),
             ),
           ),
@@ -51,7 +52,7 @@ class PmTopBar extends StatelessWidget {
           ),
 
           // Spacer to balance the back button width
-          const SizedBox(width: 44),
+          SizedBox(width: 44.w),
         ],
       ),
     );
@@ -72,35 +73,35 @@ class _ProgressChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(999.r),
         border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.star_rounded, color: Color(0xFFFFC93C), size: 17),
-          const SizedBox(width: 6),
+          Icon(Icons.star_rounded, color: const Color(0xFFFFC93C), size: 17.sp),
+          SizedBox(width: 6.w),
           Text(
             '$coins',
             style: T.badge().copyWith(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: Colors.white,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 9),
-            width: 1,
-            height: 14,
+            margin: EdgeInsets.symmetric(horizontal: 9.w),
+            width: 1.w,
+            height: 14.h,
             color: Colors.white.withValues(alpha: 0.30),
           ),
           Text(
             '$doneCount/$totalCount done',
             style: T.navLabel().copyWith(
-              fontSize: 13,
+              fontSize: 13.sp,
               color: Colors.white.withValues(alpha: 0.85),
             ),
           ),

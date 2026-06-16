@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 import 'package:patient/presentation/poly_missions/widgets/pm_mission.dart';
 
@@ -17,16 +18,16 @@ class PmFocusedPill extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 280),
       curve: Curves.easeInOut,
-      padding: const EdgeInsets.fromLTRB(14, 14, 20, 14),
+      padding: EdgeInsets.fromLTRB(14.w, 14.h, 20.w, 14.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: mission.color, width: 3),
-        boxShadow: const [
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: mission.color, width: 3.w),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x4D281959),
-            blurRadius: 26,
-            offset: Offset(0, 12),
+            color: const Color(0x4D281959),
+            blurRadius: 26.r,
+            offset: Offset(0, 12.h),
           ),
         ],
       ),
@@ -35,15 +36,15 @@ class PmFocusedPill extends StatelessWidget {
         children: [
           // Icon tile
           Container(
-            width: 40,
-            height: 40,
+            width: 40.w,
+            height: 40.h,
             decoration: BoxDecoration(
               color: mission.color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(13),
+              borderRadius: BorderRadius.circular(13.r),
             ),
-            child: Icon(mission.icon, size: 22, color: mission.deepColor),
+            child: Icon(mission.icon, size: 22.sp, color: mission.deepColor),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
 
           // Label — Flexible so long backend titles don't overflow the pill.
           Flexible(
@@ -65,20 +66,20 @@ class PmFocusedPill extends StatelessWidget {
             child: showDone
                 ? Row(
                     children: [
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 11, vertical: 5),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 11.w, vertical: 5.h),
                         decoration: BoxDecoration(
                           color: const Color(0xFF14B2A0),
-                          borderRadius: BorderRadius.circular(999),
+                          borderRadius: BorderRadius.circular(999.r),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.check_rounded,
-                                size: 13, color: Colors.white),
-                            const SizedBox(width: 4),
+                            Icon(Icons.check_rounded,
+                                size: 13.sp, color: Colors.white),
+                            SizedBox(width: 4.w),
                             Text(
                               'Done',
                               style: T.badge().copyWith(color: Colors.white),
