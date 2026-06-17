@@ -115,6 +115,7 @@ dev_dependencies:
   riverpod_generator: ^2.6.4
   custom_lint: ^0.7.0
   riverpod_lint: ^2.6.3
+  flutter_launcher_icons: ^0.14.4
 
 # The following line ensures that the Material Icons font is
 # included with your application, so that you can use the icons in

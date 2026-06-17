@@ -1,0 +1,15 @@
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+  # Default (light mode) icon
+  image_path: "assets/illustrations/appIconLightMode.png"
+
+  # Android adaptive icon (API 26+)
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/illustrations/appIconLightMode.png"
+
+  # iOS 18+ dark mode icon
+  image_path_ios_dark_transparent: "assets/illustrations/appIconDarkMode.png"
