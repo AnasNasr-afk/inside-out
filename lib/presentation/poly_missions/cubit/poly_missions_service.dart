@@ -6,11 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:patient/ai_avatar/data/openai_repository.dart';
-import 'package:patient/ai_avatar/data/session_repository.dart';
-import 'package:patient/ai_avatar/env/env.dart';
-import 'package:patient/ai_avatar/utils/input_preprocessor.dart';
-import 'package:patient/ai_avatar/utils/text_to_speech_api.dart';
+import 'package:patient/presentation/poly_missions/data/openai_repository.dart';
+import 'package:patient/presentation/poly_missions/data/session_repository.dart';
+import 'package:patient/core/env/env.dart';
+import 'package:patient/presentation/poly_missions/utils/input_preprocessor.dart';
+import 'package:patient/presentation/poly_missions/utils/text_to_speech_api.dart';
 
 class PolyMissionsService {
   PolyMissionsService._();

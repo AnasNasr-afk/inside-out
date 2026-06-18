@@ -7,8 +7,6 @@ class Routes {
   static const String chatScreen = '/chatScreen';
   static const String reportScreen = '/reportScreen';
   static const String taskDetailsScreen = '/taskDetailsScreen';
-  static const String avatarScreen = '/avatarScreen';
-  static const String aiBearScreen = '/aiBearScreen';
   static const String helpFaqScreen = '/helpFaqScreen';
   static const String aboutAppScreen = '/aboutAppScreen';
 }

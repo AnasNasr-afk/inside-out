@@ -76,6 +76,30 @@ class $AssetsIconsGen {
 class $AssetsIllustrationsGen {
   const $AssetsIllustrationsGen();
 
+  /// File path: assets/illustrations/Background+Shadow.png
+  AssetGenImage get backgroundShadow =>
+      const AssetGenImage('assets/illustrations/Background+Shadow.png');
+
+  /// File path: assets/illustrations/aboutAppIcon.png
+  AssetGenImage get aboutAppIcon =>
+      const AssetGenImage('assets/illustrations/aboutAppIcon.png');
+
+  /// File path: assets/illustrations/appIconDarkMode.png
+  AssetGenImage get appIconDarkMode =>
+      const AssetGenImage('assets/illustrations/appIconDarkMode.png');
+
+  /// File path: assets/illustrations/appIconLightMode.png
+  AssetGenImage get appIconLightMode =>
+      const AssetGenImage('assets/illustrations/appIconLightMode.png');
+
+  /// File path: assets/illustrations/childModeIcon.png
+  AssetGenImage get childModeIcon =>
+      const AssetGenImage('assets/illustrations/childModeIcon.png');
+
+  /// File path: assets/illustrations/help&FAQIcon.png
+  AssetGenImage get helpFAQIcon =>
+      const AssetGenImage('assets/illustrations/help&FAQIcon.png');
+
   /// File path: assets/illustrations/i9n_activities.svg
   SvgGenImage get i9nActivities =>
       const SvgGenImage('assets/illustrations/i9n_activities.svg');
@@ -104,8 +128,34 @@ class $AssetsIllustrationsGen {
   SvgGenImage get i9nMilestones =>
       const SvgGenImage('assets/illustrations/i9n_milestones.svg');
 
+  /// File path: assets/illustrations/logoutIcon.png
+  AssetGenImage get logoutIcon =>
+      const AssetGenImage('assets/illustrations/logoutIcon.png');
+
+  /// File path: assets/illustrations/privacyIcon.png
+  AssetGenImage get privacyIcon =>
+      const AssetGenImage('assets/illustrations/privacyIcon.png');
+
+  /// File path: assets/illustrations/specialistIcon.png
+  AssetGenImage get specialistIcon =>
+      const AssetGenImage('assets/illustrations/specialistIcon.png');
+
+  /// File path: assets/illustrations/tasksBackgroud.png
+  AssetGenImage get tasksBackgroud =>
+      const AssetGenImage('assets/illustrations/tasksBackgroud.png');
+
+  /// File path: assets/illustrations/termsIcon.png
+  AssetGenImage get termsIcon =>
+      const AssetGenImage('assets/illustrations/termsIcon.png');
+
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
+    backgroundShadow,
+    aboutAppIcon,
+    appIconDarkMode,
+    appIconLightMode,
+    childModeIcon,
+    helpFAQIcon,
     i9nActivities,
     i9nAdhd,
     i9nAq10,
@@ -113,6 +163,11 @@ class $AssetsIllustrationsGen {
     i9nGoals,
     i9nHeartbeat,
     i9nMilestones,
+    logoutIcon,
+    privacyIcon,
+    specialistIcon,
+    tasksBackgroud,
+    termsIcon,
   ];
 }
 

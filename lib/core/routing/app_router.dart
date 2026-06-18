@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:patient/ai_avatar/presentation/avatar_screen.dart';
 import 'package:patient/presentation/profile/about_app_screen.dart';
 import 'package:patient/presentation/profile/help_faq_screen.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/presentation/auth/login_screen.dart';
 import 'package:patient/presentation/auth/signup_screen.dart';
-import 'package:patient/presentation/avatar/avatar_screen.dart';
 import 'package:patient/presentation/chat/chat_screen.dart';
 import 'package:patient/presentation/reports/report_screen.dart';
 import 'package:patient/presentation/splash_screen.dart';
@@ -60,12 +57,6 @@ class AppRouter {
             create: (_) => TaskCubit(),
             child: TaskDetailsScreen(task: task),
           ),
-        );
-      case Routes.avatarScreen:
-        return MaterialPageRoute(builder: (_) => const AvatarTestScreen());
-      case Routes.aiBearScreen:
-        return MaterialPageRoute(
-          builder: (_) => const ProviderScope(child: AiBearScreen()),
         );
       case Routes.helpFaqScreen:
         return MaterialPageRoute(builder: (_) => const HelpFaqScreen());
