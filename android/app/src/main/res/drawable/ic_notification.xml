@@ -1,0 +1,18 @@
+<!-- Monochrome status-bar icon: two interlocking rings echoing the app logo.
+     White on transparent; Android tints it with the notification accent color. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.4"
+        android:fillColor="#00000000"
+        android:pathData="M3,12 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0 z" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.4"
+        android:fillColor="#00000000"
+        android:pathData="M9,12 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0 z" />
+</vector>

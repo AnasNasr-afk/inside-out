@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#FFFFFF</color>
+    <!-- Notification accent — brand violet (tints small icon + app name). -->
+    <color name="notif_accent">#7C5CFF</color>
 </resources>
