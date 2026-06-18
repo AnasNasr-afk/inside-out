@@ -5,6 +5,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient/core/cubits/task_cubit/task_listener.dart';
+import 'package:patient/core/helpers/check_in_helper.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 
@@ -68,7 +69,7 @@ class TaskCubit extends Cubit<TaskStates> {
   Future<void> completeTask(int taskId, String motherNote) async {
     emit(TaskCompleteLoadingState());
     try {
-      await _taskRepository.completeTask(taskId, motherNote);
+      await _taskRepository.completeTask(taskId, _withCheckIn(motherNote));
       emit(TaskCompleteSuccessState());
 
       // The backend pushes a notification to the specialist on completion.
@@ -88,6 +89,16 @@ class TaskCubit extends Cubit<TaskStates> {
     } catch (e) {
       emit(TaskCompleteErrorState('Something went wrong. Please try again.'));
     }
+  }
+
+  /// Appends today's daily check-in mood to the parent's note so the specialist
+  /// sees the child's emotional state for the day. No-op if no check-in today.
+  String _withCheckIn(String note) {
+    final mood = CheckInHelper.getTodayMoodLabel();
+    if (mood == null) return note;
+    final name = SharedPrefHelper.getString(SharedPrefKeys.childName).trim();
+    final who = name.isEmpty ? 'Child' : name.split(' ').first;
+    return '$note\n\nDaily check-in: $who felt $mood today.';
   }
 
   // ── Notifications ──────────────────────────────────────
