@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:patient/ai_avatar/env/env.dart';
+import 'package:patient/core/env/env.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'openai_repository.g.dart';

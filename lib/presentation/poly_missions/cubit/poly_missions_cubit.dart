@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:patient/ai_avatar/data/discussed_tasks_cache.dart';
+import 'package:patient/presentation/poly_missions/data/discussed_tasks_cache.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/models/task_model.dart';
 import 'package:patient/core/networking/repositories/tasks_repo.dart';
 import 'package:patient/presentation/child_mood/child_mode_sounds.dart';
 import 'package:patient/presentation/poly_missions/cubit/poly_missions_service.dart';
+import 'package:patient/presentation/poly_missions/data/poly_coins_repository.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -29,6 +30,7 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
   String _childMemory = '';
 
   // Task batch state.
+  static const int _dailyMissionLimit = 3;
   List<TaskModel> _allTasks = [];
   List<TaskModel> _currentBatch = [];
   Set<int> _localDiscussed = {};
@@ -51,8 +53,11 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     _childMemory = SharedPrefHelper.getString('pm_memory_$_childId');
 
     _localDiscussed = DiscussedTasksCache.load(_childId);
-    final savedCoins = SharedPrefHelper.getInt('pm_coins_$_childId');
+    // Show the local mirror instantly, then reconcile with Firestore so the
+    // total is consistent across devices.
+    final savedCoins = PolyCoinsRepository.instance.localCoins(_childId);
     if (savedCoins > 0) emit(state.copyWith(totalCoins: savedCoins));
+    _syncCoins();
 
     // Restore today's daily batch IDs if the saved date matches today.
     final savedDate = SharedPrefHelper.getString('pm_daily_date_$_childId');
@@ -83,13 +88,22 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     }
     try {
       final all = await TaskRepository().getTasks(_childId);
-      final today = DateTime.now();
-      final todayDate = DateTime(today.year, today.month, today.day);
-      _allTasks = all.where((t) {
-        if (!t.isCompleted || t.isGameTask) return false;
-        final due = DateTime(t.dueDate.year, t.dueDate.month, t.dueDate.day);
-        return !due.isBefore(todayDate); // due date is today or in the future
-      }).toList();
+      // Eligible missions = completed, non-game tasks (any due date). Served
+      // first-completed-first so the daily batch behaves like a FIFO line.
+      _allTasks = all.where((t) => t.isCompleted && !t.isGameTask).toList()
+        ..sort(_byCompletionOrder);
+
+      debugPrint('🎯 ── Poly Missions: task → mission build ──');
+      debugPrint('🎯 fetched ${all.length} tasks, '
+          '${_allTasks.length} eligible (completed & not a game)');
+      debugPrint('🎯 discussed (drained) so far: $_localDiscussed');
+      debugPrint('🎯 FIFO order (by completedAt):');
+      for (final t in _allTasks) {
+        final when = t.completedAt?.toIso8601String() ??
+            '${t.assignedDate.toIso8601String()} (assigned-fallback)';
+        final drained = _localDiscussed.contains(t.taskId) ? ' [drained]' : '';
+        debugPrint('🎯   #${t.taskId} "${t.title}" completed=$when$drained');
+      }
 
       if (_todaysBatchIds.isNotEmpty) {
         // Restore today's batch in the original saved order.
@@ -103,13 +117,24 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
             })
             .whereType<TaskModel>()
             .toList();
+        debugPrint("🎯 restored today's frozen batch: "
+            '${_currentBatch.map((t) => '#${t.taskId}').toList()} '
+            '(saved ids: $_todaysBatchIds)');
+      } else {
+        debugPrint('🎯 no saved batch for today — building fresh');
       }
 
-      // If no saved batch (new day or first launch), pick fresh undiscussed tasks.
-      if (_currentBatch.isEmpty) {
-        _rebuildBatch();
-        _saveDailyBatch();
-      }
+      // Fill any open slots up to the daily cap with the next undiscussed
+      // tasks (FIFO), preserving missions already shown today and their order.
+      // Covers a fresh day, first launch, mid-day completions, and a batch
+      // that shrank because a task became ineligible.
+      final beforeTopUp = _currentBatch.length;
+      _topUpBatch();
+      debugPrint('🎯 batch after top-up (cap $_dailyMissionLimit): '
+          '${_currentBatch.map((t) => '#${t.taskId} ${t.title}').toList()} '
+          '(was $beforeTopUp slot(s) before top-up)');
+      _todaysBatchIds = _currentBatch.map((t) => t.taskId).toList();
+      if (_currentBatch.isNotEmpty) _saveDailyBatch();
 
       // Restore which tasks in today's batch are already Poly-done.
       final done = _currentBatch
@@ -135,11 +160,33 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     }
   }
 
-  void _rebuildBatch() {
-    _currentBatch = _allTasks
-        .where((t) => !_localDiscussed.contains(t.taskId))
-        .take(3)
-        .toList();
+  /// Fills the current batch up to the daily cap with the next undiscussed
+  /// eligible tasks (FIFO), without disturbing missions already shown today
+  /// or their order. Never exceeds [_dailyMissionLimit] distinct missions.
+  void _topUpBatch() {
+    if (_currentBatch.length >= _dailyMissionLimit) {
+      debugPrint('🎯 top-up skipped — batch already full '
+          '(${_currentBatch.length}/$_dailyMissionLimit)');
+      return;
+    }
+    final inBatch = _currentBatch.map((t) => t.taskId).toSet();
+    for (final task in _allTasks) {
+      if (_currentBatch.length >= _dailyMissionLimit) break;
+      if (inBatch.contains(task.taskId)) continue;
+      if (_localDiscussed.contains(task.taskId)) continue;
+      _currentBatch.add(task);
+      inBatch.add(task.taskId);
+      debugPrint('🎯 top-up filled slot ${_currentBatch.length} '
+          'with #${task.taskId} "${task.title}"');
+    }
+  }
+
+  /// FIFO line order — earliest completion first (assignedDate as fallback
+  /// when an API record has no completedAt timestamp).
+  int _byCompletionOrder(TaskModel a, TaskModel b) {
+    final aWhen = a.completedAt ?? a.assignedDate;
+    final bWhen = b.completedAt ?? b.assignedDate;
+    return aWhen.compareTo(bWhen);
   }
 
   void _saveDailyBatch() {
@@ -231,11 +278,16 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
       final taskId = _currentBatch[state.currentIndex!].taskId;
       _localDiscussed.add(taskId);
       DiscussedTasksCache.add(taskId, _childId);
+      debugPrint('🎯 mission completed → draining task #$taskId '
+          '"${_currentBatch[state.currentIndex!].title}" '
+          '(will not return as a mission). Discussed now: $_localDiscussed');
     }
 
-    // Persist earned coins.
+    // Persist earned coins — atomic Firestore increment + local mirror.
     final newCoins = state.totalCoins + 10;
-    SharedPrefHelper.setData('pm_coins_$_childId', newCoins);
+    debugPrint('🪙 awarding +10 coins: ${state.totalCoins} → $newCoins '
+        '(childId $_childId)');
+    PolyCoinsRepository.instance.addCoins(_childId, 10, state.totalCoins);
 
     final updated = {...state.done};
     if (state.currentIndex != null) updated.add(_keyAt(state.currentIndex!));
@@ -372,6 +424,22 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     if (isClosed) return;
     if (state.phase == PmPhase.response) {
       emit(state.copyWith(polyIsTalking: false));
+    }
+  }
+
+  // ── Coins ─────────────────────────────────────────────────────────────────
+
+  /// Reconciles the in-memory coin total with the cross-device Firestore value.
+  Future<void> _syncCoins() async {
+    debugPrint('🪙 syncing coins for childId $_childId '
+        '(local shown: ${state.totalCoins})');
+    final coins = await PolyCoinsRepository.instance.fetchCoins(_childId);
+    if (!isClosed && coins != state.totalCoins) {
+      debugPrint('🪙 reconciled coins: ${state.totalCoins} → $coins '
+          '(Firestore is source of truth)');
+      emit(state.copyWith(totalCoins: coins));
+    } else {
+      debugPrint('🪙 coins already in sync at $coins');
     }
   }
 

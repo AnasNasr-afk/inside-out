@@ -7,6 +7,7 @@ import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/presentation/child_mood/child_mode_sounds.dart';
 import 'package:patient/presentation/child_mood/widgets/child_mode_body.dart';
+import 'package:patient/presentation/poly_missions/data/poly_coins_repository.dart';
 
 import '../../core/networking/repositories/auth_repo.dart';
 
@@ -20,9 +21,10 @@ class ChildModeScreen extends StatefulWidget {
 
 class _ChildModeScreenState extends State<ChildModeScreen>
     with TickerProviderStateMixin {
-  // Coin counter: 0 → 120 over ~1.5 s
+  // Coin counter: 0 → total over ~1.5 s
   late final AnimationController _coinCtrl;
-  late final Animation<int> _coinAnim;
+  late Animation<int> _coinAnim;
+  int _coinsTarget = 0;
 
   // Floating circles bob
   late final AnimationController _floatCtrl;
@@ -30,6 +32,7 @@ class _ChildModeScreenState extends State<ChildModeScreen>
   late final Animation<double> _float2;
 
   late final String _childName;
+  late final int _childId;
 
   @override
   void initState() {
@@ -40,18 +43,20 @@ class _ChildModeScreenState extends State<ChildModeScreen>
         .toUpperCase();
     _childName = raw.isEmpty ? 'FRIEND' : raw;
 
-    // Coin tally — read persisted total from Poly Missions.
-    final childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
-    final totalCoins = SharedPrefHelper.getInt('pm_coins_$childId');
+    // Coin tally — show the local mirror instantly, then reconcile with the
+    // cross-device Firestore total and re-animate if it differs.
+    _childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
+    _coinsTarget = PolyCoinsRepository.instance.localCoins(_childId);
 
     _coinCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
-    _coinAnim = IntTween(begin: 0, end: totalCoins).animate(
+    _coinAnim = IntTween(begin: 0, end: _coinsTarget).animate(
       CurvedAnimation(parent: _coinCtrl, curve: Curves.easeOut),
     );
     _coinCtrl.forward();
+    _loadRemoteCoins(_childId);
 
     // Float circles — different speeds, slight offset
     _floatCtrl = AnimationController(
@@ -62,6 +67,41 @@ class _ChildModeScreenState extends State<ChildModeScreen>
         .animate(CurvedAnimation(parent: _floatCtrl, curve: Curves.linear));
     _float2 = Tween<double>(begin: 0.8, end: 0.8 + 2 * math.pi)
         .animate(CurvedAnimation(parent: _floatCtrl, curve: Curves.linear));
+  }
+
+  /// Fetches the authoritative cross-device total and re-runs the counter
+  /// animation from the locally shown value if it changed.
+  Future<void> _loadRemoteCoins(int childId) async {
+    debugPrint('🪙 [child-mode] showing local $_coinsTarget, fetching remote…');
+    final remote = await PolyCoinsRepository.instance.fetchCoins(childId);
+    _animateCoinsTo(remote);
+  }
+
+  /// Re-animates the coin counter from the currently shown value to [target].
+  void _animateCoinsTo(int target) {
+    if (!mounted || target == _coinsTarget) {
+      debugPrint('🪙 [child-mode] coins unchanged at $_coinsTarget');
+      return;
+    }
+    debugPrint('🪙 [child-mode] animating coin counter $_coinsTarget → $target');
+    setState(() {
+      _coinAnim = IntTween(begin: _coinsTarget, end: target).animate(
+        CurvedAnimation(parent: _coinCtrl, curve: Curves.easeOut),
+      );
+      _coinsTarget = target;
+    });
+    _coinCtrl
+      ..reset()
+      ..forward();
+  }
+
+  /// Called when returning from Poly Missions, where coins may have been
+  /// earned. The local mirror is already updated, so re-animate to it
+  /// instantly, then reconcile with the cross-device Firestore total.
+  void _refreshCoins() {
+    debugPrint('🪙 [child-mode] back from missions — refreshing coins');
+    _animateCoinsTo(PolyCoinsRepository.instance.localCoins(_childId));
+    _loadRemoteCoins(_childId);
   }
 
   @override
@@ -150,6 +190,7 @@ class _ChildModeScreenState extends State<ChildModeScreen>
                           padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 40.h),
                           child: ChildModeBody(
                             onTileTap: () => ChildModeSounds.instance.playTap(),
+                            onReturnFromMissions: _refreshCoins,
                           ),
                         ),
                       ),

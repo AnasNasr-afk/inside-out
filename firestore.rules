@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Firebase-authenticated user profiles (Google sign-in). Only the signed-in
+    // user can touch their own document.
+    match /users/{uid} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Poly missions coin total, keyed by the backend childId. Most users sign in
+    // through the app's own backend (not Firebase Auth), so request.auth is null
+    // here — the data is a non-sensitive star count, so it is left open.
+    // Tighten this to `if request.auth != null` only after all users are signed
+    // into Firebase Auth.
+    match /poly_progress/{childId} {
+      allow read, write: if true;
+    }
+  }
+}

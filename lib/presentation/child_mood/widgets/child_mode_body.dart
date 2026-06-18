@@ -7,7 +7,11 @@ import '../../poly_missions/poly_missions_screen.dart';
 
 class ChildModeBody extends StatefulWidget {
   final VoidCallback? onTileTap;
-  const ChildModeBody({super.key, this.onTileTap});
+
+  /// Fired when the user returns from Poly Missions, so the parent can refresh
+  /// coins earned during the session.
+  final VoidCallback? onReturnFromMissions;
+  const ChildModeBody({super.key, this.onTileTap, this.onReturnFromMissions});
 
   @override
   State<ChildModeBody> createState() => _ChildModeBodyState();
@@ -89,10 +93,14 @@ class _ChildModeBodyState extends State<ChildModeBody>
             anim: _anims[1],
             child: _TalkToPolyTile(
               onTap: () => _tap(
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PolyMissionsScreen()),
-                ),
+                () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const PolyMissionsScreen()),
+                  );
+                  widget.onReturnFromMissions?.call();
+                },
               ),
             ),
           ),
