@@ -52,6 +52,12 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     _childId = SharedPrefHelper.getInt(SharedPrefKeys.childId);
     _childMemory = SharedPrefHelper.getString('pm_memory_$_childId');
 
+    // Restore the saved conversation language (defaults to English).
+    final savedLang = SharedPrefHelper.getString('pm_language_$_childId');
+    if (savedLang.isNotEmpty && savedLang != state.language) {
+      emit(state.copyWith(language: savedLang));
+    }
+
     _localDiscussed = DiscussedTasksCache.load(_childId);
     // Show the local mirror instantly, then reconcile with Firestore so the
     // total is consistent across devices.
@@ -232,10 +238,7 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
 
     // Spoken flow: greet and name the task, then ask a reflective question
     // that gets the child talking about what was hard or what they enjoyed.
-    final greeting = _childName.isNotEmpty
-        ? 'Hi $_childName! You picked ${task.title}.'
-        : 'You picked ${task.title}.';
-    _greetThenAsk(greeting, _reflectiveQuestion(task.title));
+    _greetThenAsk(_greeting(task.title), _reflectiveQuestion(task.title));
   }
 
   void startRecording() {
@@ -333,13 +336,14 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
   // ── TTS greeting + question ────────────────────────────────────────────────
 
   Future<void> _greetThenAsk(String greeting, String question) async {
+    final lang = state.language;
     // Step 1 — warm greeting naming the task.
-    await PolyMissionsService.instance.speakAndWait(greeting);
+    await PolyMissionsService.instance.speakAndWait(greeting, lang: lang);
     if (isClosed || state.phase != PmPhase.focus) return;
 
     // Step 2 — reflective question that gets the child talking about what was
     // hard or what they enjoyed.
-    await PolyMissionsService.instance.speakAndWait(question);
+    await PolyMissionsService.instance.speakAndWait(question, lang: lang);
     if (isClosed) return;
 
     if (state.phase == PmPhase.focus) {
@@ -362,7 +366,7 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
     if (!_sttReady || _stopping || isClosed) return;
     await _stt.listen(
       onResult: _onSttResult,
-      localeId: 'en-US',
+      localeId: state.language == 'ar' ? 'ar-EG' : 'en-US',
       listenFor: const Duration(seconds: 60),
     );
   }
@@ -405,11 +409,14 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
         childName: _childName,
         childAge: _childAge,
         childCase: _childCase,
+        language: state.language,
       );
     } catch (e) {
       debugPrint('❌ OpenAI error: $e');
       final idx = state.currentIndex;
-      response = idx != null ? _fallbackFor(idx) : 'Great job! 🌟';
+      response = idx != null
+          ? _fallbackFor(idx)
+          : (state.language == 'ar' ? 'برافو عليك! 🌟' : 'Great job! 🌟');
     }
 
     if (isClosed) return;
@@ -419,12 +426,23 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
       polyIsTalking: true,
     ));
 
-    await PolyMissionsService.instance.speakAndWait(response);
+    await PolyMissionsService.instance.speakAndWait(response, lang: state.language);
 
     if (isClosed) return;
     if (state.phase == PmPhase.response) {
       emit(state.copyWith(polyIsTalking: false));
     }
+  }
+
+  // ── Language ──────────────────────────────────────────────────────────────
+
+  /// Toggles the conversation language between English and Egyptian Arabic
+  /// and persists the choice per child.
+  void toggleLanguage() {
+    final next = state.language == 'ar' ? 'en' : 'ar';
+    SharedPrefHelper.setData('pm_language_$_childId', next);
+    debugPrint('🌐 language → $next');
+    emit(state.copyWith(language: next));
   }
 
   // ── Coins ─────────────────────────────────────────────────────────────────
@@ -470,24 +488,47 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
   String _keyAt(int i) =>
       i < _currentBatch.length ? _currentBatch[i].taskId.toString() : 'task_$i';
 
+  /// Warm greeting naming the picked task, in the active language.
+  String _greeting(String title) {
+    if (state.language == 'ar') {
+      return _childName.isNotEmpty
+          ? 'أهلاً يا $_childName! اخترت $title.'
+          : 'اخترت $title.';
+    }
+    return _childName.isNotEmpty
+        ? 'Hi $_childName! You picked $title.'
+        : 'You picked $title.';
+  }
+
   /// A warm, reflective question about a task the child just completed. Varies
   /// by task title so repeated visits do not feel scripted, and always invites
   /// the child to share what was hard or what they enjoyed.
   String _reflectiveQuestion(String title) {
-    final questions = <String>[
-      'What was the hardest part of $title for you?',
-      'You did $title! Was any part of it tricky?',
-      'When you did $title, what part did you like the most?',
-      'Tell me about $title. What felt hard, and what felt fun?',
-    ];
+    final questions = state.language == 'ar'
+        ? <String>[
+            'إيه أصعب حاجة في $title؟',
+            'إنت عملت $title! كان فيه جزء صعب؟',
+            'لما عملت $title، إيه أكتر جزء عجبك؟',
+            'احكيلي عن $title. إيه اللي كان صعب وإيه اللي كان حلو؟',
+          ]
+        : <String>[
+            'What was the hardest part of $title for you?',
+            'You did $title! Was any part of it tricky?',
+            'When you did $title, what part did you like the most?',
+            'Tell me about $title. What felt hard, and what felt fun?',
+          ];
     return questions[title.hashCode.abs() % questions.length];
   }
 
   String _fallbackFor(int i) {
-    if (i < _currentBatch.length) {
-      return 'Great effort with ${_currentBatch[i].title}! You are doing really well! 🌟';
+    if (state.language == 'ar') {
+      return i < _currentBatch.length
+          ? 'مجهود حلو في ${_currentBatch[i].title}! إنت بتعمل كويس جداً! 🌟'
+          : 'برافو عليك! 🌟';
     }
-    return 'Great job! 🌟';
+    return i < _currentBatch.length
+        ? 'Great effort with ${_currentBatch[i].title}! You are doing really well! 🌟'
+        : 'Great job! 🌟';
   }
 
   @override

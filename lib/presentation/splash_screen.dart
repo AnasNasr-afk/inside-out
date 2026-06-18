@@ -85,16 +85,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ],
                 ),
               ),
-              SizedBox(height: 8.h),
-              Text(
-                'Your child\'s growth, reflected',
-                style: GoogleFonts.poppins(
-                  fontSize: 13.sp,
-                  color: const Color(0xFF9CA3AF),
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.2,
-                ),
-              ),
             ],
           ),
         ),

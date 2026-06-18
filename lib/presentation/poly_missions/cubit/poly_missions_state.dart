@@ -13,6 +13,9 @@ class PolyMissionsState {
   final bool isLoadingTasks;
   final int totalCoins;
 
+  /// Conversation language: 'en' (English) or 'ar' (Egyptian Arabic).
+  final String language;
+
   const PolyMissionsState({
     this.phase = PmPhase.pick,
     this.currentIndex,
@@ -23,6 +26,7 @@ class PolyMissionsState {
     this.tasks = const [],
     this.isLoadingTasks = true,
     this.totalCoins = 0,
+    this.language = 'en',
   });
 
   /// True when this is the last undone task in the batch.
@@ -39,6 +43,7 @@ class PolyMissionsState {
     List<TaskModel>? tasks,
     bool? isLoadingTasks,
     int? totalCoins,
+    String? language,
     bool clearCurrentIndex = false,
     bool clearPraise = false,
   }) {
@@ -53,6 +58,7 @@ class PolyMissionsState {
       tasks: tasks ?? this.tasks,
       isLoadingTasks: isLoadingTasks ?? this.isLoadingTasks,
       totalCoins: totalCoins ?? this.totalCoins,
+      language: language ?? this.language,
     );
   }
 }

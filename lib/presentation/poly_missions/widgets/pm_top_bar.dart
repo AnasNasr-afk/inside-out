@@ -6,12 +6,16 @@ class PmTopBar extends StatelessWidget {
   final int coins;
   final int doneCount;
   final int totalCount;
+  final String language;
+  final VoidCallback onToggleLanguage;
 
   const PmTopBar({
     super.key,
     required this.coins,
     required this.doneCount,
     required this.totalCount,
+    required this.language,
+    required this.onToggleLanguage,
   });
 
   @override
@@ -51,8 +55,28 @@ class PmTopBar extends StatelessWidget {
             ),
           ),
 
-          // Spacer to balance the back button width
-          SizedBox(width: 44.w),
+          // Language toggle — occupies the slot that balances the back button.
+          GestureDetector(
+            onTap: onToggleLanguage,
+            child: Container(
+              width: 44.w,
+              height: 44.h,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.18),
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+              ),
+              child: Text(
+                language == 'ar' ? 'ع' : 'EN',
+                style: T.badge().copyWith(
+                  color: Colors.white,
+                  fontSize: language == 'ar' ? 18.sp : 13.sp,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

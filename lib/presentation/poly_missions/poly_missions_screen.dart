@@ -71,6 +71,8 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
                     coins: state.totalCoins,
                     doneCount: state.done.length,
                     totalCount: state.tasks.length,
+                    language: state.language,
+                    onToggleLanguage: cubit.toggleLanguage,
                   ),
                 ),
 
@@ -120,6 +122,7 @@ class _PolyMissionsScreenState extends State<PolyMissionsScreen>
                       allDone: state.allDone,
                       allTasksDone: state.tasks.isNotEmpty &&
                           state.done.length >= state.tasks.length,
+                      language: state.language,
                     ),
                   ),
 

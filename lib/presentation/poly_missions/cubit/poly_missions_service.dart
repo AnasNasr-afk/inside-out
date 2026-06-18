@@ -64,6 +64,7 @@ class PolyMissionsService {
     required String childName,
     required int childAge,
     required String childCase,
+    String language = 'en',
   }) async {
     // Accumulate metrics (same as _handleProcessing in AiBearScreen).
     _turnCount++;
@@ -79,7 +80,7 @@ class PolyMissionsService {
 
     final contextualPrompt = InputPreprocessor.buildPrompt(
       transcript,
-      'en',
+      language,
       taskContext: taskContext,
       childName: childName,
       childAge: childAge,
@@ -197,7 +198,10 @@ Output the full updated memory now:''';
       return existingMemory;
     }
 
-    final body = jsonDecode(response.body) as Map<String, dynamic>;
+    // UTF-8 decode so Arabic memory text isn't mangled (response.body defaults
+    // to Latin-1 when the server omits charset).
+    final body =
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     final updated = ((body['choices'] as List).first
             as Map<String, dynamic>)['message']['content']
         .toString()
@@ -212,10 +216,11 @@ Output the full updated memory now:''';
   /// Exposes player state so the avatar widget can animate in sync with audio.
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
 
-  /// Synthesizes [text] and awaits full playback before returning.
-  Future<void> speakAndWait(String text) async {
+  /// Synthesizes [text] in [lang] ('en' or 'ar') and awaits full playback
+  /// before returning.
+  Future<void> speakAndWait(String text, {String lang = 'en'}) async {
     try {
-      final bytes = await _ttsApi.synthesizeText(text, 'en-US');
+      final bytes = await _ttsApi.synthesizeText(text, lang);
       final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/pm_tts.mp3');
       await file.writeAsBytes(bytes);

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show Color;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../firebase_options.dart';
@@ -39,6 +40,10 @@ class PushNotificationService {
     importance: Importance.high,
   );
 
+  /// Brand violet (matches the child-mode exit dialog) — tints the small icon
+  /// and app name on the notification.
+  static const Color _accent = Color(0xFF7C5CFF);
+
   bool _initialised = false;
 
   /// One-time setup: permissions, local-notification plugin, channel, and FCM
@@ -63,7 +68,8 @@ class PushNotificationService {
   }
 
   Future<void> _initLocalNotifications() async {
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // Monochrome status-bar (small) icon — tinted with the accent color.
+    const androidInit = AndroidInitializationSettings('ic_notification');
     const iosInit = DarwinInitializationSettings();
     await _local.initialize(
       const InitializationSettings(android: androidInit, iOS: iosInit),
@@ -98,6 +104,22 @@ class PushNotificationService {
           channelDescription: _channel.description,
           importance: Importance.high,
           priority: Priority.high,
+          // Monochrome status-bar icon, tinted with the brand violet.
+          icon: 'ic_notification',
+          color: _accent,
+          // Full-colour app logo on the right.
+          largeIcon: const DrawableResourceAndroidBitmap('pm_app_icon'),
+          // Expanded view shows the on-brand gradient banner (matches the
+          // child-mode exit dialog), keeping the app logo and message visible.
+          styleInformation: BigPictureStyleInformation(
+            const DrawableResourceAndroidBitmap('pm_notif_banner'),
+            largeIcon: const DrawableResourceAndroidBitmap('pm_app_icon'),
+            contentTitle: title,
+            summaryText: body,
+            htmlFormatContentTitle: false,
+            htmlFormatSummaryText: false,
+            hideExpandedLargeIcon: false,
+          ),
         ),
         iOS: const DarwinNotificationDetails(),
       );

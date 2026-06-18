@@ -88,16 +88,16 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
               iconBg: Color(0xFFFCE4EC),
               title: 'Our Mission',
               body:
-                  'Inside Out helps children with autism, Down syndrome, and speech difficulties practice their therapy tasks in a safe, encouraging, and engaging way through Poly — their AI companion bear.',
+                  'Inside Out helps children with autism, Down syndrome, and speech difficulties practice their therapy tasks in a safe, encouraging, and engaging way through Dooby — their AI companion bear.',
             ),
             SizedBox(height: 12.h),
             _InfoCard(
               icon: Icons.smart_toy_rounded,
               iconColor: AppTheme.primaryColor,
               iconBg: AppTheme.primaryColor.withValues(alpha: 0.1),
-              title: 'Meet Poly',
+              title: 'Meet Dooby',
               body:
-                  'Poly is a warm AI bear powered by GPT-4o. Poly listens to children, gives simple practical tips, and speaks in their language — English, Arabic, or Japanese.',
+                  'Dooby is a warm AI bear powered by GPT-4o. Dooby listens to children, gives simple practical tips, and speaks in their language — English, Arabic, or Japanese.',
             ),
             SizedBox(height: 12.h),
             const _InfoCard(
