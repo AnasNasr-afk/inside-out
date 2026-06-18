@@ -257,7 +257,7 @@ class _Header extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Poly's World",
+                  "Dooby's World",
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w800,

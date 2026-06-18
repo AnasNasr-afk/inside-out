@@ -469,7 +469,7 @@ class _TransitionViewState extends State<_TransitionView>
             ),
           ),
           SizedBox(height: 20.h),
-          // Title "POLY'S WORLD" — gold gradient + star decorators
+          // Title "DOOBY'S WORLD" — gold gradient + star decorators
           Opacity(
             opacity: _titleOpacity.value,
             child: Transform.translate(
@@ -497,9 +497,9 @@ class _TransitionViewState extends State<_TransitionView>
                           stops: [0.0, 0.55, 1.0],
                         ).createShader(bounds),
                         child: Text(
-                          "POLY'S WORLD",
+                          "DOOBY'S WORLD",
                           style: GoogleFonts.nunito(
-                            fontSize: 36.sp,
+                            fontSize: 30.sp,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
                             color: Colors.white,

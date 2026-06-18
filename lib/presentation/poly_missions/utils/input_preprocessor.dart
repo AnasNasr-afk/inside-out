@@ -5,19 +5,31 @@ class InputPreprocessor {
     if (_hasAny(lower, [
       'scared', 'scary', 'no no', 'stop stop', 'too loud', 'loud loud',
       'hurts', 'hurt', 'pain', "don't want", 'not want', 'go away',
+      // Egyptian Arabic
+      'خايف', 'خوف', 'وجع', 'بيوجع', 'وجعني', 'ألم', 'مش عايز', 'مش عاوز',
+      'بطل', 'بطّل', 'سيبني', 'لأ لأ', 'عالي',
     ])) { return 'distressed'; }
 
     if (_hasAny(lower, [
       'sad', 'miss', 'not coming', 'gone', 'lonely', 'alone', 'crying', 'cry',
+      // Egyptian Arabic
+      'زعلان', 'حزين', 'وحشني', 'وحشتني', 'بعيط', 'عياط', 'لوحدي', 'مروحش',
     ])) { return 'sad'; }
 
     if (_hasAny(lower, [
       "can't", 'cannot', 'issue', 'problem', 'hard', 'difficult', 'struggle',
       'not fair', 'unfair', 'stop it', "won't work", "doesn't work",
+      // Egyptian Arabic
+      'مقدرش', 'ماقدرش', 'مش قادر', 'صعب', 'صعبة', 'مشكلة', 'مش بيشتغل',
+      'مش عارف', 'مش هينفع',
     ])) { return 'frustrated'; }
 
     if (input.contains('!') ||
-        _hasAny(lower, ['again again', 'yes yes', 'wow', 'look look', 'yay'])) {
+        _hasAny(lower, [
+          'again again', 'yes yes', 'wow', 'look look', 'yay',
+          // Egyptian Arabic
+          'تاني تاني', 'أيوه أيوه', 'واو', 'يا سلام', 'جامد',
+        ])) {
       return 'excited';
     }
 

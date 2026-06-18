@@ -75,7 +75,7 @@ class _PmControlAreaState extends State<PmControlArea>
           const SizedBox.shrink(key: ValueKey('pick')),
         (PmPhase.focus, true) ||
         (PmPhase.response, true) =>
-          _buildPolyTalking(),
+          _buildDoobyTalking(),
         (PmPhase.focus, _) => _buildMicButton(),
         (PmPhase.recording, _) => _buildRecording(),
         (PmPhase.analyzing, _) => _buildAnalyzing(),
@@ -84,8 +84,8 @@ class _PmControlAreaState extends State<PmControlArea>
     );
   }
 
-  // ── Poly is talking indicator ───────────────────────────────────────────────
-  Widget _buildPolyTalking() {
+  // ── Dooby is talking indicator ───────────────────────────────────────────────
+  Widget _buildDoobyTalking() {
     return Container(
       key: const ValueKey('poly-talking'),
       padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 14.h),
@@ -100,7 +100,7 @@ class _PmControlAreaState extends State<PmControlArea>
           _Waveform(ctrl: _waveCtrl, color: const Color(0xFF8A6BFF)),
           SizedBox(width: 12.w),
           Text(
-            'Poly is speaking…',
+            'Dooby is speaking…',
             style: T.badge().copyWith(fontSize: 14.5.sp, color: Colors.white),
           ),
         ],
@@ -147,7 +147,7 @@ class _PmControlAreaState extends State<PmControlArea>
         ),
         SizedBox(height: 10.h),
         Text(
-          'Tap to answer Poly',
+          'Tap to answer Dooby',
           style: T.navLabel().copyWith(fontSize: 13.5.sp, color: Colors.white),
         ),
       ],
@@ -243,7 +243,7 @@ class _PmControlAreaState extends State<PmControlArea>
           _BouncingDots(ctrl: _dotsCtrl),
           SizedBox(width: 11.w),
           Text(
-            'Poly is thinking…',
+            'Dooby is thinking…',
             style: T.badge().copyWith(fontSize: 14.5.sp, color: Colors.white),
           ),
         ],

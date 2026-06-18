@@ -77,7 +77,7 @@ class _ChildModeBodyState extends State<ChildModeBody>
               iconColor: Colors.white,
               title: 'Games',
               titleColor: const Color(0xFF03342F),
-              subtitle: 'Play & learn with Poly',
+              subtitle: 'Play & learn with Dooby',
               subtitleColor: const Color(0xFF0A5C53),
               playColor: Colors.white,
               onTap: () => _tap(
@@ -232,7 +232,7 @@ class _Tile extends StatelessWidget {
   }
 }
 
-// ── Talk to Poly tile — special because of the mint online dot ─────────────────
+// ── Talk to Dooby tile — special because of the mint online dot ─────────────────
 
 class _TalkToPolyTile extends StatelessWidget {
   final VoidCallback onTap;
@@ -301,7 +301,7 @@ class _TalkToPolyTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Talk to Poly',
+                    'Talk to Dooby',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 21.sp,
                       fontWeight: FontWeight.w800,

@@ -67,16 +67,21 @@ class ApiClient {
 
   // ── Response handler ───────────────────────────────────
   dynamic _handleResponse(http.Response response) {
-    debugPrint('Response ${response.statusCode}: ${response.body}');
+    // Decode as UTF-8 explicitly — response.body falls back to Latin-1 when the
+    // server omits charset, which mangles Arabic (names, task text) into mojibake.
+    final body = response.bodyBytes.isEmpty
+        ? ''
+        : utf8.decode(response.bodyBytes, allowMalformed: true);
+    debugPrint('Response ${response.statusCode}: $body');
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      if (response.body.isEmpty) return null;
-      return jsonDecode(response.body);
+      if (body.isEmpty) return null;
+      return jsonDecode(body);
     }
 
     throw ApiException(
       statusCode: response.statusCode,
-      message: _parseError(response.body),
+      message: _parseError(body),
     );
   }
 

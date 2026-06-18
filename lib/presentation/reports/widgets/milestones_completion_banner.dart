@@ -45,8 +45,8 @@ class MilestonesCompletionBanner extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   childName.isNotEmpty
-                      ? 'From Poly sessions\nwith $childName'
-                      : 'From Poly sessions',
+                      ? 'From Dooby sessions\nwith $childName'
+                      : 'From Dooby sessions',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 13.sp,

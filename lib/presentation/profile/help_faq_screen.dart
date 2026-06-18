@@ -15,23 +15,23 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
   static const _faqs = [
     (
       q: 'What is Inside Out?',
-      a: 'Inside Out is a therapy companion app that helps children with autism, Down syndrome, or speech difficulties practice their specialist-assigned tasks through Poly, an AI bear that listens and guides them.',
+      a: 'Inside Out is a therapy companion app that helps children with autism, Down syndrome, or speech difficulties practice their specialist-assigned tasks through Dooby, an AI bear that listens and guides them.',
     ),
     (
-      q: 'Who is Poly?',
-      a: 'Poly is a warm AI companion bear. Children can talk to Poly about their therapy tasks, get simple tips, and practice in a safe and encouraging environment.',
+      q: 'Who is Dooby?',
+      a: 'Dooby is a warm AI companion bear. Children can talk to Dooby about their therapy tasks, get simple tips, and practice in a safe and encouraging environment.',
     ),
     (
       q: 'How do tasks work?',
-      a: 'Your child\'s specialist assigns tasks through the app. You can see them on the Tasks screen. Your child can talk to Poly about any task using the spin wheel on the AI Avatar screen.',
+      a: 'Your child\'s specialist assigns tasks through the app. You can see them on the Tasks screen. Your child can talk to Dooby about any task using the spin wheel on the AI Avatar screen.',
     ),
     (
       q: 'What are session reports?',
-      a: 'After your child talks to Poly about their tasks, a session report is automatically generated and sent to your specialist. You can view past reports on the Reports screen.',
+      a: 'After your child talks to Dooby about their tasks, a session report is automatically generated and sent to your specialist. You can view past reports on the Reports screen.',
     ),
     (
-      q: 'What languages does Poly support?',
-      a: 'Poly currently supports English, Arabic (Egyptian dialect), and Japanese. You can switch languages using the flag button on the AI Avatar screen.',
+      q: 'What languages does Dooby support?',
+      a: 'Dooby currently supports English, Arabic (Egyptian dialect), and Japanese. You can switch languages using the flag button on the AI Avatar screen.',
     ),
     (
       q: 'Is my child\'s data private?',
