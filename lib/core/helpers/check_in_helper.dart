@@ -31,4 +31,20 @@ class CheckInHelper {
     final mood = SharedPrefHelper.getInt(SharedPrefKeys.checkInMood);
     return mood == 0 ? null : mood;
   }
+
+  // Mood labels, indexed by saved value (1–5). Mirrors MoodCheckInCard.
+  static const List<String> _moodLabels = [
+    'Great',
+    'Good',
+    'Okay',
+    'Low',
+    'Rough',
+  ];
+
+  // Returns today's mood as a label ('Great'…'Rough'), or null if not checked in.
+  static String? getTodayMoodLabel() {
+    final mood = getTodayMood();
+    if (mood == null || mood < 1 || mood > _moodLabels.length) return null;
+    return _moodLabels[mood - 1];
+  }
 }
