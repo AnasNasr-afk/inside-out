@@ -42,7 +42,9 @@ class ChildModeSounds {
   }
 
   void dispose() {
-    for (final p in _coinPool) p.dispose();
+    for (final p in _coinPool) {
+      p.dispose();
+    }
     _ready = false;
   }
 
@@ -88,7 +90,9 @@ class ChildModeSounds {
     final data = pcm.buffer.asUint8List();
     final hdr = ByteData(44);
     void tag(int off, String s) {
-      for (int i = 0; i < s.length; i++) hdr.setUint8(off + i, s.codeUnitAt(i));
+      for (int i = 0; i < s.length; i++) {
+        hdr.setUint8(off + i, s.codeUnitAt(i));
+      }
     }
     tag(0, 'RIFF');
     hdr.setUint32(4, 36 + data.length, Endian.little);
@@ -193,8 +197,9 @@ class ChildModeSounds {
     return List.generate(len, (i) {
       final t = i / sr;
       double s = 0;
-      if (t < 0.05)
+      if (t < 0.05) {
         s += _sq(t, 880)  * math.exp(-t * 80) * 0.06;
+      }
       if (t >= 0.025 && t < 0.075) {
         final dt = t - 0.025;
         s += _sq(dt, 1320) * math.exp(-dt * 80) * 0.05;

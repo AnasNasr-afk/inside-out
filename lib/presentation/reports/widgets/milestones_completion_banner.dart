@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:patient/presentation/reports/widgets/report_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MilestonesCompletionBanner extends StatelessWidget {

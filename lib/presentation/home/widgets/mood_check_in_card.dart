@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/theme/app_tokens.dart';
 
 import '../../../core/helpers/check_in_helper.dart';
+import '../../../core/services/notification_service.dart';
 
 class MoodCheckInCard extends StatefulWidget {
   final String childName;
@@ -78,6 +79,10 @@ class _MoodCheckInCardState extends State<MoodCheckInCard>
     });
     _pulseCtrl.forward(from: 0);
     await CheckInHelper.saveCheckIn(i + 1);
+    // DEMO: simulate the specialist assigning a task shortly after the parent's
+    // daily check-in (real iOS remote push needs APNs / a paid Apple account).
+    // No-op unless kDemoMode is set. See [PushNotificationService.showDemoSpecialistTask].
+    PushNotificationService.instance.showDemoSpecialistTask();
   }
 
   @override

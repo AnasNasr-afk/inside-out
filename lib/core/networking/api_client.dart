@@ -23,14 +23,27 @@ class ApiClient {
   // ── POST ───────────────────────────────────────────────
   Future<dynamic> post(String endpoint, {Map<String, dynamic>? body}) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
+
     debugPrint('POST $uri');
     debugPrint('BODY ${jsonEncode(body)}');
-    final response = await http.post(
-      uri,
-      headers: _headers,
-      body: jsonEncode(body),
-    );
-    return _handleResponse(response);
+
+    try {
+      final response = await http
+          .post(
+        uri,
+        headers: _headers,
+        body: jsonEncode(body),
+      )
+          .timeout(const Duration(seconds: 20));
+
+      debugPrint('REQUEST FINISHED');
+
+      return _handleResponse(response);
+    } catch (e, s) {
+      debugPrint('POST ERROR: $e');
+      debugPrint('$s');
+      rethrow;
+    }
   }
 
   // ── PATCH ──────────────────────────────────────────────

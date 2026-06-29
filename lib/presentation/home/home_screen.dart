@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient/core/cubits/auth_cubit/auth_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/helpers/shared_pref.dart';
+import 'package:patient/core/services/notification_service.dart';
 import 'package:patient/presentation/child_mood/child_mode_sounds.dart';
 import 'package:patient/presentation/home/widgets/bottom_nav_bar.dart';
 import 'package:patient/presentation/home/widgets/home_content.dart';
@@ -29,6 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadInitialData();
     // Pre-warm sounds so they're ready before the child mode button is tapped.
     ChildModeSounds.instance.init();
+    // Tapping a notification with the 'open_tasks' payload jumps to the Tasks
+    // tab (used by the specialist-task push / demo notification).
+    PushNotificationService.instance.onSelectNotification = (payload) {
+      if (payload == 'open_tasks' && mounted) {
+        setState(() => _selectedIndex = 1);
+      }
+    };
   }
 
   Future<void> _loadInitialData() async {
