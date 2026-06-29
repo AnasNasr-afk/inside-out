@@ -5,7 +5,6 @@ import 'package:patient/core/cubits/task_cubit/task_cubit.dart';
 import 'package:patient/core/cubits/task_cubit/task_listener.dart';
 import 'package:patient/core/models/task_model.dart';
 import 'package:patient/core/theme/app_tokens.dart';
-import 'package:patient/gen/assets.gen.dart';
 import 'package:patient/presentation/home/widgets/mood_check_in_card.dart';
 import 'package:patient/presentation/home/widgets/child_mode_button.dart';
 

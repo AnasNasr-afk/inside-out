@@ -7,6 +7,7 @@ import 'package:patient/core/helpers/shared_pref.dart';
 import 'package:patient/core/helpers/shared_pref_keys.dart';
 import 'package:patient/core/models/task_model.dart';
 import 'package:patient/core/networking/repositories/tasks_repo.dart';
+import 'package:patient/core/services/notification_service.dart' show kDemoMode;
 import 'package:patient/presentation/child_mood/child_mode_sounds.dart';
 import 'package:patient/presentation/poly_missions/cubit/poly_missions_service.dart';
 import 'package:patient/presentation/poly_missions/data/poly_coins_repository.dart';
@@ -355,20 +356,42 @@ class PolyMissionsCubit extends Cubit<PolyMissionsState> {
 
   Future<void> _ensureSttReady() async {
     if (_sttReady) return;
-    _sttReady = await _stt.initialize(
-      onError: _onSttError,
-      onStatus: _onSttStatus,
-    );
+    try {
+      _sttReady = await _stt.initialize(
+        onError: _onSttError,
+        onStatus: _onSttStatus,
+      );
+    } catch (e) {
+      // Never let a speech-engine init failure crash the app.
+      debugPrint('⚠️ Speech recognition init failed: $e');
+      _sttReady = false;
+    }
   }
 
   void _listenStt() async {
-    await _ensureSttReady();
-    if (!_sttReady || _stopping || isClosed) return;
-    await _stt.listen(
-      onResult: _onSttResult,
-      localeId: state.language == 'ar' ? 'ar-EG' : 'en-US',
-      listenFor: const Duration(seconds: 60),
-    );
+    // DEMO / simulator-safe path: the iOS Simulator's microphone + speech stack
+    // (AVAudioEngine / SFSpeechRecognizer) is unreliable and can hard-crash the
+    // app. In demo mode we skip native speech recognition entirely and seed a
+    // canned transcript so the mission flow still works for screen recording.
+    if (kDemoMode) {
+      _transcript = state.language == 'ar'
+          ? 'المهمة كانت حلوة بس صعبة شوية، وفرحت إني خلصتها'
+          : 'The task was fun but a little hard, and I felt happy I finished it';
+      return;
+    }
+    try {
+      await _ensureSttReady();
+      if (!_sttReady || _stopping || isClosed) return;
+      await _stt.listen(
+        onResult: _onSttResult,
+        localeId: state.language == 'ar' ? 'ar-EG' : 'en-US',
+        listenFor: const Duration(seconds: 60),
+      );
+    } catch (e) {
+      // Swallow native speech errors — recording simply yields no transcript,
+      // and the analyze step already falls back gracefully.
+      debugPrint('⚠️ Speech recognition unavailable: $e');
+    }
   }
 
   void _onSttError(SpeechRecognitionError _) {

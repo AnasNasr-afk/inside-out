@@ -257,7 +257,9 @@ class _TransitionViewState extends State<_TransitionView>
 
   @override
   void dispose() {
-    for (final t in _timers) t.cancel();
+    for (final t in _timers) {
+      t.cancel();
+    }
     _main.dispose();
     _rays.dispose();
     _rings.dispose();
@@ -620,7 +622,7 @@ class _TransitionViewState extends State<_TransitionView>
 
   double _computeMaxRadius(Offset origin, Size size) {
     return [
-      Offset(0, 0),
+      const Offset(0, 0),
       Offset(size.width, 0),
       Offset(0, size.height),
       Offset(size.width, size.height),

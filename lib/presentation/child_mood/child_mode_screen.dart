@@ -155,8 +155,8 @@ class _ChildModeScreenState extends State<ChildModeScreen>
                   child: Container(
                     width: 170.w,
                     height: 170.h,
-                    decoration: BoxDecoration(
-                      color: const Color(0x1A7C5CFF),
+                    decoration: const BoxDecoration(
+                      color: Color(0x1A7C5CFF),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -169,8 +169,8 @@ class _ChildModeScreenState extends State<ChildModeScreen>
                   child: Container(
                     width: 120.w,
                     height: 120.h,
-                    decoration: BoxDecoration(
-                      color: const Color(0x1F14D9C4),
+                    decoration: const BoxDecoration(
+                      color: Color(0x1F14D9C4),
                       shape: BoxShape.circle,
                     ),
                   ),

@@ -67,7 +67,7 @@ class _HelpFaqScreenState extends State<HelpFaqScreen> {
             child: Row(
               children: [
                 Icon(Icons.help_outline_rounded,
-                    color: Color(0xFF0369A1), size: 22.sp),
+                    color: const Color(0xFF0369A1), size: 22.sp),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: Text(

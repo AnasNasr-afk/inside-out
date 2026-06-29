@@ -8,6 +8,12 @@ import '../../firebase_options.dart';
 import '../models/app_notification.dart';
 import 'notification_store.dart';
 
+/// DEMO ONLY. iOS remote push requires a paid Apple Developer account (APNs).
+/// While that's not set up, this flag fakes the "specialist assigned a task"
+/// push with a local notification so the flow can be screen-recorded. Set to
+/// `false` (or delete the demo call sites) once real APNs push is live.
+const bool kDemoMode = false;
+
 /// FCM background handler. Must be a top-level function annotated with
 /// `@pragma('vm:entry-point')` because it runs in a separate isolate. It
 /// initialises Firebase and persists the incoming message so the in-app list
@@ -46,6 +52,11 @@ class PushNotificationService {
 
   bool _initialised = false;
 
+  /// Called when the user taps a local notification. The payload identifies the
+  /// destination (e.g. `'open_tasks'`). Set by [HomeScreen] so a tap can switch
+  /// tabs. Tolerates being unset.
+  void Function(String? payload)? onSelectNotification;
+
   /// One-time setup: permissions, local-notification plugin, channel, and FCM
   /// message listeners. Safe to call more than once.
   Future<void> init() async {
@@ -73,6 +84,9 @@ class PushNotificationService {
     const iosInit = DarwinInitializationSettings();
     await _local.initialize(
       const InitializationSettings(android: androidInit, iOS: iosInit),
+      onDidReceiveNotificationResponse: (response) {
+        onSelectNotification?.call(response.payload);
+      },
     );
     await _local
         .resolvePlatformSpecificImplementation<
@@ -95,7 +109,7 @@ class PushNotificationService {
 
   /// Displays a heads-up local notification (used for foreground pushes and
   /// the local "task sent" confirmation). Never throws.
-  Future<void> _showLocal(String title, String body) async {
+  Future<void> _showLocal(String title, String body, {String? payload}) async {
     try {
       final details = NotificationDetails(
         android: AndroidNotificationDetails(
@@ -128,6 +142,7 @@ class PushNotificationService {
         title,
         body,
         details,
+        payload: payload,
       );
     } catch (e) {
       debugPrint('⚠️ Failed to show local notification: $e');
@@ -158,5 +173,26 @@ class PushNotificationService {
       AppNotification.local(title: title, body: body, type: type),
     );
     await _showLocal(title, body);
+  }
+
+  /// DEMO ONLY. Fakes the "specialist assigned a task" remote push with a local
+  /// notification after [delay], so the demo flow works on iOS without APNs.
+  /// Tapping it carries the `'open_tasks'` payload, which [HomeScreen] uses to
+  /// switch to the Tasks tab. Remove once real remote push is live ([kDemoMode]).
+  Future<void> showDemoSpecialistTask({
+    Duration delay = const Duration(seconds: 3),
+    String title = 'New task from your specialist',
+    String body = 'Your specialist assigned a new task. Tap to view it.',
+  }) async {
+    if (!kDemoMode) return;
+    await Future<void>.delayed(delay);
+    await NotificationStore.instance.add(
+      AppNotification.local(
+        title: title,
+        body: body,
+        type: AppNotificationType.taskAssigned,
+      ),
+    );
+    await _showLocal(title, body, payload: 'open_tasks');
   }
 }

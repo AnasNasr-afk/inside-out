@@ -15,7 +15,6 @@ import '../../core/cubits/auth_cubit/auth_listener.dart';
 import '../../core/cubits/task_cubit/task_cubit.dart';
 import '../../core/cubits/task_cubit/task_listener.dart';
 import '../../core/routing/routes.dart';
-import '../reports/widgets/report_colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
