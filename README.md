@@ -6,7 +6,7 @@
 
 ### Meet **Dooby** — an AI bear that helps neurodiverse children practice therapy tasks through play.
 
-A Flutter app for children aged **3–10** with autism, Down syndrome, or speech difficulties. Specialists assign therapy tasks; Poly turns them into friendly, voice-driven conversations and quietly reports back on the child's speech, emotion, and progress.
+A Flutter app for children aged **3–10** with autism, Down syndrome, or speech difficulties. Specialists assign therapy tasks; Dooby turns them into friendly, voice-driven conversations and quietly reports back on the child's speech, emotion, and progress.
 
 <br/>
 
@@ -36,7 +36,7 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 
 <div align="center">
 
-| 🧸 Poly (AI Bear) | 🎨 Child Mode | 🏠 Home |
+| 🧸 Dooby (AI Bear) | 🎨 Child Mode | 🏠 Home |
 |:---:|:---:|:---:|
 | <img src="docs/screenshots/poly.png" width="220" alt="Poly the AI bear" /> | <img src="docs/screenshots/child-mode.png" width="220" alt="Child mode" /> | <img src="docs/screenshots/home.png" width="220" alt="Home" /> |
 | **✅ Tasks** | **📊 Session Report** | **💬 Specialist Chat** |
@@ -50,11 +50,11 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 
 ## ✨ Features
 
-- 🐻 **Poly, the AI bear** — a Rive-animated character that listens, talks, and reacts in real time.
-- 🗣️ **Voice-first conversations** — speech-to-text in, Google Cloud TTS out; Poly speaks back to the child.
+- 🐻 **Dooby, the AI bear** — a Rive-animated character that listens, talks, and reacts in real time.
+- 🗣️ **Voice-first conversations** — speech-to-text in, Google Cloud TTS out; Dooby speaks back to the child.
 - 🎡 **Spin-the-wheel tasks** — specialist-assigned therapy tasks turned into a playful picker.
 - 🧠 **GPT-4o mini brain** — child-safe persona, per-turn emotion + language awareness, capped conversation memory.
-- 🌍 **Multi-language** — Poly adapts language and voice to the child.
+- 🌍 **Multi-language** — Dooby adapts language and voice to the child.
 - 📊 **Automatic session reports** — speech clarity, sentence quality, emotion, and concerns summarized for the specialist.
 - 🌗 **Daily mood check-in** — mood is attached to the parent's task-completion note.
 - 💬 **Specialist chat** — in-app messaging via Sendbird.
@@ -110,9 +110,9 @@ lib/
 └── main.dart
 ```
 
-**Poly's session state machine:** `idle → greeting → listening → processing → responded`
+**Dooby's session state machine:** `idle → greeting → listening → processing → responded`
 
-**AI prompt design:** a system persona primes Poly's character and language rules; the specialist's task description is injected once per session; each turn adds the child's emotion, language, and profile. Conversation history is capped at 10 messages to control cost and latency.
+**AI prompt design:** a system persona primes Dooby's character and language rules; the specialist's task description is injected once per session; each turn adds the child's emotion, language, and profile. Conversation history is capped at 10 messages to control cost and latency.
 
 ---
 
