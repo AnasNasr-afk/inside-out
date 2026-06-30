@@ -23,8 +23,6 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 
 ## 🎬 Demo
 
-> _Drop your demo video here._ Upload an `.mp4` to a GitHub issue/release (or paste a YouTube/Loom link) and replace the block below.
-
 <div align="center">
 
 <!-- Option A — GitHub-hosted video (drag a file into any issue, copy the generated user-attachments URL): -->
