@@ -154,12 +154,6 @@ Add your Firebase config (`google-services.json` / `GoogleService-Info.plist`) a
 
 ---
 
-## 📂 Still to add
-
-- A demo video link (YouTube/Loom) or a GitHub-hosted `.mp4` in the **Demo** section
-
----
-
 <div align="center">
 
 Built with 🧸 and Flutter by **[Anas Nasr](https://github.com/AnasNasr-afk)**
