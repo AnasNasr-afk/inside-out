@@ -34,15 +34,15 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 
 ## 📸 Screenshots
 
-> _Placeholders below._ Add your images to `docs/screenshots/` (filenames shown) and they'll render automatically.
-
 <div align="center">
 
-| Onboarding | Poly Avatar | Spin Wheel |
+| 🧸 Poly (AI Bear) | 🎨 Child Mode | 🏠 Home |
 |:---:|:---:|:---:|
-| <img src="docs/screenshots/onboarding.png" width="220" alt="Onboarding" /> | <img src="docs/screenshots/poly.png" width="220" alt="Poly avatar" /> | <img src="docs/screenshots/wheel.png" width="220" alt="Task wheel" /> |
-| **Daily Check-in** | **Tasks** | **Session Report** |
-| <img src="docs/screenshots/checkin.png" width="220" alt="Daily check-in" /> | <img src="docs/screenshots/tasks.png" width="220" alt="Tasks" /> | <img src="docs/screenshots/report.png" width="220" alt="Report" /> |
+| <img src="docs/screenshots/poly.png" width="220" alt="Poly the AI bear" /> | <img src="docs/screenshots/child-mode.png" width="220" alt="Child mode" /> | <img src="docs/screenshots/home.png" width="220" alt="Home" /> |
+| **✅ Tasks** | **📊 Session Report** | **💬 Specialist Chat** |
+| <img src="docs/screenshots/tasks.png" width="220" alt="Tasks" /> | <img src="docs/screenshots/report.png" width="220" alt="Session report" /> | <img src="docs/screenshots/chat.png" width="220" alt="Specialist chat" /> |
+| **👤 Profile** | | |
+| <img src="docs/screenshots/profile.png" width="220" alt="Profile" /> | | |
 
 </div>
 
@@ -154,11 +154,8 @@ Add your Firebase config (`google-services.json` / `GoogleService-Info.plist`) a
 
 ---
 
-## 📂 Assets to add
+## 📂 Still to add
 
-To complete this README, drop the following in:
-
-- `docs/screenshots/` → `onboarding.png`, `poly.png`, `wheel.png`, `checkin.png`, `tasks.png`, `report.png`
 - A demo video link (YouTube/Loom) or a GitHub-hosted `.mp4` in the **Demo** section
 
 ---
