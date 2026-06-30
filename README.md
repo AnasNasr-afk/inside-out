@@ -15,8 +15,7 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 [![Top Language](https://img.shields.io/github/languages/top/AnasNasr-afk/inside-out?style=for-the-badge&logo=dart&logoColor=white&color=0175C2)](https://github.com/AnasNasr-afk/inside-out)
 [![Repo Size](https://img.shields.io/github/repo-size/AnasNasr-afk/inside-out?style=for-the-badge&logo=files&logoColor=white&color=FD79A8)](https://github.com/AnasNasr-afk/inside-out)
 
-<!-- 🪙 Built with Claude Code. Replace XXX with your real token total and this badge will show it. -->
-[![Claude Code Tokens](https://img.shields.io/badge/Built%20with%20Claude%20Code-XXX%20tokens-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![Claude Code Tokens](https://img.shields.io/badge/Built%20with%20Claude%20Code-~720M%20tokens-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
 </div>
 
@@ -106,8 +105,10 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 | 📅 Active development | Mar 2026 → Jun 2026 |
 | 📄 Dart files | **118** |
 | 🧮 Lines of Dart | **~15,000** |
-| 🪙 Claude Code tokens | _XXX_ <!-- fill in --> |
+| 🪙 Claude Code tokens | **~720M** processed¹ (~6.4M in+out) |
 | 👤 Contributors | Anas Nasr |
+
+<sub>¹ Total tokens processed by Claude Code across 38 local sessions, including cache reads. Input + output alone is ~6.4M.</sub>
 
 ---
 
@@ -179,7 +180,6 @@ To complete this README, drop the following in:
 
 - `docs/screenshots/` → `onboarding.png`, `poly.png`, `wheel.png`, `checkin.png`, `tasks.png`, `report.png`
 - A demo video link (YouTube/Loom) or a GitHub-hosted `.mp4` in the **Demo** section
-- Your Claude Code token total in the badge + stats table (search for `XXX`)
 
 ---
 
