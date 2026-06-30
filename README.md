@@ -92,21 +92,6 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 
 ---
 
-## 📈 Project Stats
-
-| Metric | Value |
-|---|---|
-| 📦 Total commits | **49** |
-| 📅 Active development | Mar 2026 → Jun 2026 |
-| 📄 Dart files | **118** |
-| 🧮 Lines of Dart | **~15,000** |
-| 🪙 Claude Code tokens | **~720M** processed¹ (~6.4M in+out) |
-| 👤 Contributors | Anas Nasr |
-
-<sub>¹ Total tokens processed by Claude Code across 38 local sessions, including cache reads. Input + output alone is ~6.4M.</sub>
-
----
-
 ## 🏗️ Architecture
 
 ```
