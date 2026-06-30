@@ -4,7 +4,7 @@
 
 # inside-out 🧸
 
-### Meet **Poly** — an AI bear that helps neurodiverse children practice therapy tasks through play.
+### Meet **Dooby** — an AI bear that helps neurodiverse children practice therapy tasks through play.
 
 A Flutter app for children aged **3–10** with autism, Down syndrome, or speech difficulties. Specialists assign therapy tasks; Poly turns them into friendly, voice-driven conversations and quietly reports back on the child's speech, emotion, and progress.
 
@@ -31,7 +31,7 @@ A Flutter app for children aged **3–10** with autism, Down syndrome, or speech
 <!-- https://github.com/user-attachments/assets/YOUR-VIDEO-ID -->
 
 <!-- Option B — YouTube thumbnail that links to the video: -->
-[![Watch the demo](https://img.shields.io/badge/▶_Watch_the_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://your-demo-link-here)
+[![Watch the demo](https://img.shields.io/badge/▶_Watch_the_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://drive.google.com/file/d/1ZuhQnwiSW1_Qi8YFHEMC4HHDkRcVpWHX/view?usp=sharing)
 
 </div>
 
