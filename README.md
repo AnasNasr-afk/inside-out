@@ -6,7 +6,7 @@
 
 ### Meet **Dooby** — an AI bear that helps neurodiverse children practice therapy tasks through play.
 
-A Flutter app for children aged **3–10** with autism, Down syndrome, or speech difficulties. Specialists assign therapy tasks; Dooby turns them into friendly, voice-driven conversations and quietly reports back on the child's speech, emotion, and progress.
+A Flutter app for children aged **6–13** with autism, Down syndrome, or speech difficulties. Specialists assign therapy tasks; Dooby turns them into friendly, voice-driven conversations and quietly reports back on the child's speech, emotion, and progress.
 
 <br/>
 
